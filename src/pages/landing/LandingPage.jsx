@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
@@ -22,31 +22,55 @@ import BookingForm from "../../component/landing_component/BookingForm";
 import OurPracticeAreas from "../../component/landing_component/OurPracticeAreas";
 import FAQSection from "../../component/landing_component/FAQSection";
 import LegalLoader from "../../component/common/LegalLoader";
+import { api } from "../../utils/app";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // API data states
+  const [bannerData, setBannerData] = useState([]);
+
+  useEffect(() => {
+    fetchAllAPIs();
+  }, []);
 
 
-  if (loading) return <LegalLoader/>;
+
+  const fetchAllAPIs = async () => {
+    try {
+      // Fire multiple API calls together
+      const 
+      [bannerResponse
+
+      ] = await Promise.all([
+         api.get("/banners"),
+      ]);
+
+      // Set data to states
+      setBannerData(bannerResponse.data.data || []);
+      
+    } catch (error) {
+       console.error("Error loading landing page data:", error);
+    }finally{
+      setLoading(false);
+    }
+  }
+
+  if (loading) return <LegalLoader />;
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <BannerSection/>
+      <BannerSection bannerData={bannerData} />
 
-      <WeAreSolicitors/>
+      <WeAreSolicitors />
 
-      <WhyHireSolicitorTalent/>
-      <WeTrulyListen/>
-      <BookingForm/>
-      <OurPracticeAreas/>
+      <WhyHireSolicitorTalent />
+      <WeTrulyListen />
+      <BookingForm />
+      <OurPracticeAreas />
       {/* <FAQSection/> */}
-
-      
-
-     
-     
     </div>
   );
 };

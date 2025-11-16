@@ -14,33 +14,58 @@ import ContactUs from "./pages/contact/ContactUs";
 import CareersPage from "./pages/careers/CareersPage";
 import Services from "./pages/services/Services";
 import ServicesDetails from "./pages/services/ServicesDetails";
+import { ToastContainer } from "react-toastify";
+import { useAuth } from "./context/AuthContext";
+import HandleBanner from "./pages/admin/homepage/HandleBanner";
+import HandleSolicitorTalent from "./pages/admin/homepage/HandleSolicitorTalent";
+import HandleTrulyListen from "./pages/admin/homepage/HandleTrulyListen";
 
 const App = () => {
+  const {token, user} = useAuth();
+  console.log(token, user);
+  
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        {/* <Route path="/register" element={<RegisterPage />} /> */}
+    <>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
 
-        <Route element={<AppLayout />}>
-          <Route index path="/" element={<LandingPage />} />
-          <Route path="/about-us" element={<AboutUsPage/>} />
-          <Route path="/team/:slug" element={<TeamMemberDetails/>} />
-          <Route path="/contact-us" element={<ContactUs/>} />
-          <Route path="/careers" element={<CareersPage/>} />
-          <Route path="/services" element={<Services/>} />
-          <Route path="/services/:serviceSlug" element={<ServicesDetails/>} />
-        </Route>
+          <Route element={<AppLayout />}>
+            <Route index path="/" element={<LandingPage />} />
+            <Route path="/about-us" element={<AboutUsPage />} />
+            <Route path="/team/:slug" element={<TeamMemberDetails />} />
+            <Route path="/contact-us" element={<ContactUs />} />
+            <Route path="/careers" element={<CareersPage />} />
+            <Route path="/services" element={<Services />} />
+            <Route
+              path="/services/:serviceSlug"
+              element={<ServicesDetails />}
+            />
+          </Route>
 
-        {/* Admin Layout */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminDashboard />} />
-          {/* Additional admin routes can be added here */}
-          <Route path="site-settings" element={<SiteSettings />} />
-          <Route path="profile" element={<AdminProfile />} />
-        </Route>
-      </Routes>
-    </Router>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="site-settings" element={<SiteSettings />} />
+            <Route path="profile" element={<AdminProfile />} />
+
+
+            {/* Handle Home Page Route */}
+            <Route path="homepage/*" >
+              <Route path="banners" element={<HandleBanner/>} />
+              <Route path="solicitor-talent" element={<HandleSolicitorTalent/>} />
+              <Route path="truly-listen" element={<HandleTrulyListen/>} />
+            </Route>
+
+
+
+
+          </Route>
+        </Routes>
+      </Router>
+
+      {/* Toast Container should ideally be HERE */}
+      <ToastContainer position="top-right" theme="light" />
+    </>
   );
 };
 

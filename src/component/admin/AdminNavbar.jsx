@@ -11,6 +11,7 @@ import {
   Mail,
   ChevronDown,
 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
 
 const AdminNavbar = ({ setSidebarOpen }) => {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -18,14 +19,9 @@ const AdminNavbar = ({ setSidebarOpen }) => {
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
   const navigate = useNavigate();
+  const {logout, user} = useAuth();
 
-  // Dummy user data - replace with your actual user data
-  const userData = {
-    name: "Admin User",
-    email: "admin@example.com",
-    role: "Administrator",
-    avatar: null, // Set to image URL if available
-  };
+
 
   // Dummy notifications - replace with your actual notifications
   const notifications = [
@@ -69,10 +65,21 @@ const AdminNavbar = ({ setSidebarOpen }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    console.log("Logging out...");
-    // Add your logout logic here
-    navigate("/signin");
+  const handleLogout = async () => {
+
+    try {
+      const res = await api.post("/logout");
+      if (res.data.status === 200) {
+        logout();
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }finally{
+      logout();
+      navigate("/");
+    }
+   
   };
 
   const handleProfileClick = () => {
@@ -175,21 +182,13 @@ const AdminNavbar = ({ setSidebarOpen }) => {
                 className="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <div className="w-9 h-9 bg-gradient-to-br from-[#ffba00] to-[#ff9500] rounded-full flex items-center justify-center shadow-md">
-                  {userData.avatar ? (
-                    <img
-                      src={userData.avatar}
-                      alt="Profile"
-                      className="w-full h-full rounded-full object-cover"
-                    />
-                  ) : (
                     <User className="w-5 h-5 text-white" />
-                  )}
                 </div>
                 <div className="hidden sm:block text-left">
                   <p className="text-sm font-semibold text-gray-900">
-                    {userData.name}
+                    {user.name}
                   </p>
-                  <p className="text-xs text-gray-500">{userData.role}</p>
+                  <p className="text-xs text-gray-500">{user.role}</p>
                 </div>
                 <ChevronDown
                   className={`w-4 h-4 text-gray-500 transition-transform hidden sm:block ${
@@ -205,21 +204,14 @@ const AdminNavbar = ({ setSidebarOpen }) => {
                   <div className="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-4">
                     <div className="flex items-center space-x-3">
                       <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                        {userData.avatar ? (
-                          <img
-                            src={userData.avatar}
-                            alt="Profile"
-                            className="w-full h-full rounded-full object-cover"
-                          />
-                        ) : (
+                       
                           <User className="w-6 h-6 text-white" />
-                        )}
                       </div>
                       <div className="flex-1">
                         <p className="text-white font-semibold text-sm">
-                          {userData.name}
+                          {user.name}
                         </p>
-                        <p className="text-white/80 text-xs">{userData.email}</p>
+                        <p className="text-white/80 text-xs">{user.role}</p>
                       </div>
                     </div>
                   </div>
@@ -243,38 +235,9 @@ const AdminNavbar = ({ setSidebarOpen }) => {
                       </div>
                     </button>
 
-                    <button
-                      onClick={handleSettingsClick}
-                      className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-50 transition-colors text-left"
-                    >
-                      <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <Settings className="w-4 h-4 text-purple-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          Settings
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          Manage preferences
-                        </p>
-                      </div>
-                    </button>
+                   
 
-                    <button
-                      className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-50 transition-colors text-left"
-                    >
-                      <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                        <Mail className="w-4 h-4 text-green-600" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          Messages
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          View your messages
-                        </p>
-                      </div>
-                    </button>
+                    
                   </div>
 
                   {/* Logout Button */}

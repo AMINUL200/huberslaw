@@ -45,92 +45,32 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
       path: "/admin/profile",
     },
     {
-      id: "users",
-      label: "Users Management",
+      id: "homepage",
+      label: "Handle Homepage",
       icon: <Users className="w-5 h-5" />,
       children: [
         {
-          id: "all-users",
-          label: "All Users",
+          id: "banners",
+          label: "Handle Banners",
           icon: <Users className="w-4 h-4" />,
-          path: "/admin/users/all",
+          path: "/admin/homepage/banners",
         },
         {
-          id: "user-roles",
-          label: "User Roles",
-          icon: <UserCog className="w-4 h-4" />,
-          path: "/admin/users/roles",
-        },
-        {
-          id: "permissions",
-          label: "Permissions",
-          icon: <Shield className="w-4 h-4" />,
-          path: "/admin/users/permissions",
-        },
-      ],
-    },
-    {
-      id: "products",
-      label: "Products",
-      icon: <Package className="w-5 h-5" />,
-      children: [
-        {
-          id: "all-products",
-          label: "All Products",
-          icon: <Package className="w-4 h-4" />,
-          path: "/admin/products/all",
-        },
-        {
-          id: "categories",
-          label: "Categories",
-          icon: <Tag className="w-4 h-4" />,
-          path: "/admin/products/categories",
-        },
-        {
-          id: "inventory",
-          label: "Inventory",
-          icon: <Database className="w-4 h-4" />,
-          path: "/admin/products/inventory",
-        },
-      ],
-    },
-    {
-      id: "orders",
-      label: "Orders",
-      icon: <ShoppingCart className="w-5 h-5" />,
-      path: "/admin/orders",
-    },
-    {
-      id: "analytics",
-      label: "Analytics",
-      icon: <BarChart className="w-5 h-5" />,
-      children: [
-        {
-          id: "overview",
-          label: "Overview",
-          icon: <TrendingUp className="w-4 h-4" />,
-          path: "/admin/analytics/overview",
-        },
-        {
-          id: "sales",
-          label: "Sales Analytics",
-          icon: <DollarSign className="w-4 h-4" />,
-          path: "/admin/analytics/sales",
-        },
-        {
-          id: "user-behavior",
-          label: "User Behavior",
+          id: "solicitor-talent",
+          label: "Handle Solicitor Talent",
           icon: <Users className="w-4 h-4" />,
-          path: "/admin/analytics/behavior",
+          path: "/admin/homepage/solicitor-talent",
         },
+        {
+          id: "truly-listen",
+          label: "Handle Truly Listen",
+          icon: <Users className="w-4 h-4" />,
+          path: "/admin/homepage/truly-listen",
+        }
+      
       ],
     },
-    {
-      id: "reports",
-      label: "Reports",
-      icon: <FileText className="w-5 h-5" />,
-      path: "/admin/reports",
-    },
+  
     {
       id: "settings",
       label: "Settings",
@@ -142,24 +82,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
           icon: <Settings className="w-4 h-4" />,
           path: "/admin/site-settings",
         },
-        {
-          id: "appearance",
-          label: "Appearance",
-          icon: <Palette className="w-4 h-4" />,
-          path: "/admin/settings/appearance",
-        },
-        {
-          id: "notifications",
-          label: "Notifications",
-          icon: <Bell className="w-4 h-4" />,
-          path: "/admin/settings/notifications",
-        },
-        {
-          id: "integrations",
-          label: "Integrations",
-          icon: <Globe className="w-4 h-4" />,
-          path: "/admin/settings/integrations",
-        },
+       
       ],
     },
   ];

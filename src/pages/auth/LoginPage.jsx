@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, LogIn, ArrowLeft, Shield } from "lucide-react";
 import CustomInput from "../../component/form/CustomInput";
+import { api } from "../../utils/app";
+import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +14,7 @@ const LoginPage = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   // Handle input change
   const handleChange = (e) => {
@@ -55,13 +59,20 @@ const LoginPage = () => {
     if (validateForm()) {
       setIsLoading(true);
 
-      // Simulate API call
-      setTimeout(() => {
-        console.log("Admin login data:", formData);
-        // Add your admin login API call here
+      try {
+        const res = await api.post("/admin/login", formData);
+        const { token, role, name } = res.data;
+        // Create user object
+        const user = { name, role };
+        login(user, token);
+        toast.success("Login successful!");
+        navigate("/admin");
+      } catch (error) {
+        console.log(error.message);
+        toast.error(error.message || "Login failed. Please try again.");
+      } finally {
         setIsLoading(false);
-        // navigate("/admin/dashboard");
-      }, 1500);
+      }
     }
   };
 
@@ -95,7 +106,9 @@ const LoginPage = () => {
             <h2 className="text-3xl font-bold text-[#0A1A2F] mb-2">
               Admin Portal
             </h2>
-            <p className="text-[#1E354F]">Secure access to Hubers Law admin panel</p>
+            <p className="text-[#1E354F]">
+              Secure access to Hubers Law admin panel
+            </p>
           </div>
 
           {/* Login Form */}
@@ -204,7 +217,7 @@ const LoginPage = () => {
                   Secure Admin Access
                 </p>
                 <p className="text-xs text-[#1E354F] mt-1">
-                  This portal is restricted to authorized personnel only. All activities are monitored and logged.
+                  admin@gmail.com/password123
                 </p>
               </div>
             </div>
