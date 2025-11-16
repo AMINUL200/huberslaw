@@ -1,253 +1,352 @@
-import React, { useState } from 'react';
-import { Scale, Building, Users, Home, Shield, Briefcase, Globe, FileText, ChevronRight, Phone, Calendar } from 'lucide-react';
+import React, { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import {
+  Scale,
+  Building,
+  Users,
+  Home,
+  Shield,
+  ChevronRight,
+  Phone,
+  ArrowRight,
+} from "lucide-react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { useNavigate } from "react-router-dom";
 
 const OurPracticeAreas = () => {
-  const [activeCategory, setActiveCategory] = useState('business');
+  const [activeCategory, setActiveCategory] = useState("business");
+  const navigate = useNavigate();
 
   const practiceAreas = {
     business: {
       title: "Business Law",
-      icon: <Building className="w-12 h-12" />,
-      description: "Have a Business solicitor who you can genuinely trust for the types of business law issues that may emerge when you are trading, helps you to concentrate on other business matters and gives you more time and resources to run your business.",
-      content: [
-        {
-          title: "Expert Legal Support for Your Business",
-          text: "Different business owners get in touch with Hubers Law because the huge expertise they can get from the leading network of law firms may make a great and positive changing on their way of doing business."
-        },
-        {
-          title: "Get the Legal Advice You Need",
-          text: "Are you willing to have business legal advice now? Have you been thinking about taking some legal advice in business matters? Are you researching business law? Do you own a business, or have you been thinking about owning a business?"
-        },
-        {
-          title: "Business Leases and Licences",
-          text: "Deciding on whether to use or agree to a lease or a licence is an important step. There are main differences which Hubers Law can advice you on. Should you choose a licence or a lease? The answer is not straight, it depends Characteristics to be clear about include the presence of regular periodic payments and a specific end-date to the agreement."
-        },
-        {
-          title: "Protect Your Business Rights",
-          text: "By signing to a wrong agreement, you might not have your rights protected which can hugely affect your business. Hubers Law provides business advices on how to set up the right agreement, on drafting of a lease or a license, clarifying their terms, obligations and liabilities without resource to legal jargon."
-        },
-        {
-          title: "Expert Guidance Every Step of the Way",
-          text: "Our expert advisors' team work closely with you, deal with any issue and make sure the costs, timescales and that most probable outcome are clear for you. If your licence or lease needs to be amended, or it is time for renewal, we can also provide you help on this matter."
-        }
+      icon: <Building className="w-8 h-8" />,
+      description:
+        "Expert legal support for business formation, contracts, compliance, and corporate governance.",
+      features: [
+        "Business Formation & Structure",
+        "Contract Drafting & Review",
+        "Mergers & Acquisitions",
+        "Corporate Compliance",
+        "Commercial Litigation",
+        "Intellectual Property",
       ],
       cta: {
-        title: "Making the Right Legal Decisions for Your Business",
-        description: "As you are a business owner and an expert in your sector, if you are concerned about any legal obligation affecting your business, we guarantee you that we can work jointly with you in order to guide you along the way. Undoubtedly, while running your business, you will want expert legal help you can rely on, so get in touch with Hubers Law and then continue to trade safely in the knowledge that you are in good hands.",
-        phone: "0203 488 0953"
-      }
+        title: "Protect Your Business",
+        description:
+          "Get comprehensive legal protection for your business operations and growth strategies.",
+        phone: "0203 488 0953",
+      },
     },
     personal: {
       title: "Personal Law",
-      icon: <Users className="w-12 h-12" />,
-      description: "Comprehensive personal legal services including family law, immigration, and other personal legal matters. We provide compassionate and expert guidance for your personal legal needs.",
-      content: [
-        {
-          title: "Family Law Services",
-          text: "We handle divorce, child custody, adoption, and family mediation with compassion and expertise. Our family law attorneys understand the emotional challenges you face and provide supportive legal guidance."
-        },
-        {
-          title: "Immigration Law Support",
-          text: "Our immigration lawyers assist with visa applications, citizenship, deportation defense, and business immigration services. We help navigate complex immigration processes with care and precision."
-        },
-        {
-          title: "Personal Legal Protection",
-          text: "From estate planning to personal contracts, we ensure your personal legal matters are handled with the utmost care and attention to detail."
-        },
-        {
-          title: "Client-Centered Approach",
-          text: "We understand that personal legal matters can be stressful. Our team provides clear communication and compassionate support throughout your legal journey."
-        }
+      icon: <Users className="w-8 h-8" />,
+      description:
+        "Comprehensive personal legal services including family law, immigration, and estate planning.",
+      features: [
+        "Family Law & Divorce",
+        "Immigration Services",
+        "Estate Planning",
+        "Personal Contracts",
+        "Child Custody",
+        "Mediation Services",
       ],
       cta: {
-        title: "Protecting Your Personal Rights",
-        description: "Your personal life deserves expert legal protection. Whether you're dealing with family matters, immigration issues, or other personal legal concerns, our team is here to provide the guidance and support you need.",
-        phone: "0203 488 0953"
-      }
+        title: "Protect Your Family",
+        description:
+          "Ensure your family's future with expert personal legal guidance.",
+        phone: "0203 488 0953",
+      },
     },
     property: {
       title: "Property Law",
-      icon: <Home className="w-12 h-12" />,
-      description: "Expert legal services for all property matters including transactions, leasing, zoning, and real estate development. Protect your property investments with our experienced team.",
-      content: [
-        {
-          title: "Real Estate Transactions",
-          text: "We handle residential and commercial property transactions, ensuring smooth and legally sound transfers of ownership for buyers and sellers."
-        },
-        {
-          title: "Leasing and Tenancy",
-          text: "Our property lawyers draft and review leases, handle tenant disputes, and ensure your property rights are protected in all leasing arrangements."
-        },
-        {
-          title: "Zoning and Development",
-          text: "Navigate complex zoning regulations and development requirements with our expert guidance for your property development projects."
-        },
-        {
-          title: "Property Disputes",
-          text: "Resolve property boundary disputes, easement issues, and other property-related conflicts with our experienced litigation team."
-        }
+      icon: <Home className="w-8 h-8" />,
+      description:
+        "Expert legal services for real estate transactions, leasing, and property disputes.",
+      features: [
+        "Real Estate Transactions",
+        "Leasing & Tenancy",
+        "Property Development",
+        "Zoning Compliance",
+        "Property Disputes",
+        "Title Verification",
       ],
       cta: {
-        title: "Secure Your Property Investments",
-        description: "Property is often your most valuable asset. Our property law experts ensure your investments are protected and your transactions are handled with precision and care.",
-        phone: "0203 488 0953"
-      }
+        title: "Secure Your Property",
+        description:
+          "Protect your most valuable assets with expert property law services.",
+        phone: "0203 488 0953",
+      },
     },
     dispute: {
       title: "Dispute Resolution",
-      icon: <Scale className="w-12 h-12" />,
-      description: "Expert litigation and dispute resolution services for civil matters, commercial disputes, and courtroom representation. We fight for your rights with strategic legal advocacy.",
-      content: [
-        {
-          title: "Civil Litigation",
-          text: "Comprehensive civil litigation services for individuals and businesses, including contract disputes, personal injury claims, and commercial litigation."
-        },
-        {
-          title: "Alternative Dispute Resolution",
-          text: "We offer mediation and arbitration services as cost-effective alternatives to courtroom litigation when appropriate for your situation."
-        },
-        {
-          title: "Appellate Practice",
-          text: "Our experienced appellate lawyers handle appeals at both state and federal levels, providing strong representation for challenging legal decisions."
-        },
-        {
-          title: "Settlement Negotiations",
-          text: "Strategic settlement negotiations to resolve disputes efficiently while protecting your interests and achieving favorable outcomes."
-        }
+      icon: <Scale className="w-8 h-8" />,
+      description:
+        "Expert litigation and alternative dispute resolution for civil and commercial matters.",
+      features: [
+        "Civil Litigation",
+        "Commercial Disputes",
+        "Mediation Services",
+        "Arbitration",
+        "Settlement Negotiations",
+        "Appellate Practice",
       ],
       cta: {
-        title: "Resolve Your Legal Disputes Effectively",
-        description: "Whether through negotiation, mediation, or courtroom litigation, our dispute resolution team provides aggressive representation and strategic guidance to protect your rights and interests.",
-        phone: "0203 488 0953"
-      }
+        title: "Resolve Conflicts",
+        description:
+          "Effective dispute resolution strategies tailored to your situation.",
+        phone: "0203 488 0953",
+      },
     },
     defense: {
       title: "Criminal Defense",
-      icon: <Shield className="w-12 h-12" />,
-      description: "Aggressive defense representation for criminal charges at both state and federal levels. Protect your rights and freedom with our experienced criminal defense team.",
-      content: [
-        {
-          title: "Felony and Misdemeanor Defense",
-          text: "Comprehensive defense services for all criminal charges, from minor misdemeanors to serious felony cases."
-        },
-        {
-          title: "Federal Criminal Defense",
-          text: "Expert representation in federal court for complex criminal matters including white-collar crimes and federal offenses."
-        },
-        {
-          title: "Appeals and Post-Conviction",
-          text: "We handle criminal appeals and post-conviction relief to challenge unjust convictions and sentences."
-        },
-        {
-          title: "Record Expungement",
-          text: "Help clear your criminal record through expungement and sealing processes to move forward with your life."
-        }
+      icon: <Shield className="w-8 h-8" />,
+      description:
+        "Aggressive defense representation for criminal charges at all levels.",
+      features: [
+        "Felony Defense",
+        "Misdemeanor Cases",
+        "Federal Crimes",
+        "Appeals Process",
+        "Record Expungement",
+        "Bail Hearings",
       ],
       cta: {
-        title: "Protect Your Rights and Freedom",
-        description: "Facing criminal charges can be overwhelming. Our criminal defense team provides aggressive representation and strategic defense to protect your rights, freedom, and future.",
-        phone: "0203 488 0953"
-      }
-    }
+        title: "Protect Your Rights",
+        description:
+          "Strong defense representation to protect your freedom and rights.",
+        phone: "0203 488 0953",
+      },
+    },
   };
 
   const categories = [
-    { id: 'business', label: 'Business Law' },
-    { id: 'personal', label: 'Personal Law' },
-    { id: 'property', label: 'Property Law' },
-    { id: 'dispute', label: 'Dispute Resolution' },
-    { id: 'defense', label: 'Criminal Defense' }
+    { id: "business", label: "Business Law" },
+    { id: "personal", label: "Personal Law" },
+    { id: "property", label: "Property Law" },
+    { id: "dispute", label: "Dispute Resolution" },
+    { id: "defense", label: "Criminal Defense" },
   ];
 
   const currentArea = practiceAreas[activeCategory];
 
+  // Swiper breakpoints configuration
+  const swiperBreakpoints = {
+    320: {
+      slidesPerView: 1,
+      spaceBetween: 20,
+    },
+    640: {
+      slidesPerView: 2,
+      spaceBetween: 25,
+    },
+    1024: {
+      slidesPerView: 3,
+      spaceBetween: 30,
+    },
+    1280: {
+      slidesPerView: 4,
+      spaceBetween: 30,
+    },
+  };
+
   return (
-    <section className="py-10 lg:py-16 bg-white">
+    <section className="py-10 lg:py-16 bg-gradient-to-br from-[#F4EEDC] to-[#E8EEF4]">
       <div className="container mx-auto px-4 lg:px-8">
-        
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-         
+          <div className="inline-flex items-center px-4 py-2 bg-white rounded-full mb-6 shadow-sm border border-[#E8EEF4]">
+            <span className="text-sm font-semibold text-[#CBA054] uppercase tracking-wide">
+              Legal Expertise
+            </span>
+          </div>
 
           <h2 className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-6 leading-tight">
             Our Practice Areas
           </h2>
 
           <p className="text-xl text-gray-600 leading-relaxed">
-            Comprehensive legal services across multiple practice areas. Our experienced attorneys 
-            provide expert counsel and representation tailored to your specific needs.
+            Comprehensive legal services across multiple practice areas. Our
+            experienced attorneys provide expert counsel and representation
+            tailored to your specific needs.
           </p>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map(category => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                activeCategory === category.id
-                  ? 'bg-[#0A1A2F] text-white shadow-lg'
-                  : 'bg-[#F4EEDC] text-[#0A1A2F] hover:bg-[#CBA054] hover:text-white'
-              }`}
-            >
-              {category.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Main Content Area */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12 border border-[#E8EEF4]">
-          
-          {/* Practice Area Header */}
-          <div className="flex items-start space-x-6 mb-12">
-            <div className="w-20 h-20 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center flex-shrink-0">
-              <div className="text-white">
-                {currentArea.icon}
-              </div>
-            </div>
-            <div>
-              <h3 className="text-4xl font-bold text-[#0A1A2F] mb-4">
-                {currentArea.title}
-              </h3>
-              <p className="text-xl text-gray-600 leading-relaxed">
-                {currentArea.description}
-              </p>
-            </div>
-          </div>
-
-          {/* Content Sections */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-            {currentArea.content.map((section, index) => (
-              <div key={index} className="bg-[#F4EEDC] rounded-2xl p-6 border-l-4 border-[#CBA054]">
-                <h4 className="text-xl font-semibold text-[#0A1A2F] mb-4">
-                  {section.title}
-                </h4>
-                <p className="text-gray-600 leading-relaxed">
-                  {section.text}
-                </p>
-              </div>
+        {/* Swiper Cards Section */}
+        <div className="relative">
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={1}
+            breakpoints={swiperBreakpoints}
+            loop={true}
+            speed={3000} // smooth continuous-like movement
+            autoplay={{
+              delay: 0, // nonstop sliding
+              disableOnInteraction: false,
+            }}
+            pagination={{
+              clickable: true,
+              el: ".custom-pagination",
+              bulletClass: "custom-bullet",
+              bulletActiveClass: "custom-bullet-active",
+            }}
+            navigation={{
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            }}
+            className="practice-areas-swiper"
+          >
+            {categories.map((category) => (
+              <SwiperSlide key={category.id}>
+                <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] overflow-hidden transform transition-all duration-500 hover:shadow-2xl hover:scale-105 group flex flex-col h-full">
+                  {" "}
+                  {/* Added flex classes for equal height */}
+                  {/* Card Header */}
+                  <div className="bg-gradient-to-br from-[#0A1A2F] to-[#1E354F] p-6 text-center flex-shrink-0">
+                    {" "}
+                    {/* Added flex-shrink-0 */}
+                    <div className="w-16 h-16 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                      <div className="text-white">
+                        {practiceAreas[category.id].icon}
+                      </div>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      {category.label}
+                    </h3>
+                    <p className="text-[#E8EEF4] text-sm leading-relaxed min-h-[60px] flex items-center justify-center">
+                      {" "}
+                      {/* Added min-height for consistent description height */}
+                      {practiceAreas[category.id].description}
+                    </p>
+                  </div>
+                  {/* Card Features */}
+                  <div className="p-6 flex-grow flex flex-col">
+                    {" "}
+                    {/* Added flex classes */}
+                    <ul className="space-y-3 mb-6 flex-grow">
+                      {" "}
+                      {/* Added flex-grow */}
+                      {practiceAreas[category.id].features
+                        .slice(0, 4)
+                        .map((feature, index) => (
+                          <li
+                            key={index}
+                            className="flex items-center space-x-3"
+                          >
+                            <div className="w-2 h-2 bg-[#CBA054] rounded-full flex-shrink-0"></div>
+                            <span className="text-[#0A1A2F] text-sm">
+                              {feature}
+                            </span>
+                          </li>
+                        ))}
+                    </ul>
+                    {/* Learn More Button */}
+                    <button
+                      onClick={() => navigate(`/services/${category.label}`)}
+                      className="w-full bg-linear-to-r from-[#CBA054] to-[#DBAE5D] text-white py-3 rounded-lg font-semibold hover:bg-[#0A1A2F] hover:from-[#0A1A2F] hover:to-[#0A1A2F] transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 group/btn mt-auto"
+                    >
+                      <span>Learn More</span>
+                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                    </button>
+                  </div>
+                </div>
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
 
-          {/* Call to Action */}
-        
+          {/* Custom Pagination */}
+          <div className="custom-pagination flex justify-center space-x-2 mt-8"></div>
 
-          {/* Additional Note for Business Law */}
-          {activeCategory === 'business' && (
-            <div className="mt-8 bg-[#F4EEDC] rounded-2xl p-6 border border-[#CBA054]/20">
-              <p className="text-gray-600 text-center italic">
-                We know that when you are running a business you would rather not assign precious time dealing with legal issues by yourself. Most business owners have so many other pressing things to do on their daily basis; this is the reason why you can feel good when you can confidently allocate your legal problem to an expert business advisor you can trust.
-              </p>
-              <p className="text-gray-600 text-center mt-4 font-semibold">
-                At Hubers Law we make every effort to provide all our clients with valuable professional assistance; leaving them to get on with looking after their business while we focus on providing them with practical legal help and advice that can help boost or protect their business.
-              </p>
-            </div>
-          )}
+         
         </div>
-
-     
       </div>
+
+      <style jsx>{`
+        .practice-areas-swiper {
+          padding: 20px 10px 60px;
+        }
+
+        /* Custom Pagination Styles */
+        .custom-pagination {
+          position: relative;
+          z-index: 20;
+        }
+
+        .custom-bullet {
+          width: 12px;
+          height: 12px;
+          background: #0a1a2f;
+          border-radius: 50%;
+          margin: 0 6px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          display: inline-block;
+        }
+
+        .custom-bullet-active {
+          background: #cba054;
+          transform: scale(1.2);
+          box-shadow: 0 0 10px rgba(203, 160, 84, 0.5);
+        }
+
+        .custom-bullet:hover {
+          background: #dbae5d;
+          transform: scale(1.1);
+        }
+
+        /* Custom Navigation Button Styles */
+        .custom-nav-btn {
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+          border: 2px solid #e8eef4;
+          color: #0a1a2f;
+        }
+
+        .custom-nav-btn:hover {
+          border-color: #cba054;
+        }
+
+        /* Swiper Slide Animation */
+        .swiper-slide {
+          opacity: 0.7;
+          transform: scale(0.9);
+          transition: all 0.4s ease;
+          height: auto; /* Ensure slides take full height */
+        }
+
+        .swiper-slide-active {
+          opacity: 1;
+          transform: scale(1);
+        }
+
+        /* Ensure all cards have the same height */
+        .swiper-slide > div {
+          height: 100%;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+          .custom-nav-btn {
+            display: none;
+          }
+
+          .practice-areas-swiper {
+            padding: 10px 5px 40px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .swiper-slide {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </section>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { 
   ChevronRight, 
@@ -8,22 +8,17 @@ import {
   Users, 
   Home as HomeIcon, 
   Shield, 
-  Briefcase, 
-  Globe, 
   FileText,
-  ArrowRight,
   Download,
   File,
   BookOpen,
   Clock,
   Award,
-  Target,
-  ChevronDown
+  Phone,
+  ArrowRight
 } from 'lucide-react';
 
 const Services = () => {
-  const [expandedService, setExpandedService] = useState(null);
-
   const breadcrumbs = [
     { name: 'Home', path: '/', icon: <Home className="w-4 h-4" /> },
     { name: 'Services', path: '/services', current: true }
@@ -33,191 +28,97 @@ const Services = () => {
     {
       id: 'business',
       title: "Business Law",
-      icon: <Building className="w-12 h-12" />,
+      icon: <Building className="w-8 h-8" />,
       description: "Comprehensive legal solutions for businesses of all sizes, from startups to multinational corporations.",
-      detailedDescription: `
-        <div class="space-y-4">
-          <p class="text-gray-700 leading-relaxed">
-            Our Business Law practice provides strategic legal counsel to help your business navigate complex regulatory environments, 
-            manage risks, and capitalize on growth opportunities. We understand that every business is unique, and we tailor our 
-            approach to meet your specific objectives.
-          </p>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <h4 class="font-semibold text-[#0A1A2F]">Corporate Services</h4>
-              <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
-                <li>Business Formation & Incorporation</li>
-                <li>Mergers & Acquisitions</li>
-                <li>Corporate Governance</li>
-                <li>Shareholder Agreements</li>
-              </ul>
-            </div>
-            <div class="space-y-2">
-              <h4 class="font-semibold text-[#0A1A2F]">Commercial Services</h4>
-              <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
-                <li>Contract Drafting & Review</li>
-                <li>Commercial Transactions</li>
-                <li>Regulatory Compliance</li>
-                <li>Business Restructuring</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="bg-[#F4EEDC] rounded-xl p-4 border-l-4 border-[#CBA054]">
-            <p class="text-[#0A1A2F] font-semibold text-sm">
-              "We've helped over 500 businesses navigate legal challenges and achieve their growth objectives."
-            </p>
-          </div>
-        </div>
-      `,
+      features: [
+        "Business Formation & Structure",
+        "Contract Drafting & Review",
+        "Mergers & Acquisitions",
+        "Corporate Compliance",
+        "Commercial Litigation",
+        "Intellectual Property"
+      ],
       stats: [
         { value: "500+", label: "Businesses Served" },
         { value: "98%", label: "Success Rate" },
         { value: "15+", label: "Years Experience" }
-      ],
-      lawyers: ["John Smith", "Emily Davis", "Michael Brown"]
+      ]
     },
     {
       id: 'personal',
       title: "Personal Law",
-      icon: <Users className="w-12 h-12" />,
+      icon: <Users className="w-8 h-8" />,
       description: "Compassionate legal guidance for individuals and families facing personal legal challenges.",
-      detailedDescription: `
-        <div class="space-y-4">
-          <p class="text-gray-700 leading-relaxed">
-            Our Personal Law team provides empathetic and expert legal support for matters that affect you and your family. 
-            We understand the emotional nature of personal legal issues and provide guidance with sensitivity and professionalism.
-          </p>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <h4 class="font-semibold text-[#0A1A2F]">Family Law</h4>
-              <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
-                <li>Divorce & Separation</li>
-                <li>Child Custody & Support</li>
-                <li>Adoption & Surrogacy</li>
-                <li>Prenuptial Agreements</li>
-              </ul>
-            </div>
-            <div class="space-y-2">
-              <h4 class="font-semibold text-[#0A1A2F]">Individual Services</h4>
-              <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
-                <li>Estate Planning</li>
-                <li>Personal Injury</li>
-                <li>Immigration Matters</li>
-                <li>Criminal Defense</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="bg-[#F4EEDC] rounded-xl p-4 border-l-4 border-[#CBA054]">
-            <p class="text-[#0A1A2F] font-semibold text-sm">
-              "We approach every personal matter with the care and attention it deserves, ensuring your rights are protected."
-            </p>
-          </div>
-        </div>
-      `,
+      features: [
+        "Family Law & Divorce",
+        "Immigration Services",
+        "Estate Planning",
+        "Personal Contracts",
+        "Child Custody",
+        "Mediation Services"
+      ],
       stats: [
         { value: "300+", label: "Families Helped" },
         { value: "95%", label: "Client Satisfaction" },
         { value: "12+", label: "Years Experience" }
-      ],
-      lawyers: ["Sarah Johnson", "David Wilson", "Lisa Chen"]
+      ]
     },
     {
       id: 'property',
       title: "Property Law",
-      icon: <HomeIcon className="w-12 h-12" />,
+      icon: <HomeIcon className="w-8 h-8" />,
       description: "Expert legal services for residential and commercial property transactions and disputes.",
-      detailedDescription: `
-        <div class="space-y-4">
-          <p class="text-gray-700 leading-relaxed">
-            Our Property Law specialists handle all aspects of real estate transactions, from residential purchases to complex 
-            commercial developments. We ensure your property interests are protected throughout the process.
-          </p>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <h4 class="font-semibold text-[#0A1A2F]">Residential</h4>
-              <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
-                <li>Property Purchases & Sales</li>
-                <li>Lease Agreements</li>
-                <li>Boundary Disputes</li>
-                <li>Mortgage Matters</li>
-              </ul>
-            </div>
-            <div class="space-y-2">
-              <h4 class="font-semibold text-[#0A1A2F]">Commercial</h4>
-              <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
-                <li>Commercial Leases</li>
-                <li>Property Development</li>
-                <li>Zoning & Planning</li>
-                <li>Construction Law</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="bg-[#F4EEDC] rounded-xl p-4 border-l-4 border-[#CBA054]">
-            <p class="text-[#0A1A2F] font-semibold text-sm">
-              "We've successfully handled over £500M in property transactions for our clients."
-            </p>
-          </div>
-        </div>
-      `,
+      features: [
+        "Real Estate Transactions",
+        "Leasing & Tenancy",
+        "Property Development",
+        "Zoning Compliance",
+        "Property Disputes",
+        "Title Verification"
+      ],
       stats: [
         { value: "£500M+", label: "Property Value" },
         { value: "97%", label: "Success Rate" },
         { value: "18+", label: "Years Experience" }
-      ],
-      lawyers: ["Robert Garcia", "Maria Rodriguez", "James Wilson"]
+      ]
     },
     {
       id: 'dispute',
       title: "Dispute Resolution",
-      icon: <Scale className="w-12 h-12" />,
+      icon: <Scale className="w-8 h-8" />,
       description: "Strategic representation in litigation and alternative dispute resolution processes.",
-      detailedDescription: `
-        <div class="space-y-4">
-          <p class="text-gray-700 leading-relaxed">
-            Our Dispute Resolution team provides aggressive and strategic representation in courtrooms and negotiation tables. 
-            We explore all avenues for resolution while preparing every case as if it will go to trial.
-          </p>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="space-y-2">
-              <h4 class="font-semibold text-[#0A1A2F]">Litigation</h4>
-              <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
-                <li>Civil Litigation</li>
-                <li>Commercial Disputes</li>
-                <li>Contract Disputes</li>
-                <li>Professional Negligence</li>
-              </ul>
-            </div>
-            <div class="space-y-2">
-              <h4 class="font-semibold text-[#0A1A2F]">ADR</h4>
-              <ul class="list-disc list-inside space-y-1 text-gray-600 text-sm">
-                <li>Mediation</li>
-                <li>Arbitration</li>
-                <li>Negotiation</li>
-                <li>Settlement Agreements</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="bg-[#F4EEDC] rounded-xl p-4 border-l-4 border-[#CBA054]">
-            <p class="text-[#0A1A2F] font-semibold text-sm">
-              "We achieve favorable outcomes for 95% of our clients through strategic dispute resolution."
-            </p>
-          </div>
-        </div>
-      `,
+      features: [
+        "Civil Litigation",
+        "Commercial Disputes",
+        "Mediation Services",
+        "Arbitration",
+        "Settlement Negotiations",
+        "Appellate Practice"
+      ],
       stats: [
         { value: "95%", label: "Favorable Outcomes" },
         { value: "400+", label: "Cases Resolved" },
         { value: "20+", label: "Years Experience" }
+      ]
+    },
+    {
+      id: 'defense',
+      title: "Criminal Defense",
+      icon: <Shield className="w-8 h-8" />,
+      description: "Aggressive defense representation for criminal charges at all levels.",
+      features: [
+        "Felony Defense",
+        "Misdemeanor Cases",
+        "Federal Crimes",
+        "Appeals Process",
+        "Record Expungement",
+        "Bail Hearings"
       ],
-      lawyers: ["Jennifer Martinez", "Thomas Lee", "Patricia Brown"]
+      stats: [
+        { value: "1000+", label: "Cases Handled" },
+        { value: "90%", label: "Success Rate" },
+        { value: "25+", label: "Years Experience" }
+      ]
     }
   ];
 
@@ -264,10 +165,6 @@ const Services = () => {
     }
   ];
 
-  const toggleService = (serviceId) => {
-    setExpandedService(expandedService === serviceId ? null : serviceId);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F4EEDC] to-[#E8EEF4] pt-20 pb-16">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -299,129 +196,99 @@ const Services = () => {
 
         {/* Page Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-4">
+         
+
+          <h1 className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-6 leading-tight">
             Our Practice Areas
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Comprehensive legal services across four main practice areas. 
-            Click on each area to learn more about how we can help you.
+            Comprehensive legal services across multiple practice areas. 
+            Our experienced attorneys provide expert counsel and representation tailored to your specific needs.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Left Side - Practice Areas */}
-          <div className="lg:col-span-3 space-y-6">
-            {practiceAreas.map((area) => (
-              <div 
-                key={area.id}
-                className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] overflow-hidden transition-all duration-300"
-              >
-                {/* Practice Area Header */}
+          {/* Left Side - Practice Areas Cards */}
+          <div className="lg:col-span-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {practiceAreas.map((area) => (
                 <div 
-                  className="p-6 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
-                  onClick={() => toggleService(area.id)}
+                  key={area.id}
+                  className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] overflow-hidden transform transition-all duration-500 hover:shadow-2xl hover:scale-105 group flex flex-col h-full"
                 >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-16 h-16 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center flex-shrink-0">
-                        <div className="text-white">
-                          {area.icon}
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="text-2xl font-bold text-[#0A1A2F] mb-2">
-                          {area.title}
-                        </h3>
-                        <p className="text-gray-600">
-                          {area.description}
-                        </p>
+                  {/* Card Header */}
+                  <div className="bg-gradient-to-br from-[#0A1A2F] to-[#1E354F] p-6 text-center flex-shrink-0">
+                    <div className="w-16 h-16 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                      <div className="text-white">
+                        {area.icon}
                       </div>
                     </div>
-                    <ChevronDown 
-                      className={`w-6 h-6 text-[#CBA054] transition-transform duration-300 ${
-                        expandedService === area.id ? 'rotate-180' : ''
-                      }`}
-                    />
+                    <h3 className="text-2xl font-bold text-white mb-2">
+                      {area.title}
+                    </h3>
+                    <p className="text-[#E8EEF4] text-sm leading-relaxed min-h-[60px] flex items-center justify-center">
+                      {area.description}
+                    </p>
+                  </div>
+
+                  {/* Card Features */}
+                  <div className="p-6 flex-grow flex flex-col">
+                    <ul className="space-y-3 mb-6 flex-grow">
+                      {area.features.slice(0, 4).map((feature, index) => (
+                        <li key={index} className="flex items-center space-x-3">
+                          <div className="w-2 h-2 bg-[#CBA054] rounded-full flex-shrink-0"></div>
+                          <span className="text-[#0A1A2F] text-sm">
+                            {feature}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                  
+
+                    {/* Learn More Button */}
+                    <Link
+                      to={`/services/${area.id}`}
+                      className="w-full bg-gradient-to-r from-[#CBA054] to-[#DBAE5D] text-white py-3 rounded-lg font-semibold hover:bg-[#0A1A2F] hover:from-[#0A1A2F] hover:to-[#0A1A2F] transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 group/btn mt-auto"
+                    >
+                      <span>Learn More</span>
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                    </Link>
                   </div>
                 </div>
-
-                {/* Expanded Content */}
-                {expandedService === area.id && (
-                  <div className="border-t border-[#E8EEF4]">
-                    <div className="p-6">
-                      {/* Detailed Description */}
-                      <div 
-                        className="mb-6"
-                        dangerouslySetInnerHTML={{ __html: area.detailedDescription }}
-                      />
-
-                      {/* Stats and Lawyers */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Statistics */}
-                        <div>
-                          <h4 className="font-semibold text-[#0A1A2F] mb-3">Our Track Record</h4>
-                          <div className="grid grid-cols-3 gap-4">
-                            {area.stats.map((stat, index) => (
-                              <div key={index} className="text-center">
-                                <div className="text-2xl font-bold text-[#CBA054]">{stat.value}</div>
-                                <div className="text-xs text-gray-600">{stat.label}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Specialist Lawyers */}
-                        <div>
-                          <h4 className="font-semibold text-[#0A1A2F] mb-3">Specialist Lawyers</h4>
-                          <div className="space-y-2">
-                            {area.lawyers.map((lawyer, index) => (
-                              <div key={index} className="flex items-center space-x-2">
-                                <div className="w-2 h-2 bg-[#CBA054] rounded-full"></div>
-                                <span className="text-gray-600">{lawyer}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* CTA Button */}
-                      <button className="w-full bg-[#0A1A2F] text-white py-3 rounded-lg font-semibold hover:bg-[#CBA054] transition-all duration-300 mt-6 flex items-center justify-center space-x-2">
-                        <span>Schedule Consultation</span>
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           {/* Right Side - Legal Documents */}
           <div className="space-y-6">
+            {/* Legal Resources Card */}
             <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-6">
-              <h3 className="text-xl font-bold text-[#0A1A2F] mb-4 flex items-center">
-                <FileText className="w-5 h-5 mr-2 text-[#CBA054]" />
-                Legal Resources
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                Download our free legal guides and resources to help you understand your legal rights and options.
-              </p>
+              <div className="flex items-center space-x-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center">
+                  <FileText className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#0A1A2F]">Legal Resources</h3>
+                  <p className="text-gray-600 text-sm">Free guides and documents</p>
+                </div>
+              </div>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {legalDocuments.map((doc) => (
                   <button
                     key={doc.id}
-                    className="w-full flex items-center justify-between p-4 bg-[#F4EEDC] rounded-lg hover:bg-[#CBA054] hover:text-white transition-all duration-300 group"
+                    className="w-full flex items-center justify-between p-4 bg-gradient-to-r from-[#F4EEDC] to-[#E8EEF4] rounded-xl hover:from-[#CBA054] hover:to-[#DBAE5D] hover:text-white transition-all duration-300 group transform hover:scale-105 border border-[#E8EEF4]"
                   >
                     <div className="flex items-center space-x-3">
                       <div className="text-[#0A1A2F] group-hover:text-white">
                         {doc.icon}
                       </div>
                       <div className="text-left">
-                        <div className="font-semibold text-sm group-hover:text-white">
+                        <div className="font-semibold text-sm group-hover:text-white text-left">
                           {doc.title}
                         </div>
-                        <div className="text-xs text-gray-600 group-hover:text-white/80">
+                        <div className="text-xs text-gray-600 group-hover:text-white/80 text-left">
                           {doc.description}
                         </div>
                       </div>
@@ -437,13 +304,22 @@ const Services = () => {
               </div>
             </div>
 
-            {/* Quick Contact */}
+            {/* Quick Contact Card */}
             <div className="bg-gradient-to-r from-[#0A1A2F] to-[#1E354F] rounded-2xl p-6 text-white">
-              <h3 className="text-xl font-bold mb-4">Need Legal Help?</h3>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center">
+                  <Phone className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">Need Legal Help?</h3>
+                  <p className="text-white/80 text-sm">Free initial consultation</p>
+                </div>
+              </div>
+              
               <p className="text-white/80 text-sm mb-4">
                 Contact us for a free initial consultation to discuss your legal needs.
               </p>
-              <div className="space-y-2 text-sm">
+              <div className="space-y-3 text-sm mb-6">
                 <div className="flex items-center space-x-2">
                   <Clock className="w-4 h-4 text-[#CBA054]" />
                   <span>Mon-Fri: 9AM-6PM</span>
@@ -453,8 +329,9 @@ const Services = () => {
                   <span>Free Initial Consultation</span>
                 </div>
               </div>
-              <button className="w-full bg-[#CBA054] text-white py-3 rounded-lg font-semibold hover:bg-[#DBAE5D] transition-all duration-300 mt-4">
-                Call: 0203 488 0953
+              <button className="w-full bg-[#CBA054] text-white py-3 rounded-lg font-semibold hover:bg-[#DBAE5D] transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
+                <Phone className="w-4 h-4" />
+                <span>Call: 0203 488 0953</span>
               </button>
             </div>
           </div>

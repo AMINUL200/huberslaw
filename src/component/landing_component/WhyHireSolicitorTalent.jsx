@@ -90,12 +90,12 @@ const WhyHireSolicitorTalent = () => {
                 </p>
 
                 {/* Read More Link */}
-                <div className="flex items-center space-x-2 text-[#0A1A2F] group-hover:text-[#CBA054] transition-colors duration-300">
+                {/* <div className="flex items-center space-x-2 text-[#0A1A2F] group-hover:text-[#CBA054] transition-colors duration-300">
                   <span className="font-semibold text-sm">Learn more</span>
                   <div className="w-4 h-4 bg-[#CBA054] rounded-full flex items-center justify-center">
                     <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Hover Border Effect */}

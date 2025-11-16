@@ -5,7 +5,7 @@ import {
   ChevronDown,
   User,
   LogOut,
-  LayoutDashboard,
+  LayoutDashboard,  
   Phone,
   Printer,
   Mail,
@@ -15,7 +15,7 @@ import {
   Instagram,
 } from "lucide-react";
 
-const Navbar = ({ toggleMenu }) => {
+const Navbar = ({ toggleMenu, togglePopup }) => {
   const [scrolled, setScrolled] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const dropdownRefs = useRef({});
@@ -36,7 +36,7 @@ const Navbar = ({ toggleMenu }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Different dummy navigation links
+  // Navigation links with parent paths
   const navLinks = [
     { id: "home", label: "Home", path: "/" },
     {
@@ -47,7 +47,7 @@ const Navbar = ({ toggleMenu }) => {
         { id: "our-people", label: "Our People", path: "/about-us?tab=people" },
         {
           id: "client-care",
-          label: "Client Care ",
+          label: "Client Care",
           path: "/about-us?tab=client-care",
         },
         {
@@ -60,20 +60,21 @@ const Navbar = ({ toggleMenu }) => {
     {
       id: "services",
       label: "Services",
+      path: "/services",
       dropdown: [
-        { id: "corporate-law", label: "Corporate Law ", path: "/services/corporate-law" },
+        { id: "corporate-law", label: "Corporate Law", path: "/services/corporate-law" },
         {
           id: "family-law",
           label: "Family Law",
           path: "/services/family-law",
         },
         { id: "business-law", label: "Business Law", path: "/services/business-law" },
-       
       ],
     },
     {
       id: "careers",
       label: "Careers",
+      path: "/careers",
       dropdown: [
         {
           id: "why-work-with-us",
@@ -93,51 +94,36 @@ const Navbar = ({ toggleMenu }) => {
     { icon: <Instagram className="w-4 h-4" />, url: "#", name: "Instagram" },
   ];
 
-  // Helper functions for dropdown management
-  const getParentDropdownId = (dropdownId) => {
-    if (dropdownId.includes("-sub-")) {
-      const parts = dropdownId.split("-sub-");
-      return parts[0];
-    }
-    return null;
+  // Hover handlers
+  const handleMouseEnter = (dropdownId) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [dropdownId]: true
+    }));
   };
 
-  const isChildDropdown = (childId, parentId) => {
-    return childId.startsWith(parentId + "-sub-");
+  const handleMouseLeave = (dropdownId) => {
+    setOpenDropdowns((prev) => ({
+      ...prev,
+      [dropdownId]: false
+    }));
   };
 
-  const toggleDropdown = (dropdownId) => {
-    setOpenDropdowns((prev) => {
-      const newState = { ...prev };
+  // Close all dropdowns
+  const closeAllDropdowns = () => {
+    setOpenDropdowns({});
+  };
 
-      if (!dropdownId.includes("-sub-")) {
-        Object.keys(newState).forEach((key) => {
-          if (key !== dropdownId && !key.includes("-sub-")) {
-            newState[key] = false;
-            Object.keys(newState).forEach((subKey) => {
-              if (isChildDropdown(subKey, key)) {
-                newState[subKey] = false;
-              }
-            });
-          }
-        });
-      } else {
-        const parentId = getParentDropdownId(dropdownId);
-        Object.keys(newState).forEach((key) => {
-          if (key !== dropdownId && getParentDropdownId(key) === parentId) {
-            newState[key] = false;
-            Object.keys(newState).forEach((nestedKey) => {
-              if (isChildDropdown(nestedKey, key)) {
-                newState[nestedKey] = false;
-              }
-            });
-          }
-        });
-      }
+  // Handle parent click - navigate to parent path
+  const handleParentClick = (item) => {
+    navigate(item.path);
+    closeAllDropdowns();
+  };
 
-      newState[dropdownId] = !prev[dropdownId];
-      return newState;
-    });
+  // Handle dropdown item click
+  const handleDropdownItemClick = (path) => {
+    navigate(path);
+    closeAllDropdowns();
   };
 
   // Close dropdowns when clicking outside
@@ -150,7 +136,7 @@ const Navbar = ({ toggleMenu }) => {
         }
       });
       if (clickedOutside) {
-        setOpenDropdowns({});
+        closeAllDropdowns();
       }
     };
 
@@ -158,31 +144,29 @@ const Navbar = ({ toggleMenu }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleNavClick = (path) => {
-    navigate(path);
-    setOpenDropdowns({});
-  };
-
   const handleLogout = () => {
     console.log("Logging out...");
-    // Add your logout logic here
     navigate("/");
   };
 
-  // Render dropdown items recursively
+  // Render dropdown items
   const renderDropdownItem = (item, level = 1) => {
     const hasSubDropdown = item.dropdown && item.dropdown.length > 0;
     const dropdownKey = `${item.id}-sub-${level}`;
     const isOpen = openDropdowns[dropdownKey];
 
     return (
-      <div key={item.id} className="relative group">
+      <div 
+        key={item.id} 
+        className="relative group"
+        onMouseEnter={() => hasSubDropdown && handleMouseEnter(dropdownKey)}
+        onMouseLeave={() => hasSubDropdown && handleMouseLeave(dropdownKey)}
+      >
         {hasSubDropdown ? (
           <div
             className={`flex items-center justify-between px-4 py-2 text-sm text-[#0A1A2F] hover:bg-[#F4EEDC] hover:text-[#CBA054] cursor-pointer transition-colors ${
               level > 1 ? "pl-8" : ""
             }`}
-            onClick={() => toggleDropdown(dropdownKey)}
           >
             <span>{item.label}</span>
             <ChevronDown
@@ -197,17 +181,19 @@ const Navbar = ({ toggleMenu }) => {
             className={`block px-4 py-2 text-sm text-[#0A1A2F] hover:bg-[#F4EEDC] hover:text-[#CBA054] transition-colors ${
               level > 1 ? "pl-8" : ""
             }`}
-            onClick={() => setOpenDropdowns({})}
+            onClick={closeAllDropdowns}
           >
             {item.label}
           </RouterLink>
         )}
 
         {hasSubDropdown && isOpen && (
-          <div className="bg-[#F4EEDC] border-l-2 border-[#CBA054] ml-2">
-            {item.dropdown.map((subItem) =>
-              renderDropdownItem(subItem, level + 1)
-            )}
+          <div className="absolute left-full top-0 w-64 bg-white border border-[#E8EEF4] rounded-lg shadow-lg z-50">
+            <div className="py-2">
+              {item.dropdown.map((subItem) =>
+                renderDropdownItem(subItem, level + 1)
+              )}
+            </div>
           </div>
         )}
       </div>
@@ -224,37 +210,43 @@ const Navbar = ({ toggleMenu }) => {
         key={item.id}
         className="relative"
         ref={(el) => (dropdownRefs.current[item.id] = el)}
+        onMouseEnter={() => hasDropdown && handleMouseEnter(item.id)}
+        onMouseLeave={() => hasDropdown && handleMouseLeave(item.id)}
       >
         {hasDropdown ? (
-          <div
-            className={`text-[#0A1A2F] font-semibold hover:text-[#CBA054] cursor-pointer transition-colors px-2 py-1 flex items-center space-x-1 ${
-              isOpen ? "text-[#CBA054]" : ""
-            }`}
-            onClick={() => toggleDropdown(item.id)}
-          >
-            <span>{item.label}</span>
-            <ChevronDown
-              className={`w-4 h-4 transition-transform duration-200 ${
-                isOpen ? "rotate-180" : ""
+          <div className="relative">
+            {/* Clickable parent link */}
+            <div
+              className={`text-[#0A1A2F] font-semibold hover:text-[#CBA054] cursor-pointer transition-colors px-2 py-1 flex items-center space-x-1 ${
+                isOpen ? "text-[#CBA054]" : ""
               }`}
-            />
+              onClick={() => handleParentClick(item)}
+            >
+              <span>{item.label}</span>
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+              />
+            </div>
+
+            {/* Dropdown menu */}
+            {isOpen && (
+              <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-[#E8EEF4] rounded-lg shadow-lg z-50">
+                <div className="py-2">
+                  {item.dropdown.map((dropdownItem) =>
+                    renderDropdownItem(dropdownItem)
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div
-            className="text-[#0A1A2F] font-semibold hover:text-[#CBA054] cursor-pointer transition-colors px-2 py-1 flex items-center space-x-1"
-            onClick={() => handleNavClick(item.path)}
+            className="text-[#0A1A2F] font-semibold hover:text-[#CBA054] cursor-pointer transition-colors px-2 py-1"
+            onClick={() => handleParentClick(item)}
           >
             {item.label}
-          </div>
-        )}
-
-        {hasDropdown && isOpen && (
-          <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-[#E8EEF4] rounded-lg shadow-lg z-50">
-            <div className="py-2">
-              {item.dropdown.map((dropdownItem) =>
-                renderDropdownItem(dropdownItem)
-              )}
-            </div>
           </div>
         )}
       </div>
@@ -346,7 +338,7 @@ const Navbar = ({ toggleMenu }) => {
             {navLinks.map((item) => renderNavItem(item))}
 
             <button
-              to="/login"
+              onClick={togglePopup}
               className="ml-4 bg-[#0A1A2F] text-white px-6 py-2 rounded-md hover:bg-[#CBA054] transition-all duration-300 flex items-center space-x-2"
             >
               <span>Book Appointment</span>

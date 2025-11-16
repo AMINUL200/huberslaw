@@ -16,27 +16,7 @@ const Footer = () => {
         { name: "Intellectual Property", url: "/practice-areas/ip" }
       ]
     },
-    about: {
-      title: "About Us",
-      links: [
-        { name: "Our People", url: "/about/our-people" },
-        { name: "Client Care", url: "/about/client-care" },
-        { name: "Why Choose Us", url: "/about/why-choose-us" },
-        { name: "Testimonials", url: "/about/testimonials" },
-        { name: "Careers", url: "/careers" },
-        { name: "Contact Us", url: "/contact" }
-      ]
-    },
-    resources: {
-      title: "Resources",
-      links: [
-        { name: "Blog & Insights", url: "/blog" },
-        { name: "FAQ", url: "/faq" },
-        { name: "Case Studies", url: "/case-studies" },
-        { name: "Legal Guides", url: "/guides" },
-        { name: "News & Updates", url: "/news" }
-      ]
-    },
+   
     legal: {
       title: "Legal",
       links: [
@@ -77,6 +57,39 @@ const Footer = () => {
     { icon: <Twitter className="w-5 h-5" />, url: "#", name: "Twitter" },
     { icon: <Linkedin className="w-5 h-5" />, url: "#", name: "LinkedIn" },
     { icon: <Instagram className="w-5 h-5" />, url: "#", name: "Instagram" }
+  ];
+
+  const accreditationLogos = [
+    {
+      name: "SRA",
+      title: "Solicitors Regulation Authority",
+      logo: (
+        <svg width="80" height="40" viewBox="0 0 80 40" className="text-white">
+          <rect width="80" height="40" fill="#0A1A2F" rx="4" />
+          <text x="40" y="22" textAnchor="middle" fill="#CBA054" fontSize="10" fontWeight="bold">
+            SRA
+          </text>
+          <text x="40" y="32" textAnchor="middle" fill="#FFFFFF" fontSize="6">
+            REGULATED
+          </text>
+        </svg>
+      )
+    },
+    {
+      name: "Law Society",
+      title: "The Law Society",
+      logo: (
+        <svg width="80" height="40" viewBox="0 0 80 40" className="text-white">
+          <rect width="80" height="40" fill="#0A1A2F" rx="4" />
+          <text x="40" y="18" textAnchor="middle" fill="#CBA054" fontSize="8" fontWeight="bold">
+            THE LAW SOCIETY
+          </text>
+          <text x="40" y="30" textAnchor="middle" fill="#FFFFFF" fontSize="6">
+            ACCREDITED
+          </text>
+        </svg>
+      )
+    }
   ];
 
   return (
@@ -144,27 +157,72 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Right Column - Links Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {Object.entries(footerLinks).map(([key, section]) => (
-              <div key={key} className="space-y-4">
-                <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
-                  {section.title}
-                </h3>
-                <ul className="space-y-3">
-                  {section.links.map((link, index) => (
-                    <li key={index}>
-                      <a
-                        href={link.url}
-                        className="text-gray-300 hover:text-[#CBA054] transition-colors duration-200 text-sm hover:underline hover:underline-offset-2"
-                      >
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+          {/* Right Column - Links Grid & Accreditation */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Practice Areas Links */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
+                {footerLinks.practiceAreas.title}
+              </h3>
+              <ul className="space-y-3">
+                {footerLinks.practiceAreas.links.map((link, index) => (
+                  <li key={index}>
+                    <a
+                      href={link.url}
+                      className="text-gray-300 hover:text-[#CBA054] transition-colors duration-200 text-sm hover:underline hover:underline-offset-2"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Legal Links */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
+                {footerLinks.legal.title}
+              </h3>
+              <ul className="space-y-3">
+                {footerLinks.legal.links.map((link, index) => (
+                  <li key={index}>
+                    <a
+                      href={link.url}
+                      className="text-gray-300 hover:text-[#CBA054] transition-colors duration-200 text-sm hover:underline hover:underline-offset-2"
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Accreditation Section */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
+                Accreditation
+              </h3>
+              
+              <div className="space-y-4">
+                {accreditationLogos.map((accreditation, index) => (
+                  <div 
+                    key={index}
+                    className="bg-[#1E354F] rounded-lg p-4 border border-[#CBA054]/20 hover:border-[#CBA054] transition-all duration-300 transform hover:scale-105"
+                  >
+                    <div className="flex flex-col items-center space-y-2">
+                      <div className="flex justify-center">
+                        {accreditation.logo}
+                      </div>
+                      <span className="text-xs text-gray-300 text-center">
+                        {accreditation.title}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+
+             
+            </div>
           </div>
         </div>
       </div>
