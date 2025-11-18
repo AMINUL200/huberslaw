@@ -46,9 +46,9 @@ api.interceptors.response.use(
       localStorage.removeItem("user");
 
       // OPTIONAL → only if NOT login page
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
+      // if (window.location.pathname !== "/login") {
+      //   window.location.href = "/login";
+      // }
     }
 
     // Always reject with readable error

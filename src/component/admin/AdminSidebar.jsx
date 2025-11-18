@@ -45,6 +45,12 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
       path: "/admin/profile",
     },
     {
+      id: "contact-us-messages",
+      label: "Contact Us Messages",
+      icon: <Mail className="w-5 h-5" />,
+      path: "/admin/contact-us-messages",
+    },
+    {
       id: "homepage",
       label: "Handle Homepage",
       icon: <Users className="w-5 h-5" />,
@@ -66,11 +72,42 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
           label: "Handle Truly Listen",
           icon: <Users className="w-4 h-4" />,
           path: "/admin/homepage/truly-listen",
-        }
-      
+        },
       ],
     },
-  
+    {
+      id: "services",
+      label: "Handle Services",
+      icon: <Package className="w-5 h-5" />,
+      path: "/admin/handle-services",
+    },
+    {
+      id: "team",
+      label: "Handle Team",
+      icon: <Users className="w-5 h-5" />,
+      path: "/admin/handle-team",
+    },
+
+    {
+      id: "about",
+      label: "Handle About Us",
+      icon: <FileText className="w-5 h-5" />,
+      children: [
+        {
+          id: "aboutPage",
+          label: "Handle About Info",
+          icon: <FileText className="w-4 h-4" />,
+          path: "/admin/handle-about",
+        },
+        {
+          id: "aboutTerms",
+          label: "Handle Terms & Conditions",
+          icon: <FileText className="w-4 h-4" />,
+          path: "/admin/handle-terms",
+        },
+      ],
+    },
+
     {
       id: "settings",
       label: "Settings",
@@ -82,7 +119,6 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
           icon: <Settings className="w-4 h-4" />,
           path: "/admin/site-settings",
         },
-       
       ],
     },
   ];

@@ -1,8 +1,13 @@
 import React, { useState } from "react";
-import { Calendar, Clock, User, Send } from "lucide-react";
+import { Calendar, Clock, User, Send, RefreshCw } from "lucide-react";
 import CustomInput from "../form/CustomInput";
+import { toast } from "react-toastify";
+import { api } from "../../utils/app";
 
-const BookingForm = () => {
+const BookingForm = ({ servicesList = [], teamList = [] }) => {
+ 
+  const [submitLoading, setSubmitLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,28 +18,7 @@ const BookingForm = () => {
     message: "",
   });
 
-  const caseTypes = [
-    { value: "", label: "Select Case Type" },
-    { value: "corporate", label: "Corporate Law" },
-    { value: "litigation", label: "Litigation" },
-    { value: "family", label: "Family Law" },
-    { value: "real-estate", label: "Real Estate" },
-    { value: "criminal", label: "Criminal Defense" },
-    { value: "immigration", label: "Immigration" },
-    { value: "employment", label: "Employment Law" },
-    { value: "intellectual-property", label: "Intellectual Property" },
-    { value: "other", label: "Other" },
-  ];
 
-  const lawyers = [
-    { value: "", label: "Choose a Lawyer" },
-    { value: "john-doe", label: "John Doe - Senior Partner" },
-    { value: "jane-smith", label: "Jane Smith - Corporate Law" },
-    { value: "mike-wilson", label: "Mike Wilson - Litigation" },
-    { value: "sarah-brown", label: "Sarah Brown - Family Law" },
-    { value: "david-lee", label: "David Lee - Real Estate" },
-    { value: "any", label: "Any Available Lawyer" },
-  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -44,10 +28,54 @@ const BookingForm = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const getServiceNameById = (id) => {
+    const service = servicesList.find((s) => s.id === Number(id));
+    return service ? service.service_name : "";
+  };
+
+  const getLawyerNameById = (id) => {
+    if (id === "any") return "Any Available Lawyer";
+    const team = teamList.find((t) => t.id === Number(id));
+    return team ? team.name : "";
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    setSubmitLoading(true);
     // Handle form submission here
+    const payload = {
+      full_name: formData.name,
+      email: formData.email,
+      phone_no: formData.phone,
+      organisation: formData.organization,
+      service_name: getServiceNameById(formData.caseType),
+      preferred_lawyer: getLawyerNameById(formData.lawyer),
+      message: formData.message,
+    };
+
+
+    try {
+      const response = await api.post("/contacts", payload);
+
+      if (response.data.status) {
+        toast.success(response.data.message || "Message sent successfully!");
+      } else {
+        toast.error(response.data.message || "Failed to send message.");
+      }
+    } catch (error) {
+      console.error("Submit error:", error);
+    } finally {
+      setSubmitLoading(false);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        caseType: "",
+        lawyer: "",
+        organization: "",
+        message: "",
+      });
+    }
   };
 
   return (
@@ -138,9 +166,10 @@ const BookingForm = () => {
                         required
                         className="w-full px-4 py-3 rounded-lg bg-white text-gray-700 outline-none focus:ring-2 focus:ring-[#CBA054]/20 focus:border-[#CBA054] duration-300 border border-[#E8EEF4] transition-all shadow-sm hover:shadow-md focus:shadow-lg"
                       >
-                        {caseTypes.map((option) => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
+                        <option value="">Select Case Type</option>
+                        {servicesList.map((option) => (
+                          <option key={option.id} value={option.id}>
+                            {option.service_name}
                           </option>
                         ))}
                       </select>
@@ -156,9 +185,10 @@ const BookingForm = () => {
                         onChange={handleChange}
                         className="w-full px-4 py-3 rounded-lg bg-white text-gray-700 outline-none focus:ring-2 focus:ring-[#CBA054]/20 focus:border-[#CBA054] duration-300 border border-[#E8EEF4] transition-all shadow-sm hover:shadow-md focus:shadow-lg"
                       >
-                        {lawyers.map((lawyer) => (
-                          <option key={lawyer.value} value={lawyer.value}>
-                            {lawyer.label}
+                        <option value="">Choose a Lawyer</option>
+                        {teamList.map((team) => (
+                          <option key={team.id} value={team.id}>
+                            {team.name}
                           </option>
                         ))}
                       </select>
@@ -201,10 +231,24 @@ const BookingForm = () => {
                   <div className="flex justify-center pt-4">
                     <button
                       type="submit"
-                      className="bg-[#0A1A2F] text-white px-12 py-4 rounded-lg font-semibold text-lg hover:bg-[#CBA054] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-3 group"
+                      disabled={submitLoading}
+                      className={`w-full px-8 py-4 rounded-lg font-semibold transition-all duration-300 transform flex items-center justify-center space-x-3 group ${
+                        submitLoading
+                          ? "bg-gray-400 text-white cursor-not-allowed hover:scale-100"
+                          : "bg-[#0A1A2F] text-white hover:bg-[#CBA054] hover:scale-105"
+                      }`}
                     >
-                      <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                      <span>Submit Booking Request</span>
+                      {submitLoading ? (
+                        <>
+                          <RefreshCw className="w-5 h-5 animate-spin" />
+                          <span>Submitting...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                          <span>Submit Booking Request</span>
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
@@ -2191,7 +2235,6 @@ const BookingForm = () => {
                       />
                     </path>
                   </svg>{" "}
-                 
                   {/* Text Content */}
                   <div className="text-center mt-8">
                     <h3 className="text-2xl font-bold text-[#F4EEDC] mb-4">

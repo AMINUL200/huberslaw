@@ -12,41 +12,10 @@ import "swiper/css/effect-fade";
 const BannerSection = ({ bannerData = [] }) => {
   const storageUrl = import.meta.env.VITE_APP_BASE_URL;
 
-    const bannerSlides = [
-    {
-      id: 1,
-      image:
-        "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      title: "Expert Legal Solutions",
-      subtitle: "Trusted by thousands of clients worldwide",
-      description:
-        "Professional legal services with decades of experience in corporate law, litigation, and legal consulting.",
-      buttonText: "Get Consultation",
-      buttonLink: "/consultation",
-    },
-    {
-      id: 2,
-      image:
-        "https://images.unsplash.com/photo-1589391886645-d51941baf7fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      title: "Your Success Is Our Priority",
-      subtitle: "Dedicated legal representation",
-      description:
-        "We fight for your rights and ensure the best possible outcome for your legal matters.",
-      buttonText: "Our Services",
-      buttonLink: "/services",
-    },
-    {
-      id: 3,
-      image:
-        "https://images.unsplash.com/photo-1565689228644-83e87ac3d1de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-      title: "Experience You Can Trust",
-      subtitle: "Proven track record of success",
-      description:
-        "With over 20 years of combined experience, our legal team delivers exceptional results.",
-      buttonText: "Meet Our Team",
-      buttonLink: "/about",
-    },
-  ];
+  // console.log(bannerData);
+  
+
+  
 
   // Filter only active banners (is_show === "1")
   const activeBanners = bannerData.filter((banner) => banner.is_show === "1");
@@ -64,7 +33,7 @@ const BannerSection = ({ bannerData = [] }) => {
   }
 
   return (
-    <section className="relative h-[80vh] w-full">
+    <section className="relative h-[70vh] w-full">
       <Swiper
         modules={[Navigation, Pagination, Autoplay, EffectFade]}
         effect="fade"

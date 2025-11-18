@@ -186,9 +186,9 @@ const AdminNavbar = ({ setSidebarOpen }) => {
                 </div>
                 <div className="hidden sm:block text-left">
                   <p className="text-sm font-semibold text-gray-900">
-                    {user.name}
+                    {user?.name}
                   </p>
-                  <p className="text-xs text-gray-500">{user.role}</p>
+                  <p className="text-xs text-gray-500">{user?.role}</p>
                 </div>
                 <ChevronDown
                   className={`w-4 h-4 text-gray-500 transition-transform hidden sm:block ${
@@ -209,9 +209,9 @@ const AdminNavbar = ({ setSidebarOpen }) => {
                       </div>
                       <div className="flex-1">
                         <p className="text-white font-semibold text-sm">
-                          {user.name}
+                          {user?.name}
                         </p>
-                        <p className="text-white/80 text-xs">{user.role}</p>
+                        <p className="text-white/80 text-xs">{user?.role}</p>
                       </div>
                     </div>
                   </div>

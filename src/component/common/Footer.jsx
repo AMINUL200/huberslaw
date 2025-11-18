@@ -1,7 +1,10 @@
 import React from 'react';
 import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
 
-const Footer = () => {
+const Footer = ({ siteSettings = {} }) => {
+  // console.log(siteSettings);
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL ;
+  
   const footerLinks = {
     practiceAreas: {
       title: "Practice Areas",
@@ -29,41 +32,66 @@ const Footer = () => {
     }
   };
 
+  // Dynamic contact info from siteSettings
   const contactInfo = [
     {
       icon: <MapPin className="w-5 h-5" />,
-      text: "123 Legal Street, London, UK WC1A 1AA",
-      url: "#"
+      text: siteSettings?.address || "123 Legal Street, London, UK WC1A 1AA",
+      url: siteSettings?.map || "#"
     },
     {
       icon: <Phone className="w-5 h-5" />,
-      text: "0203 488 0953",
-      url: "tel:+442034880953"
+      text: siteSettings?.phone || "0203 488 0953",
+      url: `tel:${siteSettings?.phone || "+442034880953"}`
     },
     {
       icon: <Mail className="w-5 h-5" />,
-      text: "info@huberslaw.com",
-      url: "mailto:info@huberslaw.com"
+      text: siteSettings?.email || "info@huberslaw.com",
+      url: `mailto:${siteSettings?.email || "info@huberslaw.com"}`
     },
     {
       icon: <Clock className="w-5 h-5" />,
-      text: "Mon-Fri: 9:00 AM - 6:00 PM",
+      text: `Mon-Fri: ${siteSettings?.mon?.split(' - ')[0] || "9:00 AM"} - ${siteSettings?.fri?.split(' - ')[1] || "6:00 PM"}`,
       url: "#"
     }
   ];
 
+  // Dynamic social links from siteSettings
   const socialLinks = [
-    { icon: <Facebook className="w-5 h-5" />, url: "#", name: "Facebook" },
-    { icon: <Twitter className="w-5 h-5" />, url: "#", name: "Twitter" },
-    { icon: <Linkedin className="w-5 h-5" />, url: "#", name: "LinkedIn" },
-    { icon: <Instagram className="w-5 h-5" />, url: "#", name: "Instagram" }
+    { 
+      icon: <Facebook className="w-5 h-5" />, 
+      url: siteSettings?.facebook || "#", 
+      name: "Facebook" 
+    },
+    { 
+      icon: <Twitter className="w-5 h-5" />, 
+      url: siteSettings?.twitter || "#", 
+      name: "Twitter" 
+    },
+    { 
+      icon: <Linkedin className="w-5 h-5" />, 
+      url: siteSettings?.linkedin || "#", 
+      name: "LinkedIn" 
+    },
+    { 
+      icon: <Instagram className="w-5 h-5" />, 
+      url: siteSettings?.instagram || "#", 
+      name: "Instagram" 
+    }
   ];
 
+  // Dynamic accreditation logos from siteSettings
   const accreditationLogos = [
     {
       name: "SRA",
-      title: "Solicitors Regulation Authority",
-      logo: (
+      title: "SRA Accredited",
+      logo: siteSettings?.sra_logo ? (
+        <img 
+          src={`${baseUrl}${siteSettings?.sra_logo}`} 
+          alt={siteSettings?.sra_alt || "SRA Accreditation"} 
+          className="h-10 w-auto object-contain"
+        />
+      ) : (
         <svg width="80" height="40" viewBox="0 0 80 40" className="text-white">
           <rect width="80" height="40" fill="#0A1A2F" rx="4" />
           <text x="40" y="22" textAnchor="middle" fill="#CBA054" fontSize="10" fontWeight="bold">
@@ -73,12 +101,19 @@ const Footer = () => {
             REGULATED
           </text>
         </svg>
-      )
+      ),
+      url: siteSettings?.sra_url
     },
     {
       name: "Law Society",
-      title: "The Law Society",
-      logo: (
+      title: "Law Society Member",
+      logo: siteSettings?.law_socity_logo ? (
+        <img 
+           src={`${baseUrl}${siteSettings?.law_socity_logo}`} 
+          alt={siteSettings?.law_socity_alt || "The Law Society Membership"} 
+          className="h-10 w-auto object-contain"
+        />
+      ) : (
         <svg width="80" height="40" viewBox="0 0 80 40" className="text-white">
           <rect width="80" height="40" fill="#0A1A2F" rx="4" />
           <text x="40" y="18" textAnchor="middle" fill="#CBA054" fontSize="8" fontWeight="bold">
@@ -88,9 +123,15 @@ const Footer = () => {
             ACCREDITED
           </text>
         </svg>
-      )
+      ),
+      url: siteSettings?.law_socity_url
     }
   ];
+
+  // Company name from siteSettings
+  const companyName = siteSettings?.com_name || "Hubers Law";
+  const companyDescription = siteSettings?.meta_description || "Providing expert legal counsel and representation with over 20 years of experience. Your trusted partner for comprehensive legal solutions tailored to your unique needs.";
+  const copyrightText = siteSettings?.copy_right || `© ${new Date().getFullYear()} Hubers Law. All rights reserved.`;
 
   return (
     <footer className="bg-[#0A1A2F] text-white">
@@ -102,28 +143,35 @@ const Footer = () => {
           <div className="space-y-8">
             {/* Brand */}
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-[#CBA054] rounded-lg flex items-center justify-center">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 48 48"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle cx="24" cy="24" r="20" stroke="white" strokeWidth="2" />
-                  <path d="M16 24L24 14L32 24L24 34L16 24Z" fill="white" />
-                </svg>
-              </div>
+              {siteSettings?.logo ? (
+                <img 
+                   src={`${baseUrl}${siteSettings?.logo}`} 
+                  alt={siteSettings.logo_alt || companyName} 
+                  className="w-10 h-10 rounded-lg object-contain"
+                />
+              ) : (
+                <div className="w-10 h-10 bg-[#CBA054] rounded-lg flex items-center justify-center">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="24" cy="24" r="20" stroke="white" strokeWidth="2" />
+                    <path d="M16 24L24 14L32 24L24 34L16 24Z" fill="white" />
+                  </svg>
+                </div>
+              )}
               <div>
-                <h2 className="text-2xl font-bold text-white">Hubers Law</h2>
+                <h2 className="text-2xl font-bold text-white">{companyName}</h2>
                 <p className="text-[#CBA054] text-sm font-semibold">Legal Excellence Since 2003</p>
               </div>
             </div>
 
             {/* Description */}
             <p className="text-gray-300 text-lg leading-relaxed max-w-md">
-              Providing expert legal counsel and representation with over 20 years of experience. 
-              Your trusted partner for comprehensive legal solutions tailored to your unique needs.
+              {companyDescription}
             </p>
 
             {/* Contact Information */}
@@ -150,6 +198,8 @@ const Footer = () => {
                   href={social.url}
                   className="w-10 h-10 bg-[#1E354F] rounded-lg flex items-center justify-center text-gray-300 hover:bg-[#CBA054] hover:text-white transition-all duration-300 transform hover:scale-110"
                   aria-label={social.name}
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   {social.icon}
                 </a>
@@ -205,9 +255,12 @@ const Footer = () => {
               
               <div className="space-y-4">
                 {accreditationLogos.map((accreditation, index) => (
-                  <div 
+                  <a
                     key={index}
-                    className="bg-[#1E354F] rounded-lg p-4 border border-[#CBA054]/20 hover:border-[#CBA054] transition-all duration-300 transform hover:scale-105"
+                    href={accreditation.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-[#1E354F] rounded-lg p-4 border border-[#CBA054]/20 hover:border-[#CBA054] transition-all duration-300 transform hover:scale-105"
                   >
                     <div className="flex flex-col items-center space-y-2">
                       <div className="flex justify-center">
@@ -217,11 +270,9 @@ const Footer = () => {
                         {accreditation.title}
                       </span>
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
-
-             
             </div>
           </div>
         </div>
@@ -233,7 +284,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <div className="text-gray-400 text-sm">
-              &copy; {new Date().getFullYear()} Hubers Law. All rights reserved.
+              {copyrightText}
             </div>
 
             {/* Additional Links */}
@@ -266,10 +317,10 @@ const Footer = () => {
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4 text-[#0A1A2F]" />
               <a 
-                href="tel:+442034880953" 
+                href={`tel:${siteSettings?.helpline_no || siteSettings?.phone || "+442034880953"}`} 
                 className="text-[#0A1A2F] font-bold text-lg hover:underline"
               >
-                0203 488 0953
+                {siteSettings?.helpline_no || siteSettings?.phone || "0203 488 0953"}
               </a>
             </div>
           </div>

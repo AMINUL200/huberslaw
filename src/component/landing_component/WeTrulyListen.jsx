@@ -1,13 +1,21 @@
-import React from 'react';
+import React from "react";
 
-const WeTrulyListen = () => {
+const WeTrulyListen = ({ trulyListenData = {} }) => {
+
+  const storageUrl = import.meta.env.VITE_APP_BASE_URL;
+
+  // Build final background image URL
+  const bgImage = trulyListenData?.image
+    ? `${storageUrl}${trulyListenData.image}`
+    : "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=2070&q=80";
+
   return (
     <section className="relative py-10 lg:py-20">
       {/* Background Image with Overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-fixed bg-center bg-no-repeat"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"
+          backgroundImage: `url('${bgImage}')`,
         }}
       >
         <div className="absolute inset-0 bg-[#0A1A2F]/80"></div>
@@ -15,19 +23,23 @@ const WeTrulyListen = () => {
 
       <div className="relative container mx-auto px-4 lg:px-8">
         <div className="max-w-5xl mx-auto text-center">
-          
-         
-
           {/* Big Title */}
-          <h1 className="text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight">
-            We Truly Listen
+          <h1
+            className="text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight"
+            aria-label={trulyListenData?.title_meta || trulyListenData?.title}
+          >
+            {trulyListenData?.title || "We Truly Listen"}
           </h1>
 
           {/* Description */}
-          <p className="text-xl text-white/90 mb-12 leading-relaxed">
-            Your story matters. At Hubers Law, we begin every case by listening intently to your concerns, 
-            understanding your unique situation, and building a legal strategy that reflects your goals and values. 
-            Because when we truly listen, we can truly help.
+          <p
+            className="text-xl text-white/90 mb-12 leading-relaxed"
+            aria-label={
+              trulyListenData?.description_meta || trulyListenData?.description
+            }
+          >
+            {trulyListenData?.description ||
+              "At Hubers Law, we believe that every client has a unique story. We take the time to listen, understand, and provide personalized legal solutions that truly address your needs."}
           </p>
 
           {/* Single CTA Button */}

@@ -19,11 +19,18 @@ import { useAuth } from "./context/AuthContext";
 import HandleBanner from "./pages/admin/homepage/HandleBanner";
 import HandleSolicitorTalent from "./pages/admin/homepage/HandleSolicitorTalent";
 import HandleTrulyListen from "./pages/admin/homepage/HandleTrulyListen";
+import HandleServices from "./pages/admin/services/HandleServices";
+import AddServices from "./pages/admin/services/AddServices";
+import HandleTeam from "./pages/admin/team/HandleTeam";
+import AddTeam from "./pages/admin/team/AddTeam";
+import HandleContactUs from "./pages/admin/contact_us/HandleContactUs";
+import HandleAbout from "./pages/admin/about/HandleAbout";
+import HandleAboutTerms from "./pages/admin/about/HandleAboutTerms";
 
 const App = () => {
-  const {token, user} = useAuth();
+  const { token, user } = useAuth();
   console.log(token, user);
-  
+
   return (
     <>
       <Router>
@@ -48,15 +55,27 @@ const App = () => {
             <Route path="site-settings" element={<SiteSettings />} />
             <Route path="profile" element={<AdminProfile />} />
 
-
             {/* Handle Home Page Route */}
-            <Route path="homepage/*" >
-              <Route path="banners" element={<HandleBanner/>} />
-              <Route path="solicitor-talent" element={<HandleSolicitorTalent/>} />
-              <Route path="truly-listen" element={<HandleTrulyListen/>} />
+            <Route path="homepage/*">
+              <Route path="banners" element={<HandleBanner />} />
+              <Route
+                path="solicitor-talent"
+                element={<HandleSolicitorTalent />}
+              />
+              <Route path="truly-listen" element={<HandleTrulyListen />} />
             </Route>
 
+            <Route path="handle-services" element={<HandleServices />} />
+            <Route path="add-services" element={<AddServices />} />
 
+            <Route path="handle-team" element={<HandleTeam />} />
+            <Route path="add-team" element={<AddTeam />} />
+
+            <Route path="contact-us-messages" element={<HandleContactUs />} />
+
+
+            <Route path="handle-about" element={<HandleAbout />} />
+            <Route path="handle-terms" element={<HandleAboutTerms />} />
 
 
           </Route>

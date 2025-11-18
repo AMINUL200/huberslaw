@@ -30,46 +30,66 @@ const LandingPage = () => {
 
   // API data states
   const [bannerData, setBannerData] = useState([]);
+  const [solicitorTalentData, setSolicitorTalentData] = useState([]);
+  const [trulyListenData, setTrulyListenData] = useState({});
+  const [servicesList, setServicesList] = useState([]);
+  const [teamList, setTeamList] = useState([]);
+  const [servicesData, setServicesData] = useState([]);
+  const [aboutData, setAboutData] = useState({});
 
   useEffect(() => {
     fetchAllAPIs();
   }, []);
 
-
-
   const fetchAllAPIs = async () => {
     try {
-      // Fire multiple API calls together
-      const 
-      [bannerResponse
-
+      const [
+        bannerResponse,
+        solicitorTalentResponse,
+        trulyListenResponse,
+        serv_and_teamList,
+        servicesResponse,
+        aboutResponse,
       ] = await Promise.all([
-         api.get("/banners"),
+        api.get("/banners"),
+        api.get("/solicitor-talents"),
+        api.get("/truly-listen"),
+        api.get("/service-name"),
+        api.get("/service"),
+        api.get("/home-about"),
       ]);
 
-      // Set data to states
       setBannerData(bannerResponse.data.data || []);
-      
+      setSolicitorTalentData(solicitorTalentResponse.data.data || []);
+      setTrulyListenData(trulyListenResponse.data.data[0] || {});
+      setServicesList(serv_and_teamList.data.services || []);
+      setTeamList(serv_and_teamList.data.teams || []);
+      setServicesData(servicesResponse.data.data || []);
+      setAboutData(aboutResponse.data.data.about || {});
     } catch (error) {
-       console.error("Error loading landing page data:", error);
-    }finally{
+      console.error("Error loading landing page data:", error);
+    } finally {
       setLoading(false);
     }
-  }
+  };
 
   if (loading) return <LegalLoader />;
+
+  // if(!loading){
+  //   console.log("Truly Listen Data:", trulyListenData);
+  // }
 
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <BannerSection bannerData={bannerData} />
 
-      <WeAreSolicitors />
+      <WeAreSolicitors aboutData={aboutData} />
 
-      <WhyHireSolicitorTalent />
-      <WeTrulyListen />
-      <BookingForm />
-      <OurPracticeAreas />
+      <WhyHireSolicitorTalent solicitorTalentData={solicitorTalentData} />
+      <WeTrulyListen trulyListenData={trulyListenData} />
+      <BookingForm servicesList={servicesList} teamList={teamList} />
+      <OurPracticeAreas servicesData={servicesData} />
       {/* <FAQSection/> */}
     </div>
   );

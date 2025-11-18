@@ -1,277 +1,128 @@
-import React from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { 
-  ChevronRight, 
-  Home, 
-  FileText, 
-  Download, 
-  Clock, 
-  Award, 
+import React from "react";
+import { Link, useParams } from "react-router-dom";
+import {
+  ChevronRight,
+  Home,
+  FileText,
+  Download,
+  Clock,
+  Award,
   Users,
   Phone,
   Mail,
-  Calendar
-} from 'lucide-react';
+  Building,
+
+} from "lucide-react";
+import { toast } from "react-toastify";
+import { api } from "../../utils/app";
+import LegalLoader from "../../component/common/LegalLoader";
+import { getServiceIcon } from "../../utils/getServiceIcon";
 
 const ServicesDetails = () => {
   const { serviceSlug } = useParams();
-  
-  // Dummy data for service details
-  const serviceDetails = {
-    'corporate-law': {
-      title: 'Corporate Law',
-      description: `
-        <div class="space-y-6">
-          <h2 class="text-3xl lg:text-4xl font-bold text-[#0A1A2F] mb-6">
-            Corporate Legal Services
-          </h2>
+  const [serviceData, setServiceData] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  const [contactInfo, setContactInfo] = React.useState(null);
 
-          <p class="text-lg text-gray-700 leading-relaxed">
-            At <strong class="text-[#0A1A2F]">Hubers Law</strong>, we provide comprehensive corporate legal services 
-            designed to help businesses of all sizes navigate complex legal landscapes. Our experienced corporate 
-            lawyers combine legal expertise with business acumen to deliver practical solutions.
-          </p>
+  const fetchServiceData = async () => {
+    try {
+      setLoading(true);
+      const response = await api.get(`/service-details/${serviceSlug}`);
 
-          <div class="bg-[#F4EEDC] rounded-xl p-6 border-l-4 border-[#CBA054]">
-            <h3 class="text-xl font-bold text-[#0A1A2F] mb-3">Our Approach</h3>
-            <p class="text-gray-700 italic">
-              "We don't just provide legal advice; we become strategic partners in your business growth, 
-              helping you anticipate challenges and capitalize on opportunities."
-            </p>
-          </div>
-
-          <h3 class="text-2xl font-bold text-[#0A1A2F] mt-8 mb-4">Core Services</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-3">
-              <h4 class="font-semibold text-[#0A1A2F]">Business Formation</h4>
-              <ul class="list-disc list-inside space-y-2 text-gray-600">
-                <li>Company incorporation and registration</li>
-                <li>Partnership agreements</li>
-                <li>LLC formation and structuring</li>
-                <li>Shareholder agreements</li>
-              </ul>
-            </div>
-            <div class="space-y-3">
-              <h4 class="font-semibold text-[#0A1A2F]">Mergers & Acquisitions</h4>
-              <ul class="list-disc list-inside space-y-2 text-gray-600">
-                <li>Due diligence investigations</li>
-                <li>Transaction structuring</li>
-                <li>Negotiation and documentation</li>
-                <li>Post-merger integration</li>
-              </ul>
-            </div>
-            <div class="space-y-3">
-              <h4 class="font-semibold text-[#0A1A2F]">Corporate Governance</h4>
-              <ul class="list-disc list-inside space-y-2 text-gray-600">
-                <li>Board advisory services</li>
-                <li>Compliance programs</li>
-                <li>Director responsibilities</li>
-                <li>Annual compliance</li>
-              </ul>
-            </div>
-            <div class="space-y-3">
-              <h4 class="font-semibold text-[#0A1A2F]">Commercial Contracts</h4>
-              <ul class="list-disc list-inside space-y-2 text-gray-600">
-                <li>Supplier and vendor agreements</li>
-                <li>Service level agreements</li>
-                <li>Distribution agreements</li>
-                <li>Joint venture agreements</li>
-              </ul>
-            </div>
-          </div>
-
-         
-
-         
-        </div>
-      `,
-      documents: [
-        {
-          id: 1,
-          title: 'Corporate Legal Requirements Guide',
-          description: 'Comprehensive guide to corporate legal obligations',
-          format: 'PDF',
-          size: '2.8 MB',
-          icon: <FileText className="w-6 h-6" />
-        },
-        {
-          id: 2,
-          title: 'Business Formation Checklist',
-          description: 'Step-by-step business setup guide',
-          format: 'PDF',
-          size: '1.5 MB',
-          icon: <FileText className="w-6 h-6" />
-        },
-        {
-          id: 3,
-          title: 'M&A Due Diligence Template',
-          description: 'Comprehensive due diligence checklist',
-          format: 'DOCX',
-          size: '2.1 MB',
-          icon: <FileText className="w-6 h-6" />
-        },
-        {
-          id: 4,
-          title: 'Corporate Governance Framework',
-          description: 'Best practices for corporate governance',
-          format: 'PDF',
-          size: '3.2 MB',
-          icon: <FileText className="w-6 h-6" />
-        }
-      ],
-      contactInfo: {
-        specialist: 'John Smith',
-        email: 'corporate@huberslaw.co.uk',
-        phone: '0203 488 0951',
-        consultation: 'Free 30-minute consultation'
+      if (response.data.status) {
+        setServiceData(response.data.data);
+      } else {
+        toast.error("Failed to load service details.");
       }
-    },
-    'family-law': {
-      title: 'Family Law',
-      description: `
-        <div class="space-y-6">
-          <h2 class="text-3xl lg:text-4xl font-bold text-[#0A1A2F] mb-6">
-            Family Law Services
-          </h2>
-
-          <p class="text-lg text-gray-700 leading-relaxed">
-            Our <strong class="text-[#0A1A2F]">Family Law</strong> team provides compassionate and expert legal 
-            guidance during some of life's most challenging moments. We approach each case with sensitivity 
-            while vigorously protecting your rights and interests.
-          </p>
-
-          <div class="bg-[#F4EEDC] rounded-xl p-6 border-l-4 border-[#CBA054]">
-            <h3 class="text-xl font-bold text-[#0A1A2F] mb-3">Our Philosophy</h3>
-            <p class="text-gray-700 italic">
-              "We believe in resolving family disputes with dignity and respect, focusing on solutions 
-              that protect your family's future while minimizing conflict."
-            </p>
-          </div>
-
-          <h3 class="text-2xl font-bold text-[#0A1A2F] mt-8 mb-4">Our Family Law Services</h3>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="space-y-3">
-              <h4 class="font-semibold text-[#0A1A2F]">Divorce & Separation</h4>
-              <ul class="list-disc list-inside space-y-2 text-gray-600">
-                <li>Uncontested and contested divorce</li>
-                <li>Legal separation agreements</li>
-                <li>Asset division and valuation</li>
-                <li>Spousal support matters</li>
-              </ul>
-            </div>
-            <div class="space-y-3">
-              <h4 class="font-semibold text-[#0A1A2F]">Child-Related Matters</h4>
-              <ul class="list-disc list-inside space-y-2 text-gray-600">
-                <li>Child custody and access</li>
-                <li>Child support calculations</li>
-                <li>Parenting plans and agreements</li>
-                <li>Relocation disputes</li>
-              </ul>
-            </div>
-            <div class="space-y-3">
-              <h4 class="font-semibold text-[#0A1A2F]">Family Agreements</h4>
-              <ul class="list-disc list-inside space-y-2 text-gray-600">
-                <li>Prenuptial agreements</li>
-                <li>Cohabitation agreements</li>
-                <li>Separation agreements</li>
-                <li>Mediation services</li>
-              </ul>
-            </div>
-            <div class="space-y-3">
-              <h4 class="font-semibold text-[#0A1A2F]">Other Services</h4>
-              <ul class="list-disc list-inside space-y-2 text-gray-600">
-                <li>Adoption proceedings</li>
-                <li>Surrogacy arrangements</li>
-                <li>Domestic violence protection</li>
-                <li>Grandparents' rights</li>
-              </ul>
-            </div>
-          </div>
-
-          <h3 class="text-2xl font-bold text-[#0A1A2F] mt-8 mb-4">Our Approach to Family Law</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="text-center p-4">
-              <Users className="w-8 h-8 text-[#CBA054] mx-auto mb-2" />
-              <div class="font-semibold text-[#0A1A2F]">Client-Focused</div>
-              <div class="text-gray-600 text-sm mt-1">Your needs and goals come first</div>
-            </div>
-            <div class="text-center p-4">
-              <Award className="w-8 h-8 text-[#CBA054] mx-auto mb-2" />
-              <div class="font-semibold text-[#0A1A2F]">Expert Guidance</div>
-              <div class="text-gray-600 text-sm mt-1">20+ years combined experience</div>
-            </div>
-            <div class="text-center p-4">
-              <Clock className="w-8 h-8 text-[#CBA054] mx-auto mb-2" />
-              <div class="font-semibold text-[#0A1A2F]">Timely Resolution</div>
-              <div class="text-gray-600 text-sm mt-1">Efficient case management</div>
-            </div>
-          </div>
-        </div>
-      `,
-      documents: [
-        {
-          id: 1,
-          title: 'Divorce Process Guide',
-          description: 'Understanding the divorce process step-by-step',
-          format: 'PDF',
-          size: '2.1 MB',
-          icon: <FileText className="w-6 h-6" />
-        },
-        {
-          id: 2,
-          title: 'Child Support Calculator',
-          description: 'Worksheet for estimating child support',
-          format: 'XLSX',
-          size: '1.2 MB',
-          icon: <FileText className="w-6 h-6" />
-        },
-        {
-          id: 3,
-          title: 'Parenting Plan Template',
-          description: 'Customizable parenting agreement template',
-          format: 'DOCX',
-          size: '1.8 MB',
-          icon: <FileText className="w-6 h-6" />
-        },
-        {
-          id: 4,
-          title: 'Family Law Rights Guide',
-          description: 'Understanding your legal rights in family matters',
-          format: 'PDF',
-          size: '2.5 MB',
-          icon: <FileText className="w-6 h-6" />
-        }
-      ],
-      contactInfo: {
-        specialist: 'Sarah Johnson',
-        email: 'family@huberslaw.co.uk',
-        phone: '0203 488 0952',
-        consultation: 'Complimentary initial meeting'
-      }
+    } catch (error) {
+      console.error("Error fetching service details:", error);
+      toast.error("Failed to load service details.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Get current service data or default to corporate law
-  const service = serviceDetails[serviceSlug] || serviceDetails['corporate-law'];
-  
+  const fetchContactInfo = async () => {
+    try {
+      const response = await api.get("/settings");
+      if (response.data.status) {
+        // Use contact info as needed
+        setContactInfo(response.data.data);
+      } else {
+        toast.error("Failed to load contact information.");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.message || "Failed to load contact information.");
+    }
+  };
+
+  React.useEffect(() => {
+    if (serviceSlug) {
+      fetchServiceData();
+      fetchContactInfo();
+    }
+  }, [serviceSlug]);
+
+  if (loading) {
+    return <LegalLoader />;
+  }
+
+  if (!serviceData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#F4EEDC] to-[#E8EEF4] pt-20 pb-16">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-2xl font-bold text-[#0A1A2F]">
+            Service not found
+          </h1>
+          <Link to="/services" className="text-[#CBA054] hover:underline">
+            Back to Services
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   const breadcrumbs = [
-    { name: 'Home', path: '/', icon: <Home className="w-4 h-4" /> },
-    { name: 'Services', path: '/services' },
-    { name: service.title, path: '#', current: true }
+    { name: "Home", path: "/", icon: <Home className="w-4 h-4" /> },
+    { name: "Services", path: "/services" },
+    { name: serviceData.service_name, path: "#", current: true },
   ];
 
+  // Default contact information (fallback)
+  const defaultContactInfo = {
+    specialist: "Our Legal Team",
+    email: contactInfo?.email || "info@huberslaw.co.uk",
+    phone: contactInfo?.phone || "0203 488 0953",
+    consultation: "Free Initial Consultation",
+  };
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] pt-20 pb-16">
+    <div className="min-h-screen bg-gradient-to-br from-[#F4EEDC] to-[#E8EEF4] pt-20 pb-16">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Breadcrumbs */}
-        <nav className="mb-8">
-          <ol className="flex items-center space-x-2 text-sm text-gray-600">
+        {/* Breadcrumbs with structured data */}
+        <nav className="mb-8" aria-label="Breadcrumb">
+          <ol
+            className="flex items-center space-x-2 text-sm text-gray-600"
+            itemScope
+            itemType="https://schema.org/BreadcrumbList"
+          >
             {breadcrumbs.map((crumb, index) => (
-              <li key={crumb.name} className="flex items-center">
+              <li
+                key={crumb.name}
+                className="flex items-center"
+                itemProp="itemListElement"
+                itemScope
+                itemType="https://schema.org/ListItem"
+              >
                 {index > 0 && <ChevronRight className="w-4 h-4 mx-2" />}
                 {crumb.current ? (
-                  <span className="text-[#0A1A2F] font-semibold flex items-center">
+                  <span
+                    className="text-[#0A1A2F] font-semibold flex items-center"
+                    itemProp="name"
+                    aria-current="page"
+                  >
                     {crumb.icon && <span className="mr-2">{crumb.icon}</span>}
                     {crumb.name}
                   </span>
@@ -279,11 +130,13 @@ const ServicesDetails = () => {
                   <Link
                     to={crumb.path}
                     className="hover:text-[#CBA054] transition-colors duration-200 flex items-center"
+                    itemProp="item"
                   >
                     {crumb.icon && <span className="mr-2">{crumb.icon}</span>}
-                    {crumb.name}
+                    <span itemProp="name">{crumb.name}</span>
                   </Link>
                 )}
+                <meta itemProp="position" content={String(index + 1)} />
               </li>
             ))}
           </ol>
@@ -292,57 +145,243 @@ const ServicesDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Left Side - Service Description */}
           <div className="lg:col-span-3">
-            <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-8">
-              <div 
-                className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: service.description }}
-              />
+            <div
+              className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-8"
+              itemScope
+              itemType="https://schema.org/LegalService"
+            >
+              {/* Service Header */}
+              <div className="flex items-center space-x-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center">
+                  <div className="text-white">
+                    {getServiceIcon(serviceData.service_name)}
+                  </div>
+                </div>
+                <div>
+                  <h1
+                    className="text-3xl lg:text-4xl font-bold text-[#0A1A2F]"
+                    itemProp="name"
+                  >
+                    {serviceData.service_name}
+                  </h1>
+                  <p className="text-gray-600 mt-2" itemProp="description">
+                    {serviceData.service_description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Long Description */}
+              {serviceData.long_desc ? (
+                <div
+                  className="prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{ __html: serviceData.long_desc }}
+                  itemProp="disambiguatingDescription"
+                />
+              ) : (
+                <div className="prose prose-lg max-w-none">
+                  <p>
+                    Detailed information about {serviceData.service_name} is
+                    coming soon.
+                  </p>
+                </div>
+              )}
+
+              {/* Features Section */}
+              {serviceData.feature && serviceData.feature.length > 0 && (
+                <div className="mt-8">
+                  <h3 className="text-2xl font-bold text-[#0A1A2F] mb-4">
+                    Key Features
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {serviceData.feature.map((feature, index) => (
+                      <div key={index} className="flex items-center space-x-3">
+                        <div className="w-2 h-2 bg-[#CBA054] rounded-full flex-shrink-0"></div>
+                        <span className="text-gray-700">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
           {/* Right Side - Documents & Contact */}
           <div className="space-y-6">
             {/* Documents Section */}
-            <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-6">
-              <h3 className="text-xl font-bold text-[#0A1A2F] mb-4 flex items-center">
-                <FileText className="w-5 h-5 mr-2 text-[#CBA054]" />
-                Legal Resources
-              </h3>
-              <p className="text-gray-600 text-sm mb-4">
-                Download our free guides and resources related to {service.title}.
-              </p>
-              
-              <div className="space-y-3">
-                {service.documents.map((doc) => (
-                  <button
-                    key={doc.id}
-                    className="w-full flex items-center justify-between p-4 bg-[#F4EEDC] rounded-lg hover:bg-[#CBA054] hover:text-white transition-all duration-300 group"
-                  >
-                    <div className="flex items-center space-x-3">
-                      <div className="text-[#0A1A2F] group-hover:text-white">
-                        {doc.icon}
-                      </div>
-                      <div className="text-left">
-                        <div className="font-semibold text-sm group-hover:text-white">
-                          {doc.title}
-                        </div>
-                        <div className="text-xs text-gray-600 group-hover:text-white/80">
-                          {doc.description}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-xs text-gray-500 group-hover:text-white/80">
-                        {doc.format} • {doc.size}
-                      </span>
-                      <Download className="w-4 h-4 text-gray-400 group-hover:text-white" />
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+            {serviceData.pdfs && serviceData.pdfs.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-6">
+                <h3 className="text-xl font-bold text-[#0A1A2F] mb-4 flex items-center">
+                  <FileText className="w-5 h-5 mr-2 text-[#CBA054]" />
+                  Legal Resources
+                </h3>
+                <p className="text-gray-600 text-sm mb-4">
+                  Download our free guides and resources related to{" "}
+                  {serviceData.service_name}.
+                </p>
 
-          
+                <div className="space-y-3">
+                  {serviceData.pdfs.map((pdf) => (
+                    <a
+                      key={pdf.id}
+                      href={`${baseUrl}/${pdf.pdf}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-between p-4 bg-[#F4EEDC] rounded-lg hover:bg-[#CBA054] hover:text-white transition-all duration-300 group block"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="text-[#0A1A2F] group-hover:text-white">
+                          <FileText className="w-6 h-6" />
+                        </div>
+                        <div className="text-left">
+                          <div className="font-semibold text-sm group-hover:text-white">
+                            {pdf.pdf_name}
+                          </div>
+                          <div className="text-xs text-gray-600 group-hover:text-white/80">
+                            PDF Document
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs text-gray-500 group-hover:text-white/80">
+                          PDF
+                        </span>
+                        <Download className="w-4 h-4 text-gray-400 group-hover:text-white" />
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Contact Card */}
+            <div className="bg-gradient-to-r from-[#0A1A2F] to-[#1E354F] rounded-2xl p-6 text-white">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center">
+                  <Phone className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">
+                    Need {serviceData.service_name} Help?
+                  </h3>
+                  <p className="text-white/80 text-sm">
+                    Free initial consultation
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-white/80 text-sm mb-4">
+                Contact us for a free initial consultation to discuss your{" "}
+                {serviceData.service_name.toLowerCase()} needs.
+              </p>
+
+              <div className="space-y-3 text-sm mb-6">
+                {/* Opening Hours Section */}
+                <div className="mb-4">
+                  <h4 className="font-semibold text-[#CBA054] mb-2 flex items-center">
+                    <Clock className="w-4 h-4 mr-2" />
+                    Opening Hours
+                  </h4>
+                  <div className="space-y-1 text-white/80">
+                    <div className="flex justify-between">
+                      <span>Monday:</span>
+                      <span>{contactInfo?.mon || "9:00 AM - 6:00 PM"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Tuesday:</span>
+                      <span>{contactInfo?.tues || "9:00 AM - 7:00 PM"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Wednesday:</span>
+                      <span>{contactInfo?.wed || "9:00 AM - 6:00 PM"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Thursday:</span>
+                      <span>{contactInfo?.thus || "9:00 AM - 6:00 PM"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Friday:</span>
+                      <span>{contactInfo?.fri || "9:00 AM - 6:00 PM"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Saturday:</span>
+                      <span>{contactInfo?.sat || "10:00 AM - 2:00 PM"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Sunday:</span>
+                      <span
+                        className={
+                          contactInfo?.sun === "Closed" ? "text-red-300" : ""
+                        }
+                      >
+                        {contactInfo?.sun || "Closed"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Award className="w-4 h-4 text-[#CBA054]" />
+                  <span>Free Initial Consultation</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Users className="w-4 h-4 text-[#CBA054]" />
+                  <span>Specialist: Our Legal Team</span>
+                </div>
+                {contactInfo?.address && (
+                  <div className="flex items-start space-x-2">
+                    <Building className="w-4 h-4 text-[#CBA054] mt-0.5 flex-shrink-0" />
+                    <span className="text-xs">{contactInfo.address}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-3">
+                <a
+                  href={`tel:${contactInfo?.phone || defaultContactInfo.phone}`}
+                  className="w-full bg-[#CBA054] text-white py-3 rounded-lg font-semibold hover:bg-[#DBAE5D] transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>
+                    Call: {contactInfo?.phone || defaultContactInfo.phone}
+                  </span>
+                </a>
+                <a
+                  href={`mailto:${
+                    contactInfo?.email || defaultContactInfo.email
+                  }`}
+                  className="w-full border border-white/30 text-white py-3 rounded-lg font-semibold hover:bg-white/10 transition-all duration-300 flex items-center justify-center space-x-2"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>Email Us</span>
+                </a>
+                {contactInfo?.helpline_no && (
+                  <a
+                    href={`tel:${contactInfo.helpline_no}`}
+                    className="w-full border border-white/30 text-white py-3 rounded-lg font-semibold hover:bg-white/10 transition-all duration-300 flex items-center justify-center space-x-2 text-sm"
+                  >
+                    <Phone className="w-4 h-4" />
+                    <span>Helpline: {contactInfo.helpline_no}</span>
+                  </a>
+                )}
+              </div>
+
+              {/* Canonical URL - You can use this for SEO purposes */}
+              {contactInfo?.canonical_url && (
+                <div className="mt-4 pt-4 border-t border-white/20">
+                  <p className="text-xs text-white/60 text-center">
+                    Visit us at:{" "}
+                    <a
+                      href={contactInfo.canonical_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#CBA054] hover:underline"
+                    >
+                      {contactInfo.canonical_url.replace("https://", "")}
+                    </a>
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

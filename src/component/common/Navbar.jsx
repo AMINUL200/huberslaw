@@ -232,11 +232,27 @@ const Navbar = ({ toggleMenu, togglePopup }) => {
 
             {/* Dropdown menu */}
             {isOpen && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-[#E8EEF4] rounded-lg shadow-lg z-50">
+              <div 
+                className="absolute top-6 left-0 mt-2 w-64 bg-white border border-[#E8EEF4] rounded-lg shadow-lg z-50"
+                onMouseEnter={() => handleMouseEnter(item.id)}
+                onMouseLeave={() => handleMouseLeave(item.id)}
+              >
                 <div className="py-2">
-                  {item.dropdown.map((dropdownItem) =>
-                    renderDropdownItem(dropdownItem)
-                  )}
+                  {item.dropdown.map((dropdownItem) => (
+                    <div key={dropdownItem.id}>
+                      {dropdownItem.dropdown ? (
+                        renderDropdownItem(dropdownItem)
+                      ) : (
+                        <RouterLink
+                          to={dropdownItem.path}
+                          className="block px-4 py-2 text-sm text-[#0A1A2F] hover:bg-[#F4EEDC] hover:text-[#CBA054] transition-colors"
+                          onClick={closeAllDropdowns}
+                        >
+                          {dropdownItem.label}
+                        </RouterLink>
+                      )}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}

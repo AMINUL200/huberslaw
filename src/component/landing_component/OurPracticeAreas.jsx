@@ -16,124 +16,13 @@ import {
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { getServiceIcon } from "../../utils/getServiceIcon";
 
-const OurPracticeAreas = () => {
-  const [activeCategory, setActiveCategory] = useState("business");
-  const navigate = useNavigate();
+const OurPracticeAreas = ({ servicesData = [] }) => {
+  
 
-  const practiceAreas = {
-    business: {
-      title: "Business Law",
-      icon: <Building className="w-8 h-8" />,
-      description:
-        "Expert legal support for business formation, contracts, compliance, and corporate governance.",
-      features: [
-        "Business Formation & Structure",
-        "Contract Drafting & Review",
-        "Mergers & Acquisitions",
-        "Corporate Compliance",
-        "Commercial Litigation",
-        "Intellectual Property",
-      ],
-      cta: {
-        title: "Protect Your Business",
-        description:
-          "Get comprehensive legal protection for your business operations and growth strategies.",
-        phone: "0203 488 0953",
-      },
-    },
-    personal: {
-      title: "Personal Law",
-      icon: <Users className="w-8 h-8" />,
-      description:
-        "Comprehensive personal legal services including family law, immigration, and estate planning.",
-      features: [
-        "Family Law & Divorce",
-        "Immigration Services",
-        "Estate Planning",
-        "Personal Contracts",
-        "Child Custody",
-        "Mediation Services",
-      ],
-      cta: {
-        title: "Protect Your Family",
-        description:
-          "Ensure your family's future with expert personal legal guidance.",
-        phone: "0203 488 0953",
-      },
-    },
-    property: {
-      title: "Property Law",
-      icon: <Home className="w-8 h-8" />,
-      description:
-        "Expert legal services for real estate transactions, leasing, and property disputes.",
-      features: [
-        "Real Estate Transactions",
-        "Leasing & Tenancy",
-        "Property Development",
-        "Zoning Compliance",
-        "Property Disputes",
-        "Title Verification",
-      ],
-      cta: {
-        title: "Secure Your Property",
-        description:
-          "Protect your most valuable assets with expert property law services.",
-        phone: "0203 488 0953",
-      },
-    },
-    dispute: {
-      title: "Dispute Resolution",
-      icon: <Scale className="w-8 h-8" />,
-      description:
-        "Expert litigation and alternative dispute resolution for civil and commercial matters.",
-      features: [
-        "Civil Litigation",
-        "Commercial Disputes",
-        "Mediation Services",
-        "Arbitration",
-        "Settlement Negotiations",
-        "Appellate Practice",
-      ],
-      cta: {
-        title: "Resolve Conflicts",
-        description:
-          "Effective dispute resolution strategies tailored to your situation.",
-        phone: "0203 488 0953",
-      },
-    },
-    defense: {
-      title: "Criminal Defense",
-      icon: <Shield className="w-8 h-8" />,
-      description:
-        "Aggressive defense representation for criminal charges at all levels.",
-      features: [
-        "Felony Defense",
-        "Misdemeanor Cases",
-        "Federal Crimes",
-        "Appeals Process",
-        "Record Expungement",
-        "Bail Hearings",
-      ],
-      cta: {
-        title: "Protect Your Rights",
-        description:
-          "Strong defense representation to protect your freedom and rights.",
-        phone: "0203 488 0953",
-      },
-    },
-  };
 
-  const categories = [
-    { id: "business", label: "Business Law" },
-    { id: "personal", label: "Personal Law" },
-    { id: "property", label: "Property Law" },
-    { id: "dispute", label: "Dispute Resolution" },
-    { id: "defense", label: "Criminal Defense" },
-  ];
-
-  const currentArea = practiceAreas[activeCategory];
 
   // Swiper breakpoints configuration
   const swiperBreakpoints = {
@@ -160,20 +49,20 @@ const OurPracticeAreas = () => {
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-white rounded-full mb-6 shadow-sm border border-[#E8EEF4]">
-            <span className="text-sm font-semibold text-[#CBA054] uppercase tracking-wide">
-              Legal Expertise
-            </span>
-          </div>
+         
 
-          <h2 className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-6 leading-tight">
-            Our Practice Areas
-          </h2>
+           <h1
+            className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-6 leading-tight"
+            itemProp="headline"
+          >
+            {servicesData[0]?.page_heading }
+          </h1>
 
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Comprehensive legal services across multiple practice areas. Our
-            experienced attorneys provide expert counsel and representation
-            tailored to your specific needs.
+         <p
+            className="text-xl text-gray-600 max-w-3xl mx-auto"
+            itemProp="description"
+          >
+            {servicesData[0]?.page_description}
           </p>
         </div>
 
@@ -202,58 +91,50 @@ const OurPracticeAreas = () => {
             }}
             className="practice-areas-swiper"
           >
-            {categories.map((category) => (
-              <SwiperSlide key={category.id}>
+            {servicesData.map((service) => (
+              <SwiperSlide key={service.id}>
                 <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] overflow-hidden transform transition-all duration-500 hover:shadow-2xl hover:scale-105 group flex flex-col h-full">
-                  {" "}
-                  {/* Added flex classes for equal height */}
-                  {/* Card Header */}
-                  <div className="bg-gradient-to-br from-[#0A1A2F] to-[#1E354F] p-6 text-center flex-shrink-0">
-                    {" "}
-                    {/* Added flex-shrink-0 */}
-                    <div className="w-16 h-16 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                  {/* Header */}
+                  <div className="bg-linear-to-br from-[#0A1A2F] to-[#1E354F] p-6 text-center flex-shrink-0">
+                    <div className="w-16 h-16 bg-linear-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center mx-auto mb-4 transform group-hover:scale-110 transition-transform duration-300">
                       <div className="text-white">
-                        {practiceAreas[category.id].icon}
+                        {getServiceIcon(service.service_name)}
                       </div>
                     </div>
-                    <h3 className="text-2xl font-bold text-white mb-2">
-                      {category.label}
-                    </h3>
-                    <p className="text-[#E8EEF4] text-sm leading-relaxed min-h-[60px] flex items-center justify-center">
-                      {" "}
-                      {/* Added min-height for consistent description height */}
-                      {practiceAreas[category.id].description}
+                    <h2 className="text-2xl font-bold text-white mb-2">
+                      {service.service_name}
+                    </h2>
+                    <p className="text-[#E8EEF4] text-sm leading-relaxed min-h-[60px]">
+                      {service.service_description}
                     </p>
                   </div>
-                  {/* Card Features */}
+
+                  {/* Body */}
                   <div className="p-6 flex-grow flex flex-col">
-                    {" "}
-                    {/* Added flex classes */}
                     <ul className="space-y-3 mb-6 flex-grow">
-                      {" "}
-                      {/* Added flex-grow */}
-                      {practiceAreas[category.id].features
-                        .slice(0, 4)
-                        .map((feature, index) => (
-                          <li
-                            key={index}
-                            className="flex items-center space-x-3"
-                          >
-                            <div className="w-2 h-2 bg-[#CBA054] rounded-full flex-shrink-0"></div>
-                            <span className="text-[#0A1A2F] text-sm">
-                              {feature}
-                            </span>
-                          </li>
-                        ))}
+                      {service.feature &&
+                        service.feature
+                          .slice(0, 4)
+                          .map((feature, featureIndex) => (
+                            <li
+                              key={featureIndex}
+                              className="flex items-center space-x-3"
+                            >
+                              <div className="w-2 h-2 bg-[#CBA054] rounded-full"></div>
+                              <span className="text-[#0A1A2F] text-sm">
+                                {feature}
+                              </span>
+                            </li>
+                          ))}
                     </ul>
-                    {/* Learn More Button */}
-                    <button
-                      onClick={() => navigate(`/services/${category.label}`)}
-                      className="w-full bg-linear-to-r from-[#CBA054] to-[#DBAE5D] text-white py-3 rounded-lg font-semibold hover:bg-[#0A1A2F] hover:from-[#0A1A2F] hover:to-[#0A1A2F] transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 group/btn mt-auto"
+
+                    <Link
+                      to={`/services/${service.slug}`}
+                      className="w-full bg-gradient-to-r from-[#CBA054] to-[#DBAE5D] text-white py-3 rounded-lg font-semibold hover:from-[#0A1A2F] hover:to-[#0A1A2F] hover:text-white transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2 mt-auto"
                     >
                       <span>Learn More</span>
-                      <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                    </button>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
                 </div>
               </SwiperSlide>
@@ -262,8 +143,6 @@ const OurPracticeAreas = () => {
 
           {/* Custom Pagination */}
           <div className="custom-pagination flex justify-center space-x-2 mt-8"></div>
-
-         
         </div>
       </div>
 
