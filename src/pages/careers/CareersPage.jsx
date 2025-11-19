@@ -1,27 +1,59 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  ChevronRight,
-  Home,
-  Briefcase,
-  User,
-  Star,
-  MapPin,
-  Clock,
-  DollarSign,
-  Users,
-  Award,
-  Heart,
-  Calendar,
-} from "lucide-react";
+import { ChevronRight, Home, Briefcase, User, Star } from "lucide-react";
 import Vacancies from "../../component/careers/Vacanices";
 import SelfEmployed from "../../component/careers/SelfEmployed";
 import WhyWork from "../../component/careers/WhyWork";
+import { toast } from "react-toastify";
+import { api } from "../../utils/app";
+import LegalLoader from "../../component/common/LegalLoader";
 
 const CareersPage = () => {
   const [activeTab, setActiveTab] = useState("vacancies");
 
+  const [vacanciesData, setVacanciesData] = useState([]);
+  const [whyWorkData, setWhyWorkData] = useState({});
+  const [selfEmployedData, setSelfEmployedData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pageInfo, setPageInfo] = useState({});
+  const [settingInfo, setSettingInfo] = useState({});
+
   const location = useLocation();
+
+  const fetchData = async () => {
+    try {
+      const res = await api.get("/careers");
+      if (res.data.status) {
+        // console.log("Careers Data:", res.data.data);
+        setPageInfo({
+          title: res.data.data.page_title,
+          title_meta: res.data.data.page_meta,
+          description: res.data.data.page_desc,
+        });
+        setVacanciesData(res.data.data.vacancy || []);
+        setWhyWorkData(res.data.data.work_with_us || {});
+        setSelfEmployedData(res.data.data.self_employee || []);
+      } else {
+        toast.error("Failed to load careers data.");
+      }
+    } catch (error) {
+      console.error("Error fetching careers data:", error);
+      toast.error(error.message || "Failed to load careers data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const res = await api.get("/settings");
+      if (res.data.status) {
+        setSettingInfo(res.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching site settings:", error);
+    }
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -31,6 +63,11 @@ const CareersPage = () => {
       setActiveTab(tabParam);
     }
   }, [location.search]);
+
+  useEffect(() => {
+    fetchData();
+    fetchSettings();
+  }, []);
 
   const tabs = [
     {
@@ -55,119 +92,23 @@ const CareersPage = () => {
     { name: "Careers", path: "/careers", current: true },
   ];
 
-  // Dummy data for vacancies
-  const vacancies = [
-    {
-      id: 1,
-      title: "Senior Corporate Lawyer",
-      department: "Corporate Law",
-      location: "London, UK",
-      type: "Full-time",
-      salary: "£80,000 - £120,000",
-      experience: "5+ years",
-      description:
-        "We are seeking an experienced Corporate Lawyer to join our growing team. The ideal candidate will have extensive experience in M&A, corporate governance, and commercial contracts.",
-      requirements: [
-        "Qualified solicitor in England and Wales",
-        "5+ years of corporate law experience",
-        "Strong knowledge of M&A transactions",
-        "Excellent client management skills",
-      ],
-      posted: "2 days ago",
-    },
-    {
-      id: 2,
-      title: "Family Law Associate",
-      department: "Family Law",
-      location: "London, UK",
-      type: "Full-time",
-      salary: "£45,000 - £65,000",
-      experience: "2+ years",
-      description:
-        "Join our family law team and help clients navigate complex family matters including divorce, child custody, and financial settlements.",
-      requirements: [
-        "Qualified solicitor in England and Wales",
-        "2+ years of family law experience",
-        "Strong empathy and communication skills",
-        "Experience with mediation preferred",
-      ],
-      posted: "1 week ago",
-    },
-    {
-      id: 3,
-      title: "Litigation Paralegal",
-      department: "Litigation",
-      location: "London, UK",
-      type: "Full-time",
-      salary: "£30,000 - £40,000",
-      experience: "1+ years",
-      description:
-        "Support our litigation team in preparing cases, conducting legal research, and managing client communications.",
-      requirements: [
-        "Law degree or LPC qualification",
-        "1+ years of litigation experience",
-        "Strong research and writing skills",
-        "Attention to detail",
-      ],
-      posted: "3 days ago",
-    },
-  ];
-
-  // Dummy data for benefits
-  const benefits = [
-    {
-      icon: <DollarSign className="w-8 h-8" />,
-      title: "Competitive Compensation",
-      description:
-        "Attractive salary packages with performance-based bonuses and comprehensive benefits.",
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Professional Development",
-      description:
-        "Continuous learning opportunities, training programs, and support for professional qualifications.",
-    },
-    {
-      icon: <Award className="w-8 h-8" />,
-      title: "Career Advancement",
-      description:
-        "Clear career progression paths and opportunities for growth within the firm.",
-    },
-    {
-      icon: <Heart className="w-8 h-8" />,
-      title: "Health & Wellness",
-      description:
-        "Comprehensive health insurance, mental health support, and wellness programs.",
-    },
-    {
-      icon: <Calendar className="w-8 h-8" />,
-      title: "Work-Life Balance",
-      description:
-        "Flexible working arrangements and generous holiday allowance.",
-    },
-    {
-      icon: <Briefcase className="w-8 h-8" />,
-      title: "Modern Environment",
-      description:
-        "State-of-the-art offices with all the tools and technology you need to succeed.",
-    },
-  ];
-
   const renderTabContent = () => {
     switch (activeTab) {
       case "vacancies":
-        return <Vacancies vacancies={vacancies} />;
+        return <Vacancies vacancies={vacanciesData} />;
 
       case "self-employed":
-        return <SelfEmployed />;
+        return <SelfEmployed selfEmployedData={selfEmployedData} />;
 
       case "why-work":
-        return <WhyWork benefits={benefits} />;
+        return <WhyWork settingInfo={settingInfo} WorkData={whyWorkData} />;
 
       default:
         return null;
     }
   };
+
+  if (loading) return <LegalLoader />;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] pt-20 pb-16">
@@ -199,12 +140,15 @@ const CareersPage = () => {
 
         {/* Page Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-4">
-            Careers at Hubers Law
+          <h1
+            className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-4"
+            aria-label={pageInfo.title_meta || "Careers at Our Firm"}
+          >
+            {pageInfo.title || "Careers at Our Firm"}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Join our team of legal professionals and build your career with a
-            firm that values excellence, integrity, and growth.
+            {pageInfo.description ||
+              "Join our team and build a rewarding career with us."}
           </p>
         </div>
 

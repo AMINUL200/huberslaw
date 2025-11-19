@@ -14,11 +14,54 @@ import AboutINfo from "../../component/about-us/AboutINfo";
 import AboutOurPeople from "../../component/about-us/AboutOurPeople";
 import AboutClientCare from "../../component/about-us/AboutClientCare";
 import AboutTerms from "../../component/about-us/AboutTerms";
+import { toast } from "react-toastify";
+import { api } from "../../utils/app";
+import LegalLoader from "../../component/common/LegalLoader";
 
 const AboutUsPage = () => {
   const [activeTab, setActiveTab] = useState("about");
+  const [aboutInfo, setAboutInfo] = useState({});
+  const [teamInfo, setTeamInfo] = useState([]);
+  const [clientCareInfo, setClientCareInfo] = useState({});
+  const [termsInfo, setTermsInfo] = useState([]);
+  const [solicitorInfo, setSolicitorInfo] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [settingInfo, setSettingInfo] = useState(null);
 
   const location = useLocation();
+
+  const fetchData = async () => {
+    try {
+      const res = await api.get("/about-us");
+      if (res.data.status) {
+        const data = res.data.data;
+        // console.log("About Us Data:", data);
+        setAboutInfo(data.about || {});
+        setClientCareInfo(data.client_care || {});
+        setTermsInfo(data.terms_condition || []);
+        setTeamInfo(data.teams || []);
+        setSolicitorInfo(data.solicitor_talent || []);
+      }
+    } catch (error) {
+      console.error("Error fetching about us data:", error);
+      toast.error(error.message || "Failed to load About Us data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const res = await api.get("/settings");
+      if (res.data.status) {
+        setSettingInfo(res.data.data);
+      }
+      
+    } catch (error) {
+      console.error("Error fetching site settings:", error);
+      toast.error(error.message || "Failed to load site settings.");
+    }
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -28,6 +71,11 @@ const AboutUsPage = () => {
       setActiveTab(tabParam);
     }
   }, [location.search]);
+
+  useEffect(() => {
+    fetchData();
+    fetchSettings();
+  }, []);
 
   const tabs = [
     { id: "about", label: "About Us", icon: <Users className="w-5 h-5" /> },
@@ -92,51 +140,34 @@ const AboutUsPage = () => {
     },
   ];
 
-  const values = [
-    {
-      icon: <Target className="w-8 h-8" />,
-      title: "Excellence",
-      description:
-        "We strive for excellence in every aspect of our legal services, ensuring the highest quality representation for our clients.",
-    },
-    {
-      icon: <Shield className="w-8 h-8" />,
-      title: "Integrity",
-      description:
-        "Honesty and ethical practice are at the core of everything we do. We build trust through transparency and reliability.",
-    },
-    {
-      icon: <Heart className="w-8 h-8" />,
-      title: "Client Focus",
-      description:
-        "Your success is our priority. We listen carefully and tailor our approach to meet your specific legal needs and objectives.",
-    },
-    {
-      icon: <Clock className="w-8 h-8" />,
-      title: "Dedication",
-      description:
-        "We are committed to providing timely, effective legal solutions while maintaining the highest standards of professional service.",
-    },
-  ];
+ 
 
   const renderTabContent = () => {
     switch (activeTab) {
       case "about":
-        return <AboutINfo values={values} teamMembers={teamMembers} />;
+        return (
+          <AboutINfo
+            aboutInfo={aboutInfo}
+            teamInfo={teamInfo}
+            solicitorInfo={solicitorInfo}
+          />
+        );
 
       case "people":
-        return <AboutOurPeople teamMembers={teamMembers} />;
+        return <AboutOurPeople  teamInfo={teamInfo} />;
 
       case "client-care":
-        return <AboutClientCare />;
+        return <AboutClientCare clientCareInfo={clientCareInfo} />;
 
       case "terms":
-        return <AboutTerms />;
+        return <AboutTerms termsInfo={termsInfo} settingInfo={settingInfo} />;
 
       default:
         return null;
     }
   };
+
+  if (loading) return <LegalLoader />;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] pt-32 pb-16">

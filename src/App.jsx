@@ -26,10 +26,15 @@ import AddTeam from "./pages/admin/team/AddTeam";
 import HandleContactUs from "./pages/admin/contact_us/HandleContactUs";
 import HandleAbout from "./pages/admin/about/HandleAbout";
 import HandleAboutTerms from "./pages/admin/about/HandleAboutTerms";
+import HandleVacancies from "./pages/admin/careers/HandleVacancies";
+import HandleWhyWorkWithUs from "./pages/admin/careers/HandleWhyWorkWithUs";
+import HandleSelfEmployed from "./pages/admin/careers/HandleSelfEmployed";
+import ViewApplyJob from "./pages/admin/careers/ViewApplyJob";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 const App = () => {
   const { token, user } = useAuth();
-  console.log(token, user);
+  console.log(token);
 
   return (
     <>
@@ -50,34 +55,43 @@ const App = () => {
             />
           </Route>
 
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboard />} />
-            <Route path="site-settings" element={<SiteSettings />} />
-            <Route path="profile" element={<AdminProfile />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="site-settings" element={<SiteSettings />} />
+              <Route path="profile" element={<AdminProfile />} />
 
-            {/* Handle Home Page Route */}
-            <Route path="homepage/*">
-              <Route path="banners" element={<HandleBanner />} />
+              <Route path="homepage/*">
+                <Route path="banners" element={<HandleBanner />} />
+                <Route
+                  path="solicitor-talent"
+                  element={<HandleSolicitorTalent />}
+                />
+                <Route path="truly-listen" element={<HandleTrulyListen />} />
+              </Route>
+
+              <Route path="handle-services" element={<HandleServices />} />
+              <Route path="add-services" element={<AddServices />} />
+
+              <Route path="handle-team" element={<HandleTeam />} />
+              <Route path="add-team" element={<AddTeam />} />
+
+              <Route path="contact-us-messages" element={<HandleContactUs />} />
+
+              <Route path="handle-about" element={<HandleAbout />} />
+              <Route path="handle-terms" element={<HandleAboutTerms />} />
+
+              <Route path="handle-vacancies" element={<HandleVacancies />} />
               <Route
-                path="solicitor-talent"
-                element={<HandleSolicitorTalent />}
+                path="handle-why-work-with-us"
+                element={<HandleWhyWorkWithUs />}
               />
-              <Route path="truly-listen" element={<HandleTrulyListen />} />
+              <Route
+                path="handle-self-employed"
+                element={<HandleSelfEmployed />}
+              />
+              <Route path="view-apply-job" element={<ViewApplyJob />} />
             </Route>
-
-            <Route path="handle-services" element={<HandleServices />} />
-            <Route path="add-services" element={<AddServices />} />
-
-            <Route path="handle-team" element={<HandleTeam />} />
-            <Route path="add-team" element={<AddTeam />} />
-
-            <Route path="contact-us-messages" element={<HandleContactUs />} />
-
-
-            <Route path="handle-about" element={<HandleAbout />} />
-            <Route path="handle-terms" element={<HandleAboutTerms />} />
-
-
           </Route>
         </Routes>
       </Router>

@@ -10,10 +10,13 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const WhyWork = () => {
-  // Dummy data with HTML content
-  const whyWorkData = {
-    description: `
+const WhyWork = ({ WorkData = {}, settingInfo = {} }) => {
+  console.log("Why Work Data:", WorkData);
+  console.log("Setting Info:", settingInfo);
+
+  // Default data in case WorkData is empty
+  const defaultData = {
+    long_desc: `
       <div class="space-y-6">
         <h2 class="text-3xl lg:text-4xl font-bold text-[#0A1A2F] mb-6">
           Why Build Your Career at Hubers Law?
@@ -72,18 +75,46 @@ const WhyWork = () => {
             </div>
           </div>
         </div>
-
-       
       </div>
     `,
+    button_name: "See Our Current Vacancies",
+  };
 
+  // Generate contact hours from settingInfo
+  const generateContactHours = () => {
+    if (!settingInfo.mon) return "Monday - Friday: 9:00 AM - 5:30 PM";
+    
+    const days = [
+      { day: 'Mon', hours: settingInfo.mon },
+      { day: 'Tue', hours: settingInfo.tues },
+      { day: 'Wed', hours: settingInfo.wed },
+      { day: 'Thu', hours: settingInfo.thus },
+      { day: 'Fri', hours: settingInfo.fri },
+      { day: 'Sat', hours: settingInfo.sat },
+      { day: 'Sun', hours: settingInfo.sun }
+    ];
+    
+    const weekdays = days.slice(0, 5);
+    const hasSameWeekdayHours = weekdays.every(day => day.hours === weekdays[0].hours);
+    
+    if (hasSameWeekdayHours) {
+      return `Monday - Friday: ${weekdays[0].hours}`;
+    }
+    
+    return "View website for detailed hours";
+  };
+
+  // Use WorkData if available, otherwise use default data
+  const whyWorkData = {
+    description: WorkData.long_desc || defaultData.long_desc,
+    button_name: WorkData.button_name || defaultData.button_name,
     contactInfo: {
-      recruitmentEmail: "careers@huberslaw.co.uk",
-      phone: "0203 488 0953",
-      address: "123 Legal Street, London, UK WC1A 1AA",
-      contactHours: "Monday - Friday: 9:00 AM - 5:30 PM",
-      recruitmentManager: "Sarah Johnson",
-      nextOpenDay: "15th January 2024",
+      recruitmentEmail: settingInfo.email || "careers@huberslaw.co.uk",
+      phone: settingInfo.phone || "0203 488 095333",
+      address: settingInfo.address || "123 Legal Street, London, UK WC1A 1AA",
+      contactHours: generateContactHours(),
+      helpline: settingInfo.helpline_no,
+      fax: settingInfo.fax,
     },
   };
 
@@ -95,11 +126,12 @@ const WhyWork = () => {
           className="prose prose-lg max-w-none"
           dangerouslySetInnerHTML={{ __html: whyWorkData.description }}
         />
-        <div className="flex justify-center mt-4 ">
-          <Link 
+        <div className="flex justify-center mt-4">
+          <Link
             to="/careers?tab=vacancies"
-          className=" bg-[#0A1A2F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#CBA054] transition-all duration-300">
-            See Our Current Vacancies
+            className="bg-[#0A1A2F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#CBA054] transition-all duration-300 flex items-center"
+          >
+            {whyWorkData.button_name}
             <ArrowRight className="w-4 h-4 ml-2 inline-block" />
           </Link>
         </div>
@@ -115,6 +147,7 @@ const WhyWork = () => {
           </h3>
 
           <div className="space-y-4">
+            {/* Email */}
             <div className="flex items-start space-x-3">
               <Mail className="w-5 h-5 text-[#CBA054] mt-1 flex-shrink-0" />
               <div>
@@ -127,6 +160,7 @@ const WhyWork = () => {
               </div>
             </div>
 
+            {/* Phone */}
             <div className="flex items-start space-x-3">
               <Phone className="w-5 h-5 text-[#CBA054] mt-1 flex-shrink-0" />
               <div>
@@ -137,6 +171,33 @@ const WhyWork = () => {
               </div>
             </div>
 
+            {/* Helpline (if available) */}
+            {whyWorkData.contactInfo.helpline && (
+              <div className="flex items-start space-x-3">
+                <Phone className="w-5 h-5 text-[#CBA054] mt-1 flex-shrink-0" />
+                <div>
+                  <div className="font-semibold text-[#0A1A2F]">Helpline</div>
+                  <div className="text-gray-600 text-sm">
+                    {whyWorkData.contactInfo.helpline}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Fax (if available) */}
+            {whyWorkData.contactInfo.fax && (
+              <div className="flex items-start space-x-3">
+                <Phone className="w-5 h-5 text-[#CBA054] mt-1 flex-shrink-0" />
+                <div>
+                  <div className="font-semibold text-[#0A1A2F]">Fax</div>
+                  <div className="text-gray-600 text-sm">
+                    {whyWorkData.contactInfo.fax}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Address */}
             <div className="flex items-start space-x-3">
               <MapPin className="w-5 h-5 text-[#CBA054] mt-1 flex-shrink-0" />
               <div>
@@ -147,6 +208,7 @@ const WhyWork = () => {
               </div>
             </div>
 
+            {/* Contact Hours */}
             <div className="flex items-start space-x-3">
               <Clock className="w-5 h-5 text-[#CBA054] mt-1 flex-shrink-0" />
               <div>
@@ -160,6 +222,8 @@ const WhyWork = () => {
             </div>
           </div>
         </div>
+
+        
       </div>
     </div>
   );

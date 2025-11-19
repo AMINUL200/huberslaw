@@ -23,6 +23,7 @@ import {
   Clock,
   Star,
   User2,
+  Briefcase,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -105,6 +106,37 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
           icon: <FileText className="w-4 h-4" />,
           path: "/admin/handle-terms",
         },
+      ],
+    },
+    {
+      id: "careers",
+      label: "Handle Careers",
+      icon: <Briefcase className="w-5 h-5" />,
+      children: [
+        {
+          id: "jobVacancies",
+          label: "Handle Job Vacancies",
+          icon: <Briefcase className="w-4 h-4" />,
+          path: "/admin/handle-vacancies",
+        },
+        {
+          id: "applyJob",
+          label: "View Applied Jobs",
+          icon: <Briefcase className="w-4 h-4" />,
+          path: "/admin/view-apply-job",
+        },
+        {
+          id: "whyWorkWithUs",
+          label: "Handle Why Work With Us",
+          icon: <Briefcase className="w-4 h-4" />,
+          path: "/admin/handle-why-work-with-us",
+        },
+        {
+          id: "selfEmployed",
+          label: "Handle Self Employed",
+          icon: <Briefcase className="w-4 h-4" />,
+          path: "/admin/handle-self-employed",
+        }
       ],
     },
 

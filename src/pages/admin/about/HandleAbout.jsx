@@ -35,8 +35,10 @@ const HandleAbout = () => {
       setLoading(true);
       const response = await api.get("/about/edit"); // Adjust endpoint as needed
 
+      console.log("Fetched about data:", response);
       if (response.data.status) {
         const { about, client_care } = response.data.data;
+
 
         // Merge about and client_care data
         setAboutData({
@@ -403,14 +405,13 @@ const HandleAbout = () => {
                 <label className="block text-sm font-semibold text-[#0A1A2F] mb-2">
                   Mission Statement
                 </label>
-                <textarea
-                  name="mission"
+                <CustomTextEditor
                   value={aboutData.mission}
-                  onChange={handleInputChange}
-                  rows={3}
-                  className="w-full px-4 py-3 rounded-lg border border-[#E8EEF4] focus:border-[#CBA054] focus:ring-2 focus:ring-[#CBA054]/20 transition-all duration-300 resize-none"
-                  placeholder="Enter your firm's mission statement"
+                  onChange={(value) => handleEditorChange("mission", value)}
+                  placeholder="Enter your firm's mission statement..."
+                  height={400}
                 />
+
               </div>
             </div>
           </div>
