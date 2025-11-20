@@ -76,6 +76,11 @@ const LoginPage = () => {
     }
   };
 
+  // Handle forgot password click
+  const handleForgotPassword = () => {
+    navigate("/forgot-password");
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#F4EEDC] to-[#E8EEF4] py-12 px-4 sm:px-6 lg:px-8">
       {/* Background decoration */}
@@ -179,12 +184,13 @@ const LoginPage = () => {
               </div>
 
               <div className="text-sm">
-                <a
-                  href="/admin/forgot-password"
-                  className="font-semibold text-[#0A1A2F] hover:text-[#CBA054] transition-colors"
+                <button
+                  type="button"
+                  onClick={handleForgotPassword}
+                  className="font-semibold text-[#0A1A2F] hover:text-[#CBA054] transition-colors focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:ring-opacity-50 rounded px-2 py-1"
                 >
                   Forgot password?
-                </a>
+                </button>
               </div>
             </div>
 

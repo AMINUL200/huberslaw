@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
@@ -31,16 +31,76 @@ import HandleWhyWorkWithUs from "./pages/admin/careers/HandleWhyWorkWithUs";
 import HandleSelfEmployed from "./pages/admin/careers/HandleSelfEmployed";
 import ViewApplyJob from "./pages/admin/careers/ViewApplyJob";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
+import { api } from "./utils/app";
+import LegalLoader from "./component/common/LegalLoader";
+import { Helmet } from "react-helmet";
+import EmailSetting from "./pages/admin/settings/EmailSetting";
 
 const App = () => {
   const { token, user } = useAuth();
-  console.log(token);
+  // console.log(token);
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
+  const [settings, setSettings] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSettings = async () => {
+    try {
+      const res = await api.get("/settings");
+      setSettings(res.data.data);
+    } catch (err) {
+      console.error("Failed to fetch site settings", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  if (loading) return <LegalLoader />;
 
   return (
     <>
+      <Helmet>
+        {/* Favicon */}
+        <link
+          rel="icon"
+          type="image/png"
+          href={`${baseUrl}${settings.fav_icon}`}
+        />
+
+        {/* Title */}
+        <title>{settings.com_name }</title>
+
+        {/* Meta Description */}
+        <meta name="description" content={settings.meta_description} />
+
+        {/* Meta Keywords */}
+        <meta name="keywords" content={settings.meta_keywords} />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href={settings.canonical_url} />
+
+        {/* Open Graph Tags */}
+        <meta property="og:title" content={settings.meta_title} />
+        <meta property="og:description" content={settings.meta_description} />
+        <meta property="og:image" content={`${baseUrl}/${settings.logo}`} />
+        <meta property="og:url" content={settings.canonical_url} />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={settings.meta_title} />
+        <meta name="twitter:description" content={settings.meta_description} />
+        <meta name="twitter:image" content={`${baseUrl}/${settings.logo}`} />
+      </Helmet>
+
       <Router>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
 
           <Route element={<AppLayout />}>
             <Route index path="/" element={<LandingPage />} />
@@ -58,8 +118,9 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
+
               <Route path="site-settings" element={<SiteSettings />} />
-              <Route path="profile" element={<AdminProfile />} />
+              {/* <Route path="profile" element={<AdminProfile />} /> */}
 
               <Route path="homepage/*">
                 <Route path="banners" element={<HandleBanner />} />
@@ -91,6 +152,9 @@ const App = () => {
                 element={<HandleSelfEmployed />}
               />
               <Route path="view-apply-job" element={<ViewApplyJob />} />
+
+              <Route path="email-setting" element={<EmailSetting/>}/>
+
             </Route>
           </Route>
         </Routes>

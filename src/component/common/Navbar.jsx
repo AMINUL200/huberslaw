@@ -5,7 +5,7 @@ import {
   ChevronDown,
   User,
   LogOut,
-  LayoutDashboard,  
+  LayoutDashboard,
   Phone,
   Printer,
   Mail,
@@ -15,7 +15,14 @@ import {
   Instagram,
 } from "lucide-react";
 
-const Navbar = ({ toggleMenu, togglePopup }) => {
+const Navbar = ({
+  toggleMenu,
+  togglePopup,
+  servicesData = [],
+  siteSettings = {},
+}) => {
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  // console.log(siteSettings);
   const [scrolled, setScrolled] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const dropdownRefs = useRef({});
@@ -61,15 +68,11 @@ const Navbar = ({ toggleMenu, togglePopup }) => {
       id: "services",
       label: "Services",
       path: "/services",
-      dropdown: [
-        { id: "corporate-law", label: "Corporate Law", path: "/services/corporate-law" },
-        {
-          id: "family-law",
-          label: "Family Law",
-          path: "/services/family-law",
-        },
-        { id: "business-law", label: "Business Law", path: "/services/business-law" },
-      ],
+      dropdown: servicesData.map((service) => ({
+        id: service.id,
+        label: service.service_name,
+        path: `/services/${service.slug}`,
+      })),
     },
     {
       id: "careers",
@@ -87,25 +90,43 @@ const Navbar = ({ toggleMenu, togglePopup }) => {
     { id: "contact", label: "Contact Us", path: "/contact-us" },
   ];
 
+  // Extract settings with fallbacks
+  const {
+    phone = "0044 (0)203 488 0953",
+    fax = "0044 (0)203 004 1413",
+    email = "info@huberslaw.co.uk",
+    com_name = "Hubers Law",
+    facebook = "#",
+    twitter = "#",
+    linkedin = "#",
+    instagram = "#",
+    logo = "",
+    logo_alt = "Hubers Law Logo",
+  } = siteSettings;
+
   const socialLinks = [
-    { icon: <Facebook className="w-4 h-4" />, url: "#", name: "Facebook" },
-    { icon: <Twitter className="w-4 h-4" />, url: "#", name: "Twitter" },
-    { icon: <Linkedin className="w-4 h-4" />, url: "#", name: "LinkedIn" },
-    { icon: <Instagram className="w-4 h-4" />, url: "#", name: "Instagram" },
+    { icon: <Facebook className="w-4 h-4" />, url: facebook, name: "Facebook" },
+    { icon: <Twitter className="w-4 h-4" />, url: twitter, name: "Twitter" },
+    { icon: <Linkedin className="w-4 h-4" />, url: linkedin, name: "LinkedIn" },
+    {
+      icon: <Instagram className="w-4 h-4" />,
+      url: instagram,
+      name: "Instagram",
+    },
   ];
 
   // Hover handlers
   const handleMouseEnter = (dropdownId) => {
     setOpenDropdowns((prev) => ({
       ...prev,
-      [dropdownId]: true
+      [dropdownId]: true,
     }));
   };
 
   const handleMouseLeave = (dropdownId) => {
     setOpenDropdowns((prev) => ({
       ...prev,
-      [dropdownId]: false
+      [dropdownId]: false,
     }));
   };
 
@@ -156,8 +177,8 @@ const Navbar = ({ toggleMenu, togglePopup }) => {
     const isOpen = openDropdowns[dropdownKey];
 
     return (
-      <div 
-        key={item.id} 
+      <div
+        key={item.id}
         className="relative group"
         onMouseEnter={() => hasSubDropdown && handleMouseEnter(dropdownKey)}
         onMouseLeave={() => hasSubDropdown && handleMouseLeave(dropdownKey)}
@@ -232,7 +253,7 @@ const Navbar = ({ toggleMenu, togglePopup }) => {
 
             {/* Dropdown menu */}
             {isOpen && (
-              <div 
+              <div
                 className="absolute top-6 left-0 mt-2 w-64 bg-white border border-[#E8EEF4] rounded-lg shadow-lg z-50"
                 onMouseEnter={() => handleMouseEnter(item.id)}
                 onMouseLeave={() => handleMouseLeave(item.id)}
@@ -284,15 +305,15 @@ const Navbar = ({ toggleMenu, togglePopup }) => {
           <div className="flex items-center space-x-6 text-sm">
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4 text-[#CBA054]" />
-              <span>Tel: 0044 (0)203 488 0953</span>
+              <span>Tel: {phone}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Printer className="w-4 h-4 text-[#CBA054]" />
-              <span>Fax: 0044 (0)203 004 1413</span>
+              <span>Fax: {fax}</span>
             </div>
             <div className="flex items-center space-x-2">
               <Mail className="w-4 h-4 text-[#CBA054]" />
-              <span>Email: info@huberslaw.co.uk</span>
+              <span>Email: {email}</span>
             </div>
           </div>
 
@@ -327,25 +348,35 @@ const Navbar = ({ toggleMenu, togglePopup }) => {
               className="text-2xl font-bold flex items-center cursor-pointer"
               onClick={() => navigate("/")}
             >
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 48 48"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  cx="24"
-                  cy="24"
-                  r="20"
-                  stroke="#0A1A2F"
-                  strokeWidth="4"
+              {logo ? (
+                <img
+                  src={`${baseUrl}${logo}`}
+                  alt={logo_alt}
+                  className="h-14 w-20 object-contain"
                 />
-                <path d="M16 24L24 14L32 24L24 34L16 24Z" fill="#0A1A2F" />
-              </svg>
-              <h1 className="ml-2 text-xl font-semibold text-[#0A1A2F]">
-                Hubers Law
-              </h1>
+              ) : (
+                <>
+                  <svg
+                    width="40"
+                    height="40"
+                    viewBox="0 0 48 48"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle
+                      cx="24"
+                      cy="24"
+                      r="20"
+                      stroke="#0A1A2F"
+                      strokeWidth="4"
+                    />
+                    <path d="M16 24L24 14L32 24L24 34L16 24Z" fill="#0A1A2F" />
+                  </svg>
+                  <h1 className="ml-2 text-xl font-semibold text-[#0A1A2F]">
+                    {com_name}
+                  </h1>
+                </>
+              )}
             </div>
           </div>
 

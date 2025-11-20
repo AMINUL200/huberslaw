@@ -1,10 +1,19 @@
-import React from 'react';
-import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Instagram } from 'lucide-react';
+import React from "react";
+import {
+  MapPin,
+  Phone,
+  Mail,
+  Clock,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+} from "lucide-react";
 
 const Footer = ({ siteSettings = {} }) => {
   // console.log(siteSettings);
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL ;
-  
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+
   const footerLinks = {
     practiceAreas: {
       title: "Practice Areas",
@@ -16,10 +25,10 @@ const Footer = ({ siteSettings = {} }) => {
         { name: "Criminal Defense", url: "/practice-areas/criminal" },
         { name: "Employment Law", url: "/practice-areas/employment" },
         { name: "Immigration Law", url: "/practice-areas/immigration" },
-        { name: "Intellectual Property", url: "/practice-areas/ip" }
-      ]
+        { name: "Intellectual Property", url: "/practice-areas/ip" },
+      ],
     },
-   
+
     legal: {
       title: "Legal",
       links: [
@@ -27,9 +36,9 @@ const Footer = ({ siteSettings = {} }) => {
         { name: "Privacy Policy", url: "/privacy" },
         { name: "Cookie Policy", url: "/cookies" },
         { name: "Disclaimer", url: "/disclaimer" },
-        { name: "Accessibility", url: "/accessibility" }
-      ]
-    }
+        { name: "Accessibility", url: "/accessibility" },
+      ],
+    },
   };
 
   // Dynamic contact info from siteSettings
@@ -37,47 +46,49 @@ const Footer = ({ siteSettings = {} }) => {
     {
       icon: <MapPin className="w-5 h-5" />,
       text: siteSettings?.address || "123 Legal Street, London, UK WC1A 1AA",
-      url: siteSettings?.map || "#"
+      url: siteSettings?.map || "#",
     },
     {
       icon: <Phone className="w-5 h-5" />,
       text: siteSettings?.phone || "0203 488 0953",
-      url: `tel:${siteSettings?.phone || "+442034880953"}`
+      url: `tel:${siteSettings?.phone || "+442034880953"}`,
     },
     {
       icon: <Mail className="w-5 h-5" />,
       text: siteSettings?.email || "info@huberslaw.com",
-      url: `mailto:${siteSettings?.email || "info@huberslaw.com"}`
+      url: `mailto:${siteSettings?.email || "info@huberslaw.com"}`,
     },
     {
       icon: <Clock className="w-5 h-5" />,
-      text: `Mon-Fri: ${siteSettings?.mon?.split(' - ')[0] || "9:00 AM"} - ${siteSettings?.fri?.split(' - ')[1] || "6:00 PM"}`,
-      url: "#"
-    }
+      text: `Mon-Fri: ${siteSettings?.mon?.split(" - ")[0] || "9:00 AM"} - ${
+        siteSettings?.fri?.split(" - ")[1] || "6:00 PM"
+      }`,
+      url: "#",
+    },
   ];
 
   // Dynamic social links from siteSettings
   const socialLinks = [
-    { 
-      icon: <Facebook className="w-5 h-5" />, 
-      url: siteSettings?.facebook || "#", 
-      name: "Facebook" 
+    {
+      icon: <Facebook className="w-5 h-5" />,
+      url: siteSettings?.facebook || "#",
+      name: "Facebook",
     },
-    { 
-      icon: <Twitter className="w-5 h-5" />, 
-      url: siteSettings?.twitter || "#", 
-      name: "Twitter" 
+    {
+      icon: <Twitter className="w-5 h-5" />,
+      url: siteSettings?.twitter || "#",
+      name: "Twitter",
     },
-    { 
-      icon: <Linkedin className="w-5 h-5" />, 
-      url: siteSettings?.linkedin || "#", 
-      name: "LinkedIn" 
+    {
+      icon: <Linkedin className="w-5 h-5" />,
+      url: siteSettings?.linkedin || "#",
+      name: "LinkedIn",
     },
-    { 
-      icon: <Instagram className="w-5 h-5" />, 
-      url: siteSettings?.instagram || "#", 
-      name: "Instagram" 
-    }
+    {
+      icon: <Instagram className="w-5 h-5" />,
+      url: siteSettings?.instagram || "#",
+      name: "Instagram",
+    },
   ];
 
   // Dynamic accreditation logos from siteSettings
@@ -86,15 +97,22 @@ const Footer = ({ siteSettings = {} }) => {
       name: "SRA",
       title: "SRA Accredited",
       logo: siteSettings?.sra_logo ? (
-        <img 
-          src={`${baseUrl}${siteSettings?.sra_logo}`} 
-          alt={siteSettings?.sra_alt || "SRA Accreditation"} 
+        <img
+          src={`${baseUrl}${siteSettings?.sra_logo}`}
+          alt={siteSettings?.sra_alt || "SRA Accreditation"}
           className="h-10 w-auto object-contain"
         />
       ) : (
         <svg width="80" height="40" viewBox="0 0 80 40" className="text-white">
           <rect width="80" height="40" fill="#0A1A2F" rx="4" />
-          <text x="40" y="22" textAnchor="middle" fill="#CBA054" fontSize="10" fontWeight="bold">
+          <text
+            x="40"
+            y="22"
+            textAnchor="middle"
+            fill="#CBA054"
+            fontSize="10"
+            fontWeight="bold"
+          >
             SRA
           </text>
           <text x="40" y="32" textAnchor="middle" fill="#FFFFFF" fontSize="6">
@@ -102,21 +120,28 @@ const Footer = ({ siteSettings = {} }) => {
           </text>
         </svg>
       ),
-      url: siteSettings?.sra_url
+      url: siteSettings?.sra_url,
     },
     {
       name: "Law Society",
       title: "Law Society Member",
       logo: siteSettings?.law_socity_logo ? (
-        <img 
-           src={`${baseUrl}${siteSettings?.law_socity_logo}`} 
-          alt={siteSettings?.law_socity_alt || "The Law Society Membership"} 
+        <img
+          src={`${baseUrl}${siteSettings?.law_socity_logo}`}
+          alt={siteSettings?.law_socity_alt || "The Law Society Membership"}
           className="h-10 w-auto object-contain"
         />
       ) : (
         <svg width="80" height="40" viewBox="0 0 80 40" className="text-white">
           <rect width="80" height="40" fill="#0A1A2F" rx="4" />
-          <text x="40" y="18" textAnchor="middle" fill="#CBA054" fontSize="8" fontWeight="bold">
+          <text
+            x="40"
+            y="18"
+            textAnchor="middle"
+            fill="#CBA054"
+            fontSize="8"
+            fontWeight="bold"
+          >
             THE LAW SOCIETY
           </text>
           <text x="40" y="30" textAnchor="middle" fill="#FFFFFF" fontSize="6">
@@ -124,49 +149,64 @@ const Footer = ({ siteSettings = {} }) => {
           </text>
         </svg>
       ),
-      url: siteSettings?.law_socity_url
-    }
+      url: siteSettings?.law_socity_url,
+    },
   ];
 
   // Company name from siteSettings
   const companyName = siteSettings?.com_name || "Hubers Law";
-  const companyDescription = siteSettings?.meta_description || "Providing expert legal counsel and representation with over 20 years of experience. Your trusted partner for comprehensive legal solutions tailored to your unique needs.";
-  const copyrightText = siteSettings?.copy_right || `© ${new Date().getFullYear()} Hubers Law. All rights reserved.`;
+  const companyDescription =
+    siteSettings?.meta_description ||
+    "Providing expert legal counsel and representation with over 20 years of experience. Your trusted partner for comprehensive legal solutions tailored to your unique needs.";
+  const copyrightText =
+    siteSettings?.copy_right ||
+    `© ${new Date().getFullYear()} Hubers Law. All rights reserved.`;
 
   return (
     <footer className="bg-[#0A1A2F] text-white">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          
           {/* Left Column - Brand & Contact */}
           <div className="space-y-8">
             {/* Brand */}
             <div className="flex items-center space-x-3">
               {siteSettings?.logo ? (
-                <img 
-                   src={`${baseUrl}${siteSettings?.logo}`} 
-                  alt={siteSettings.logo_alt || companyName} 
-                  className="w-10 h-10 rounded-lg object-contain"
+                <img
+                  src={`${baseUrl}${siteSettings?.logo}`}
+                  alt={siteSettings.logo_alt || companyName}
+                  className="w-30 h-15 rounded-lg object-contain"
                 />
               ) : (
-                <div className="w-10 h-10 bg-[#CBA054] rounded-lg flex items-center justify-center">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 48 48"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="24" cy="24" r="20" stroke="white" strokeWidth="2" />
-                    <path d="M16 24L24 14L32 24L24 34L16 24Z" fill="white" />
-                  </svg>
-                </div>
+                <>
+                  <div className="w-10 h-10 bg-[#CBA054] rounded-lg flex items-center justify-center">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 48 48"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle
+                        cx="24"
+                        cy="24"
+                        r="20"
+                        stroke="white"
+                        strokeWidth="2"
+                      />
+                      <path d="M16 24L24 14L32 24L24 34L16 24Z" fill="white" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">
+                      {companyName}
+                    </h2>
+                    <p className="text-[#CBA054] text-sm font-semibold">
+                      Legal Excellence Since 2003
+                    </p>
+                  </div>
+                </>
               )}
-              <div>
-                <h2 className="text-2xl font-bold text-white">{companyName}</h2>
-                <p className="text-[#CBA054] text-sm font-semibold">Legal Excellence Since 2003</p>
-              </div>
             </div>
 
             {/* Description */}
@@ -252,7 +292,7 @@ const Footer = ({ siteSettings = {} }) => {
               <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
                 Accreditation
               </h3>
-              
+
               <div className="space-y-4">
                 {accreditationLogos.map((accreditation, index) => (
                   <a
@@ -283,9 +323,7 @@ const Footer = ({ siteSettings = {} }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
-            <div className="text-gray-400 text-sm">
-              {copyrightText}
-            </div>
+            <div className="text-gray-400 text-sm">{copyrightText}</div>
 
             {/* Additional Links */}
             <div className="flex flex-wrap justify-center gap-6 text-sm text-gray-400">
@@ -316,11 +354,17 @@ const Footer = ({ siteSettings = {} }) => {
             </div>
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4 text-[#0A1A2F]" />
-              <a 
-                href={`tel:${siteSettings?.helpline_no || siteSettings?.phone || "+442034880953"}`} 
+              <a
+                href={`tel:${
+                  siteSettings?.helpline_no ||
+                  siteSettings?.phone ||
+                  "+442034880953"
+                }`}
                 className="text-[#0A1A2F] font-bold text-lg hover:underline"
               >
-                {siteSettings?.helpline_no || siteSettings?.phone || "0203 488 0953"}
+                {siteSettings?.helpline_no ||
+                  siteSettings?.phone ||
+                  "0203 488 0953"}
               </a>
             </div>
           </div>

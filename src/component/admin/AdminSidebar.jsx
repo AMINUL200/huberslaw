@@ -39,12 +39,12 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
       icon: <LayoutDashboard className="w-5 h-5" />,
       path: "/admin",
     },
-    {
-      id: "profile",
-      label: "Profile",
-      icon: <User2 className="w-5 h-5" />,
-      path: "/admin/profile",
-    },
+    // {
+    //   id: "profile",
+    //   label: "Profile",
+    //   icon: <User2 className="w-5 h-5" />,
+    //   path: "/admin/profile",
+    // },
     {
       id: "contact-us-messages",
       label: "Contact Us Messages",
@@ -136,7 +136,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
           label: "Handle Self Employed",
           icon: <Briefcase className="w-4 h-4" />,
           path: "/admin/handle-self-employed",
-        }
+        },
       ],
     },
 
@@ -150,6 +150,12 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
           label: "Site Setting",
           icon: <Settings className="w-4 h-4" />,
           path: "/admin/site-settings",
+        },
+        {
+          id: "emailSetting",
+          label: "Email Setting",
+          icon: <Settings className="w-4 h-4" />,
+          path :"/admin/email-setting"
         },
       ],
     },

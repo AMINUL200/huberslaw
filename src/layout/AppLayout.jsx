@@ -6,6 +6,7 @@ import Navbar from "../component/common/Navbar";
 import BackToTop from "../component/common/BackToTop";
 import AppointmentPopup from "../component/common/AppointmentPopup";
 import { api } from "../utils/app";
+import LegalLoader from "../component/common/LegalLoader";
 
 const AppLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -51,10 +52,22 @@ const AppLayout = () => {
     fetchAllData();
   }, []);
 
+  if (loading) return <LegalLoader />;
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar toggleMenu={toggleSidebar} togglePopup={togglePopup} />
-      <SideBar toggleMenu={toggleSidebar} isOpen={sidebarOpen} />
+      <Navbar
+        toggleMenu={toggleSidebar}
+        togglePopup={togglePopup}
+        servicesData={servicesData}
+        siteSettings={siteSettings}
+      />
+      <SideBar
+        toggleMenu={toggleSidebar}
+        isOpen={sidebarOpen}
+        servicesData={servicesData}
+        siteSettings={siteSettings}
+      />
       <Outlet />
       <Footer siteSettings={siteSettings} />
       <BackToTop />

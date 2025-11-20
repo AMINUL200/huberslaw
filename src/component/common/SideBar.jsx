@@ -14,10 +14,16 @@ import {
   LayoutDashboard,
 } from "lucide-react";
 
-const SideBar = ({ toggleMenu, isOpen }) => {
+const SideBar = ({
+  toggleMenu,
+  isOpen,
+  servicesData = [],
+  siteSettings = {},
+}) => {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const navigate = useNavigate();
   const location = useLocation();
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
   // Sidebar navigation links with icons - Updated to match navbar structure
   const sidebarLinks = [
@@ -34,26 +40,33 @@ const SideBar = ({ toggleMenu, isOpen }) => {
       dropdown: [
         { id: "our-people", label: "Our People", path: "/about/our-people" },
         { id: "client-care", label: "Client Care", path: "/about/client-care" },
-        { id: "terms-condition", label: "Terms And Condition", path: "/about/terms-condition" },
+        {
+          id: "terms-condition",
+          label: "Terms And Condition",
+          path: "/about/terms-condition",
+        },
       ],
     },
     {
       id: "services",
       label: "Services",
       icon: <Briefcase className="w-5 h-5" />,
-      dropdown: [
-        { id: "web-design", label: "Web Design", path: "/services/web-design" },
-        { id: "development", label: "Development", path: "/services/development" },
-        { id: "seo", label: "SEO Optimization", path: "/services/seo" },
-        { id: "marketing", label: "Digital Marketing", path: "/services/digital-marketing" },
-      ],
+      dropdown: servicesData.map((service) => ({
+        id: service.id,
+        label: service.service_name,
+        path: `/services/${service.slug}`,
+      })),
     },
     {
       id: "careers",
       label: "Careers",
       icon: <Package className="w-5 h-5" />,
       dropdown: [
-        { id: "why-work-with-us", label: "Why Work With Us", path: "/careers/why-work-with-us" },
+        {
+          id: "why-work-with-us",
+          label: "Why Work With Us",
+          path: "/careers/why-work-with-us",
+        },
         { id: "vacensis", label: "Vacensis", path: "/careers/vacensis" },
       ],
     },
@@ -64,8 +77,6 @@ const SideBar = ({ toggleMenu, isOpen }) => {
       icon: <Mail className="w-5 h-5" />,
     },
   ];
-
-
 
   // Close sidebar when route changes
   useEffect(() => {
@@ -211,7 +222,9 @@ const SideBar = ({ toggleMenu, isOpen }) => {
             }`}
           >
             <div className="mt-1">
-              {item.dropdown.map((dropdownItem) => renderDropdownItem(dropdownItem))}
+              {item.dropdown.map((dropdownItem) =>
+                renderDropdownItem(dropdownItem)
+              )}
             </div>
           </div>
         )}
@@ -238,17 +251,33 @@ const SideBar = ({ toggleMenu, isOpen }) => {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#E8EEF4] bg-white">
           <div className="flex items-center space-x-3">
-            <svg
-              width="36"
-              height="36"
-              viewBox="0 0 48 48"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle cx="24" cy="24" r="20" stroke="#0A1A2F" strokeWidth="4" />
-              <path d="M16 24L24 14L32 24L24 34L16 24Z" fill="#0A1A2F" />
-            </svg>
-            <h2 className="text-xl font-bold text-[#0A1A2F]">Hubers Law</h2>
+            {siteSettings.logo ? (
+              <img
+                src={`${baseUrl}${siteSettings.logo}`}
+                alt={siteSettings.logo_alt || "Logo"}
+                className="h-15 w-auto"
+              />
+            ) : (
+              <>
+                <svg
+                  width="36"
+                  height="36"
+                  viewBox="0 0 48 48"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle
+                    cx="24"
+                    cy="24"
+                    r="20"
+                    stroke="#0A1A2F"
+                    strokeWidth="4"
+                  />
+                  <path d="M16 24L24 14L32 24L24 34L16 24Z" fill="#0A1A2F" />
+                </svg>
+                <h2 className="text-xl font-bold text-[#0A1A2F]">Hubers Law</h2>
+              </>
+            )}
           </div>
           <button
             onClick={toggleMenu}
@@ -263,8 +292,6 @@ const SideBar = ({ toggleMenu, isOpen }) => {
         <nav className="flex-1 overflow-y-auto py-4 px-2 h-[calc(100vh-180px)]">
           {sidebarLinks.map((item) => renderNavItem(item))}
         </nav>
-
-  
       </aside>
     </>
   );
