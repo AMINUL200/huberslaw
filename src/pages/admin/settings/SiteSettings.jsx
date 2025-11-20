@@ -69,19 +69,19 @@ const SiteSettings = () => {
       if (response.data.status && response.data.data) {
         const data = response.data.data;
         setSettings(data);
-        
+
         // Set previews if logos exist
         if (data.logo) {
-          setLogoPreview(data.logo);
+          setLogoPreview(`${storageUrl}${data.logo}`);
         }
         if (data.sra_logo) {
-          setSraLogoPreview(data.sra_logo);
+          setSraLogoPreview(`${storageUrl}${data.sra_logo}`);
         }
         if (data.law_socity_logo) {
-          setLawSocietyLogoPreview(data.law_socity_logo);
+          setLawSocietyLogoPreview(`${storageUrl}${data.law_socity_logo}`);
         }
         if (data.fav_icon) {
-          setFavIconPreview(data.fav_icon);
+          setFavIconPreview(`${storageUrl}${data.fav_icon}`);
         }
       }
     } catch (error) {
@@ -141,22 +141,22 @@ const SiteSettings = () => {
       switch (type) {
         case "logo":
           setLogoPreview(previewUrl);
-          setChangedImages(prev => ({ ...prev, logo: true }));
+          setChangedImages((prev) => ({ ...prev, logo: true }));
           setSettings((prev) => ({ ...prev, logo: file }));
           break;
         case "sra_logo":
           setSraLogoPreview(previewUrl);
-          setChangedImages(prev => ({ ...prev, sra_logo: true }));
+          setChangedImages((prev) => ({ ...prev, sra_logo: true }));
           setSettings((prev) => ({ ...prev, sra_logo: file }));
           break;
         case "law_society_logo":
           setLawSocietyLogoPreview(previewUrl);
-          setChangedImages(prev => ({ ...prev, law_socity_logo: true }));
+          setChangedImages((prev) => ({ ...prev, law_socity_logo: true }));
           setSettings((prev) => ({ ...prev, law_socity_logo: file }));
           break;
         case "fav_icon":
           setFavIconPreview(previewUrl);
-          setChangedImages(prev => ({ ...prev, fav_icon: true }));
+          setChangedImages((prev) => ({ ...prev, fav_icon: true }));
           setSettings((prev) => ({ ...prev, fav_icon: file }));
           break;
         default:
@@ -171,32 +171,63 @@ const SiteSettings = () => {
 
     try {
       const formData = new FormData();
-      const debugData = {};
 
-      // Append all non-image fields
-      Object.keys(settings).forEach((key) => {
-        // Skip image fields that haven't been changed
-        if (['logo', 'sra_logo', 'law_socity_logo', 'fav_icon'].includes(key)) {
-          if (changedImages[key] && settings[key] instanceof File) {
-            formData.append(key, settings[key]);
-            debugData[key] = `File: ${settings[key].name}`;
-          } else if (changedImages[key] && settings[key] === null) {
-            // Handle case where image is removed
-            formData.append(key, '');
-            debugData[key] = 'Removed';
-          }
-          // If image hasn't been changed, don't send it
-        } else {
-          // Append all other fields
-          if (settings[key] !== null && settings[key] !== undefined) {
-            formData.append(key, settings[key]);
-            debugData[key] = settings[key];
-          }
-        }
-      });
+      // Append all fields individually
+      formData.append("phone", settings.phone || "");
+      formData.append("email", settings.email || "");
+      formData.append("fax", settings.fax || "");
+      formData.append("map", settings.map || "");
+      formData.append("helpline_no", settings.helpline_no || "");
+      formData.append("address", settings.address || "");
+      formData.append("facebook", settings.facebook || "");
+      formData.append("twitter", settings.twitter || "");
+      formData.append("linkedin", settings.linkedin || "");
+      formData.append("instagram", settings.instagram || "");
+      formData.append("logo_alt", settings.logo_alt || "");
+      formData.append("com_name", settings.com_name || "");
+      formData.append("copy_right", settings.copy_right || "");
+      formData.append("sra_url", settings.sra_url || "");
+      formData.append("sra_alt", settings.sra_alt || "");
+      formData.append("law_socity_url", settings.law_socity_url || "");
+      formData.append("law_socity_alt", settings.law_socity_alt || "");
+      formData.append("title", settings.title || "");
+      formData.append("meta_title", settings.meta_title || "");
+      formData.append("meta_description", settings.meta_description || "");
+      formData.append("meta_keywords", settings.meta_keywords || "");
+      formData.append("canonical_url", settings.canonical_url || "");
+      formData.append("mon", settings.mon || "");
+      formData.append("tues", settings.tues || "");
+      formData.append("wed", settings.wed || "");
+      formData.append("thus", settings.thus || "");
+      formData.append("fri", settings.fri || "");
+      formData.append("sat", settings.sat || "");
+      formData.append("sun", settings.sun || "");
 
-      console.log("Form Data to be sent:", debugData);
-      console.log("Changed images:", changedImages);
+      // Append file fields only if they've been changed and are File objects
+      if ( settings.logo instanceof File) {
+        formData.append("logo", settings.logo);
+      }
+      if (changedImages.sra_logo && settings.sra_logo instanceof File) {
+        formData.append("sra_logo", settings.sra_logo);
+      }
+      if (
+        changedImages.law_socity_logo &&
+        settings.law_socity_logo instanceof File
+      ) {
+        formData.append("law_socity_logo", settings.law_socity_logo);
+      }
+      if (changedImages.fav_icon && settings.fav_icon instanceof File) {
+        formData.append("fav_icon", settings.fav_icon);
+      }
+
+      // Debug: Log all form data entries
+      console.log("FormData entries:");
+      for (let [key, value] of formData.entries()) {
+        console.log(
+          `${key}:`,
+          value instanceof File ? `File: ${value.name}` : value
+        );
+      }
 
       const response = await api.post("/settings/1", formData, {
         headers: {
@@ -216,6 +247,8 @@ const SiteSettings = () => {
         });
         // Refetch settings to get updated image paths
         fetchSettings();
+      } else {
+        alert(response.data.message || "Failed to update settings");
       }
     } catch (error) {
       console.error("Error updating settings:", error);
@@ -227,7 +260,7 @@ const SiteSettings = () => {
 
   // Helper function to get image preview URL
   const getImageUrl = (preview, existingPath) => {
-    if (preview && preview.startsWith('blob:')) {
+    if (preview && preview.startsWith("blob:")) {
       return preview; // New uploaded image preview
     } else if (existingPath) {
       return `${storageUrl}${existingPath}`; // Existing image from server
@@ -569,9 +602,15 @@ const SiteSettings = () => {
               </h3>
               <div className="space-y-4">
                 <div className="w-32 h-32 border-2 border-dashed border-[#E8EEF4] rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden">
-                  {getImageUrl(lawSocietyLogoPreview, settings.law_socity_logo) ? (
+                  {getImageUrl(
+                    lawSocietyLogoPreview,
+                    settings.law_socity_logo
+                  ) ? (
                     <img
-                      src={getImageUrl(lawSocietyLogoPreview, settings.law_socity_logo)}
+                      src={getImageUrl(
+                        lawSocietyLogoPreview,
+                        settings.law_socity_logo
+                      )}
                       alt="Law Society Logo Preview"
                       className="w-full h-full object-contain"
                     />
@@ -739,7 +778,7 @@ const SiteSettings = () => {
             <button
               type="submit"
               disabled={saving}
-              className="px-8 py-3 bg-linear-to-r from-[#0A1A2F] to-[#1E354F] text-white rounded-xl shadow-lg hover:from-[#CBA054] hover:to-[#DBAE5D] transition-all text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
+              className="px-8 py-3 bg-[#0A1A2F] text-white rounded-xl shadow-lg hover:bg-[#CBA054] transition-all text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-95"
             >
               {saving ? "Saving..." : "Save Settings"}
             </button>

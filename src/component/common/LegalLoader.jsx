@@ -2,7 +2,7 @@ import React from 'react';
 
 const LegalLoader = () => {
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-[#F4EEDC] to-[#E8EEF4] flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] flex items-center justify-center z-50">
       <div className="text-center space-y-8">
         
         {/* Main Loader Container */}
@@ -10,7 +10,7 @@ const LegalLoader = () => {
           {/* Scales of Justice - More Realistic */}
           <div className="relative w-48 h-48 mx-auto">
             {/* Base Stand */}
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4 h-16 bg-gradient-to-b from-[#0A1A2F] to-[#1E354F] rounded-t-lg"></div>
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-4 h-16 bg-linear-to-b from-[#0A1A2F] to-[#1E354F] rounded-t-lg"></div>
             
             {/* Center Column */}
             <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 w-3 h-32 bg-[#0A1A2F] rounded-t-lg"></div>
@@ -20,17 +20,17 @@ const LegalLoader = () => {
               
               {/* Left Scale Chain & Pan */}
               <div className="absolute -left-4 top-0">
-                <div className="w-1 h-16 bg-gradient-to-b from-[#CBA054] to-[#DBAE5D] mx-auto animate-swing-left origin-top"></div>
+                <div className="w-1 h-16 bg-linear-to-b from-[#CBA054] to-[#DBAE5D] mx-auto animate-swing-left origin-top"></div>
                 <div className="w-12 h-12 border-2 border-[#CBA054] rounded-full mt-1 flex items-center justify-center bg-white/80 shadow-lg animate-tilt-left">
-                  <div className="w-8 h-8 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-full animate-pulse-gold"></div>
+                  <div className="w-8 h-8 bg-linear-to-br from-[#CBA054] to-[#DBAE5D] rounded-full animate-pulse-gold"></div>
                 </div>
               </div>
               
               {/* Right Scale Chain & Pan */}
               <div className="absolute -right-4 top-0">
-                <div className="w-1 h-16 bg-gradient-to-b from-[#CBA054] to-[#DBAE5D] mx-auto animate-swing-right origin-top"></div>
+                <div className="w-1 h-16 bg-linear-to-b from-[#CBA054] to-[#DBAE5D] mx-auto animate-swing-right origin-top"></div>
                 <div className="w-12 h-12 border-2 border-[#CBA054] rounded-full mt-1 flex items-center justify-center bg-white/80 shadow-lg animate-tilt-right">
-                  <div className="w-8 h-8 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-full animate-pulse-gold"></div>
+                  <div className="w-8 h-8 bg-linear-to-br from-[#CBA054] to-[#DBAE5D] rounded-full animate-pulse-gold"></div>
                 </div>
               </div>
               
@@ -41,9 +41,9 @@ const LegalLoader = () => {
           <div className="absolute top-8 left-1/2 transform -translate-x-1/2 animate-gavel-swing origin-top">
             <div className="flex flex-col items-center">
               {/* Handle */}
-              <div className="w-3 h-16 bg-gradient-to-b from-[#0A1A2F] to-[#1E354F] rounded-t-lg"></div>
+              <div className="w-3 h-16 bg-linear-to-b from-[#0A1A2F] to-[#1E354F] rounded-t-lg"></div>
               {/* Head */}
-              <div className="w-8 h-6 bg-gradient-to-r from-[#CBA054] to-[#DBAE5D] rounded-lg -mt-1 shadow-lg"></div>
+              <div className="w-8 h-6 bg-linear-to-r from-[#CBA054] to-[#DBAE5D] rounded-lg -mt-1 shadow-lg"></div>
             </div>
           </div>
         </div>
@@ -71,7 +71,7 @@ const LegalLoader = () => {
         {/* Brand & Loading Text */}
         <div className="space-y-4">
           <div className="flex items-center justify-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-lg flex items-center justify-center animate-glow">
+            <div className="w-8 h-8 bg-linear-to-br from-[#CBA054] to-[#DBAE5D] rounded-lg flex items-center justify-center animate-glow">
               <svg
                 width="20"
                 height="20"
@@ -112,32 +112,12 @@ const LegalLoader = () => {
             <span className="animate-counting">0%</span>
           </div>
           <div className="w-full h-2 bg-[#E8EEF4] rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-[#CBA054] to-[#DBAE5D] rounded-full animate-progress-fill"></div>
+            <div className="h-full bg-linear-to-r from-[#CBA054] to-[#DBAE5D] rounded-full animate-progress-fill"></div>
           </div>
         </div>
 
         {/* Background Legal Elements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Floating Legal Terms */}
-          {['CONTRACT', 'AGREEMENT', 'JUSTICE', 'LAW'].map((term, index) => (
-            <div
-              key={term}
-              className="absolute text-[#0A1A2F]/10 font-bold text-lg animate-float-term"
-              style={{
-                left: `${20 + index * 20}%`,
-                animationDelay: `${index * 1.5}s`,
-                animationDuration: `${8 + index * 2}s`
-              }}
-            >
-              {term}
-            </div>
-          ))}
-          
-          {/* Subtle Grid Pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="w-full h-full bg-gradient-to-r from-transparent via-[#0A1A2F] to-transparent animate-grid-move"></div>
-          </div>
-        </div>
+        
       </div>
 
       <style jsx>{`
