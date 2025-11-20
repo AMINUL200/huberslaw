@@ -53,7 +53,7 @@ const ContactUs = () => {
     } catch (error) {
       console.error("Error fetching contact data:", error);
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   };
 
