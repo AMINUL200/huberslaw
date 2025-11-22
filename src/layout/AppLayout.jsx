@@ -64,6 +64,7 @@ const AppLayout = () => {
       />
       <SideBar
         toggleMenu={toggleSidebar}
+        togglePopup={togglePopup}
         isOpen={sidebarOpen}
         servicesData={servicesData}
         siteSettings={siteSettings}

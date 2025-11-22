@@ -276,7 +276,7 @@ const BannerSection = ({
       </Swiper>
 
       {/* Custom Navigation Buttons */}
-      {showControls && activeBanners.length > 1 && (
+      {/* {showControls && activeBanners.length > 1 && (
         <>
           <div className="absolute inset-y-0 left-2 md:left-4 flex items-center z-10">
             <button
@@ -296,10 +296,10 @@ const BannerSection = ({
             </button>
           </div>
         </>
-      )}
+      )} */}
 
       {/* Autoplay Control */}
-      {autoPlay && activeBanners.length > 1 && (
+      {/* {autoPlay && activeBanners.length > 1 && (
         <div className="absolute bottom-4 right-4 md:bottom-6 md:right-6 z-10">
           <button
             onClick={toggleAutoplay}
@@ -313,7 +313,7 @@ const BannerSection = ({
             )}
           </button>
         </div>
-      )}
+      )} */}
 
       {/* Progress Bar for Autoplay */}
       {autoPlay && activeBanners.length > 1 && (

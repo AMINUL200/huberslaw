@@ -91,20 +91,66 @@ const SiteSettings = () => {
     }
   };
 
-  // Validate image file (1MB max)
+  // Validate image file with different limits for different types
   const validateImage = (file, type) => {
-    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
-    const maxSize = 1 * 1024 * 1024; // 1MB
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/x-icon", "image/vnd.microsoft.icon"];
+    
+    // Different size limits for different image types
+    const sizeLimits = {
+      logo: 1 * 1024 * 1024, // 1MB for logos
+      sra_logo: 1 * 1024 * 1024, // 1MB for SRA logo
+      law_society_logo: 1 * 1024 * 1024, // 1MB for law society logo
+      fav_icon: 100 * 1024, // 100KB for favicon
+    };
+
+    const maxSize = sizeLimits[type] || 1 * 1024 * 1024; // Default to 1MB
 
     if (!validTypes.includes(file.type)) {
-      return `Please select a valid image format (JPG, PNG, WEBP) for ${type}`;
+      return `Please select a valid image format (JPG, PNG, WEBP, ICO) for ${type}`;
     }
 
     if (file.size > maxSize) {
-      return `Image size should be less than 1MB for ${type}`;
+      const sizeInKB = Math.round(maxSize / 1024);
+      return `${type === 'fav_icon' ? 'Favicon' : 'Image'} size should be less than ${sizeInKB}KB`;
     }
 
     return null;
+  };
+
+  // Validate favicon dimensions
+  const validateFaviconDimensions = (file) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = function() {
+        const width = this.width;
+        const height = this.height;
+        
+        // Common favicon dimensions
+        const validDimensions = [
+          { width: 16, height: 16 },
+          { width: 32, height: 32 },
+          { width: 48, height: 48 },
+          { width: 64, height: 64 },
+          { width: 128, height: 128 },
+        ];
+
+        const isValidDimension = validDimensions.some(
+          dim => width === dim.width && height === dim.height
+        );
+
+        if (!isValidDimension) {
+          resolve("Favicon should be one of these sizes: 16x16, 32x32, 48x48, 64x64, or 128x128 pixels");
+        } else {
+          resolve(null);
+        }
+      };
+
+      img.onerror = function() {
+        resolve("Unable to load image for dimension validation");
+      };
+
+      img.src = URL.createObjectURL(file);
+    });
   };
 
   // Handle input changes
@@ -117,17 +163,29 @@ const SiteSettings = () => {
   };
 
   // Handle file uploads
-  const handleFileUpload = (e, type) => {
+  const handleFileUpload = async (e, type) => {
     const file = e.target.files[0];
     if (file) {
-      const error = validateImage(file, type);
-
-      if (error) {
+      // Basic validation
+      const basicError = validateImage(file, type);
+      if (basicError) {
         setImageErrors((prev) => ({
           ...prev,
-          [type]: error,
+          [type]: basicError,
         }));
         return;
+      }
+
+      // Additional dimension validation for favicon
+      if (type === "fav_icon") {
+        const dimensionError = await validateFaviconDimensions(file);
+        if (dimensionError) {
+          setImageErrors((prev) => ({
+            ...prev,
+            [type]: dimensionError,
+          }));
+          return;
+        }
       }
 
       // Clear any previous errors
@@ -204,7 +262,7 @@ const SiteSettings = () => {
       formData.append("sun", settings.sun || "");
 
       // Append file fields only if they've been changed and are File objects
-      if ( settings.logo instanceof File) {
+      if (settings.logo instanceof File) {
         formData.append("logo", settings.logo);
       }
       if (changedImages.sra_logo && settings.sra_logo instanceof File) {
@@ -218,15 +276,6 @@ const SiteSettings = () => {
       }
       if (changedImages.fav_icon && settings.fav_icon instanceof File) {
         formData.append("fav_icon", settings.fav_icon);
-      }
-
-      // Debug: Log all form data entries
-      console.log("FormData entries:");
-      for (let [key, value] of formData.entries()) {
-        console.log(
-          `${key}:`,
-          value instanceof File ? `File: ${value.name}` : value
-        );
       }
 
       const response = await api.post("/settings/1", formData, {
@@ -363,7 +412,7 @@ const SiteSettings = () => {
                     type="file"
                     className="hidden"
                     onChange={(e) => handleFileUpload(e, "fav_icon")}
-                    accept=".jpg,.jpeg,.png,.webp"
+                    accept=".jpg,.jpeg,.png,.webp,.ico"
                   />
                 </label>
                 {imageErrors.fav_icon && (
@@ -371,9 +420,11 @@ const SiteSettings = () => {
                     {imageErrors.fav_icon}
                   </p>
                 )}
-                <p className="text-xs text-gray-500">
-                  Recommended: 32x32px or 16x16px, max 1MB
-                </p>
+                <div className="text-xs text-gray-500 space-y-1">
+                  <p><strong>Recommended:</strong> 16x16, 32x32, 48x48, 64x64, or 128x128 pixels</p>
+                  <p><strong>Max Size:</strong> 100KB</p>
+                  <p><strong>Formats:</strong> JPG, PNG, WEBP, ICO</p>
+                </div>
               </div>
             </div>
           </div>

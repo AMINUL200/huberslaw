@@ -16,6 +16,7 @@ import {
 
 const SideBar = ({
   toggleMenu,
+  togglePopup,
   isOpen,
   servicesData = [],
   siteSettings = {},
@@ -90,7 +91,7 @@ const SideBar = ({
     if (isOpen) {
       toggleMenu();
     }
-  }, [location.pathname]);
+  }, [location.pathname, location.search]);
 
   // Toggle dropdown
   const toggleDropdown = (dropdownId) => {
@@ -299,6 +300,19 @@ const SideBar = ({
         <nav className="flex-1 overflow-y-auto py-4 px-2 h-[calc(100vh-180px)]">
           {sidebarLinks.map((item) => renderNavItem(item))}
         </nav>
+
+        {/* Book Appointment Button */}
+        <div className="p-4 border-t border-[#E8EEF4]">
+          <button
+            onClick={() => {
+              togglePopup(); // open popup
+              toggleMenu(); // close sidebar
+            }}
+            className="w-full bg-[#0A1A2F] text-white py-3 rounded-lg font-semibold hover:bg-[#CBA054] transition-all duration-300"
+          >
+            Book Appointment
+          </button>
+        </div>
       </aside>
     </>
   );

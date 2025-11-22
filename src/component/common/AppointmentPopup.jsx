@@ -137,7 +137,7 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
 
       {/* Main Popup Container */}
       <div
-        className={`relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-hidden transform-gpu transition-all duration-800 ease-out ${
+        className={`relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-screen overflow-hidden transform-gpu transition-all duration-800 ease-out ${
           isOpen && !isClosing
             ? "opacity-100 scale-100 rotate-x-0 rotate-y-0"
             : "opacity-0 scale-75 -rotate-x-12 rotate-y-12"

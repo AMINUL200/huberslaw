@@ -331,7 +331,6 @@ const AddTeam = () => {
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                     placeholder="Enter full name"
                   />
@@ -347,7 +346,6 @@ const AddTeam = () => {
                     name="designation"
                     value={formData.designation}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                     placeholder="Enter designation"
                   />
@@ -362,7 +360,6 @@ const AddTeam = () => {
                     name="service_id"
                     value={formData.service_id}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                   >
                     <option value="">Select a service</option>
@@ -384,7 +381,6 @@ const AddTeam = () => {
                     name="experience"
                     value={formData.experience}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                     placeholder="e.g., 12 Years"
                   />
@@ -403,7 +399,6 @@ const AddTeam = () => {
                     name="phone_no"
                     value={formData.phone_no}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                     placeholder="Enter phone number"
                   />
@@ -418,7 +413,6 @@ const AddTeam = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                     placeholder="Enter email address"
                   />

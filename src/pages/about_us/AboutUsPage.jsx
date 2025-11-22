@@ -7,8 +7,6 @@ import {
   Heart,
   FileText,
   Shield,
-  Target,
-  Clock,
 } from "lucide-react";
 import AboutINfo from "../../component/about-us/AboutINfo";
 import AboutOurPeople from "../../component/about-us/AboutOurPeople";
@@ -18,6 +16,13 @@ import { toast } from "react-toastify";
 import { api } from "../../utils/app";
 import LegalLoader from "../../component/common/LegalLoader";
 
+const breadcrumbMap = {
+  about: "About Us",
+  people: "Our People",
+  "client-care": "Client Care",
+  terms: "Terms & Conditions",
+};
+
 const AboutUsPage = () => {
   const [activeTab, setActiveTab] = useState("about");
   const [aboutInfo, setAboutInfo] = useState({});
@@ -26,42 +31,48 @@ const AboutUsPage = () => {
   const [termsInfo, setTermsInfo] = useState([]);
   const [solicitorInfo, setSolicitorInfo] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [tabTransition, setTabTransition] = useState(false);
   const [settingInfo, setSettingInfo] = useState(null);
 
   const location = useLocation();
 
-  const fetchData = async () => {
+  const fetchAllData = async () => {
     try {
-      const res = await api.get("/about-us");
-      if (res.data.status) {
-        const data = res.data.data;
-        // console.log("About Us Data:", data);
+      setLoading(true);
+      const [aboutRes, settingsRes] = await Promise.all([
+        api.get("/about-us"),
+        api.get("/settings"),
+      ]);
+
+      if (aboutRes.data.status) {
+        const data = aboutRes.data.data;
         setAboutInfo(data.about || {});
         setClientCareInfo(data.client_care || {});
         setTermsInfo(data.terms_condition || []);
         setTeamInfo(data.teams || []);
         setSolicitorInfo(data.solicitor_talent || []);
       }
+
+      if (settingsRes.data.status) {
+        setSettingInfo(settingsRes.data.data);
+      }
     } catch (error) {
-      console.error("Error fetching about us data:", error);
-      toast.error(error.message || "Failed to load About Us data.");
+      console.error("Error fetching data:", error);
+      toast.error(error.message || "Failed to load data.");
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchSettings = async () => {
-    try {
-      const res = await api.get("/settings");
-      if (res.data.status) {
-        setSettingInfo(res.data.data);
-      }
-      
-    } catch (error) {
-      console.error("Error fetching site settings:", error);
-      toast.error(error.message || "Failed to load site settings.");
-    }
-  }
+  const handleTabChange = (tabId) => {
+    setTabTransition(true);
+    setActiveTab(tabId);
+
+    // Smooth transition effect
+    setTimeout(() => {
+      setTabTransition(false);
+    }, 300);
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -73,9 +84,8 @@ const AboutUsPage = () => {
   }, [location.search]);
 
   useEffect(() => {
-    fetchData();
-    fetchSettings();
-  }, []);
+    fetchAllData();
+  }, [activeTab]);
 
   const tabs = [
     { id: "about", label: "About Us", icon: <Users className="w-5 h-5" /> },
@@ -94,80 +104,45 @@ const AboutUsPage = () => {
 
   const breadcrumbs = [
     { name: "Home", path: "/", icon: <Home className="w-4 h-4" /> },
-    { name: "About Us", path: "/about", current: true },
-  ];
-
-  const teamMembers = [
     {
-      name: "John Smith",
-      role: "Senior Partner",
-      specialty: "Corporate Law",
-      experience: "15+ years",
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-    },
-    {
-      name: "Sarah Johnson",
-      role: "Partner",
-      specialty: "Family Law",
-      experience: "12+ years",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-    },
-    {
-      name: "Sarah Johnson",
-      role: "Partner",
-      specialty: "Family Law",
-      experience: "12+ years",
-      image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-    },
-    {
-      name: "Michael Brown",
-      role: "Senior Associate",
-      specialty: "Litigation",
-      experience: "10+ years",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
-    },
-    {
-      name: "Emily Davis",
-      role: "Associate",
-      specialty: "Real Estate",
-      experience: "8+ years",
-      image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+      name: breadcrumbMap[activeTab],
+      path: `/about-us?tab=${activeTab}`,
+      current: true,
     },
   ];
-
- 
 
   const renderTabContent = () => {
-    switch (activeTab) {
-      case "about":
-        return (
+    if (loading) {
+      return (
+        <div className="min-h-96 flex items-center justify-center">
+          <LegalLoader />
+        </div>
+      );
+    }
+
+    return (
+      <div
+        className={`transition-opacity duration-300 ${
+          tabTransition ? "opacity-50" : "opacity-100"
+        }`}
+      >
+        {activeTab === "about" && (
           <AboutINfo
             aboutInfo={aboutInfo}
             teamInfo={teamInfo}
             solicitorInfo={solicitorInfo}
           />
-        );
-
-      case "people":
-        return <AboutOurPeople  teamInfo={teamInfo} />;
-
-      case "client-care":
-        return <AboutClientCare clientCareInfo={clientCareInfo} />;
-
-      case "terms":
-        return <AboutTerms termsInfo={termsInfo} settingInfo={settingInfo} />;
-
-      default:
-        return null;
-    }
+        )}
+        {activeTab === "people" && <AboutOurPeople teamInfo={teamInfo} />}
+        {activeTab === "client-care" && (
+          <AboutClientCare clientCareInfo={clientCareInfo} />
+        )}
+        {activeTab === "terms" && (
+          <AboutTerms termsInfo={termsInfo} settingInfo={settingInfo} />
+        )}
+      </div>
+    );
   };
-
-  if (loading) return <LegalLoader />;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] pt-15 md:pt-32 pb-16">
@@ -210,16 +185,17 @@ const AboutUsPage = () => {
 
         {/* Tabs Navigation */}
         <div className="flex overflow-x-auto pb-2 mb-8">
-          <div className=" mx-auto flex space-x-1 bg-white rounded-2xl p-2 shadow-lg border border-[#E8EEF4]">
+          <div className="mx-auto flex space-x-1 bg-white rounded-2xl p-2 shadow-lg border border-[#E8EEF4]">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
+                disabled={tabTransition}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap ${
                   activeTab === tab.id
                     ? "bg-[#0A1A2F] text-white shadow-md"
                     : "text-[#0A1A2F] hover:bg-[#F4EEDC] hover:text-[#CBA054]"
-                }`}
+                } ${tabTransition ? "cursor-not-allowed" : "cursor-pointer"}`}
               >
                 {tab.icon}
                 <span>{tab.label}</span>
@@ -229,7 +205,7 @@ const AboutUsPage = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-4 md:p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-4 md:p-8 min-h-96">
           {renderTabContent()}
         </div>
       </div>

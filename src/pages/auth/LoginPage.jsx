@@ -215,7 +215,7 @@ const LoginPage = () => {
           </form>
 
           {/* Security Notice */}
-          <div className="mt-6 p-4 bg-[#F4EEDC] rounded-lg border-l-4 border-[#CBA054]">
+          {/* <div className="mt-6 p-4 bg-[#F4EEDC] rounded-lg border-l-4 border-[#CBA054]">
             <div className="flex items-start space-x-3">
               <Shield className="w-4 h-4 text-[#CBA054] mt-0.5 flex-shrink-0" />
               <div>
@@ -227,7 +227,7 @@ const LoginPage = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Admin Contact */}
           <div className="mt-4 text-center">

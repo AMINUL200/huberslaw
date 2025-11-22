@@ -8,33 +8,48 @@ import { toast } from "react-toastify";
 import { api } from "../../utils/app";
 import LegalLoader from "../../component/common/LegalLoader";
 
+const breadcrumbMap = {
+  vacancies: "Vacancies",
+  "self-employed": "Self-employed / Free Earner / Locum",
+  "why-work": "Why Work With Us",
+};
+
 const CareersPage = () => {
   const [activeTab, setActiveTab] = useState("vacancies");
-
   const [vacanciesData, setVacanciesData] = useState([]);
   const [whyWorkData, setWhyWorkData] = useState({});
   const [selfEmployedData, setSelfEmployedData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [tabTransition, setTabTransition] = useState(false);
   const [pageInfo, setPageInfo] = useState({});
   const [settingInfo, setSettingInfo] = useState({});
 
   const location = useLocation();
 
-  const fetchData = async () => {
+  const fetchAllData = async () => {
     try {
-      const res = await api.get("/careers");
-      if (res.data.status) {
-        // console.log("Careers Data:", res.data.data);
+      setLoading(true);
+      const [careersRes, settingsRes] = await Promise.all([
+        api.get("/careers"),
+        api.get("/settings"),
+      ]);
+
+      if (careersRes.data.status) {
+        const data = careersRes.data.data;
         setPageInfo({
-          title: res.data.data.page_title,
-          title_meta: res.data.data.page_meta,
-          description: res.data.data.page_desc,
+          title: data.page_title,
+          title_meta: data.page_meta,
+          description: data.page_desc,
         });
-        setVacanciesData(res.data.data.vacancy || []);
-        setWhyWorkData(res.data.data.work_with_us || {});
-        setSelfEmployedData(res.data.data.self_employee || []);
+        setVacanciesData(data.vacancy || []);
+        setWhyWorkData(data.work_with_us || {});
+        setSelfEmployedData(data.self_employee || []);
       } else {
         toast.error("Failed to load careers data.");
+      }
+
+      if (settingsRes.data.status) {
+        setSettingInfo(settingsRes.data.data);
       }
     } catch (error) {
       console.error("Error fetching careers data:", error);
@@ -44,15 +59,14 @@ const CareersPage = () => {
     }
   };
 
-  const fetchSettings = async () => {
-    try {
-      const res = await api.get("/settings");
-      if (res.data.status) {
-        setSettingInfo(res.data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching site settings:", error);
-    }
+  const handleTabChange = (tabId) => {
+    setTabTransition(true);
+    setActiveTab(tabId);
+
+    // Smooth transition effect
+    setTimeout(() => {
+      setTabTransition(false);
+    }, 300);
   };
 
   useEffect(() => {
@@ -65,9 +79,8 @@ const CareersPage = () => {
   }, [location.search]);
 
   useEffect(() => {
-    fetchData();
-    fetchSettings();
-  }, []);
+    fetchAllData();
+  }, [activeTab]);
 
   const tabs = [
     {
@@ -89,26 +102,38 @@ const CareersPage = () => {
 
   const breadcrumbs = [
     { name: "Home", path: "/", icon: <Home className="w-4 h-4" /> },
-    { name: "Careers", path: "/careers", current: true },
+    {
+      name: breadcrumbMap[activeTab],
+      path: `/careers?tab=${activeTab}`,
+      current: true,
+    },
   ];
 
   const renderTabContent = () => {
-    switch (activeTab) {
-      case "vacancies":
-        return <Vacancies vacancies={vacanciesData} />;
-
-      case "self-employed":
-        return <SelfEmployed selfEmployedData={selfEmployedData} />;
-
-      case "why-work":
-        return <WhyWork settingInfo={settingInfo} WorkData={whyWorkData} />;
-
-      default:
-        return null;
+    if (loading) {
+      return (
+        <div className="min-h-96 flex items-center justify-center">
+          <LegalLoader />
+        </div>
+      );
     }
-  };
 
-  if (loading) return <LegalLoader />;
+    return (
+      <div
+        className={`transition-opacity duration-300 ${
+          tabTransition ? "opacity-50" : "opacity-100"
+        }`}
+      >
+        {activeTab === "vacancies" && <Vacancies vacancies={vacanciesData} />}
+        {activeTab === "self-employed" && (
+          <SelfEmployed selfEmployedData={selfEmployedData} />
+        )}
+        {activeTab === "why-work" && (
+          <WhyWork settingInfo={settingInfo} WorkData={whyWorkData} />
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] pt-20 pb-16">
@@ -158,12 +183,13 @@ const CareersPage = () => {
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
+                disabled={tabTransition}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap ${
                   activeTab === tab.id
                     ? "bg-[#0A1A2F] text-white shadow-md"
                     : "text-[#0A1A2F] hover:bg-[#F4EEDC] hover:text-[#CBA054]"
-                }`}
+                } ${tabTransition ? "cursor-not-allowed" : "cursor-pointer"}`}
               >
                 {tab.icon}
                 <span>{tab.label}</span>
@@ -173,7 +199,7 @@ const CareersPage = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-4 md:p-8 min-h-96">
           {renderTabContent()}
         </div>
       </div>
