@@ -69,7 +69,7 @@ const AppLayout = () => {
         siteSettings={siteSettings}
       />
       <Outlet />
-      <Footer siteSettings={siteSettings} />
+      <Footer siteSettings={siteSettings} servicesData={servicesData} />
       <BackToTop />
 
       {/* SHOW POPUP */}

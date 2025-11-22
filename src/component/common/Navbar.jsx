@@ -300,9 +300,9 @@ const Navbar = ({
             : "h-12 opacity-100 translate-y-0"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-8 h-full flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
           {/* Left Side - Contact Info */}
-          <div className="flex items-center space-x-6 text-sm">
+          <div className="hidden lg:flex items-center space-x-6 text-sm">
             <div className="flex items-center space-x-2">
               <Phone className="w-4 h-4 text-[#CBA054]" />
               <span>Tel: {phone}</span>
@@ -315,6 +315,12 @@ const Navbar = ({
               <Mail className="w-4 h-4 text-[#CBA054]" />
               <span>Email: {email}</span>
             </div>
+          </div>
+
+          {/* Mobile Contact Info */}
+          <div className="lg:hidden flex items-center space-x-2 text-xs">
+            <Phone className="w-3 h-3 text-[#CBA054]" />
+            <span>{phone}</span>
           </div>
 
           {/* Right Side - Social Icons */}
@@ -352,7 +358,7 @@ const Navbar = ({
                 <img
                   src={`${baseUrl}${logo}`}
                   alt={logo_alt}
-                  className="h-14 w-20 object-contain"
+                  className="h-12 w-38 object-contain"
                 />
               ) : (
                 <>

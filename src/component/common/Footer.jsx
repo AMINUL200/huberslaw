@@ -10,23 +10,17 @@ import {
   Instagram,
 } from "lucide-react";
 
-const Footer = ({ siteSettings = {} }) => {
+const Footer = ({ siteSettings = {}, servicesData = [] }) => {
   // console.log(siteSettings);
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
   const footerLinks = {
     practiceAreas: {
       title: "Practice Areas",
-      links: [
-        { name: "Corporate Law", url: "/practice-areas/corporate" },
-        { name: "Litigation", url: "/practice-areas/litigation" },
-        { name: "Family Law", url: "/practice-areas/family" },
-        { name: "Real Estate Law", url: "/practice-areas/real-estate" },
-        { name: "Criminal Defense", url: "/practice-areas/criminal" },
-        { name: "Employment Law", url: "/practice-areas/employment" },
-        { name: "Immigration Law", url: "/practice-areas/immigration" },
-        { name: "Intellectual Property", url: "/practice-areas/ip" },
-      ],
+      links: servicesData.slice(0, 5).map((service) => ({
+        name: service.service_name,
+        url: `/services/${service.slug}`,
+      })),
     },
 
     legal: {

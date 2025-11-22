@@ -2,7 +2,7 @@ import React from "react";
 import { FileText, Phone, Mail, Download } from "lucide-react";
 
 const AboutTerms = ({ termsInfo = [], settingInfo = {} }) => {
-  console.log(settingInfo);
+  // console.log(settingInfo);
   
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 

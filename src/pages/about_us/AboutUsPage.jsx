@@ -170,7 +170,7 @@ const AboutUsPage = () => {
   if (loading) return <LegalLoader />;
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] pt-32 pb-16">
+    <div className="min-h-screen bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] pt-15 md:pt-32 pb-16">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumbs */}
         <nav className="mb-8">
@@ -229,7 +229,7 @@ const AboutUsPage = () => {
         </div>
 
         {/* Tab Content */}
-        <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-4 md:p-8">
           {renderTabContent()}
         </div>
       </div>

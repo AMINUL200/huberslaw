@@ -37,13 +37,18 @@ const SideBar = ({
       id: "about",
       label: "About Us",
       icon: <User className="w-5 h-5" />,
+      path: "/about-us?tab=about",
       dropdown: [
-        { id: "our-people", label: "Our People", path: "/about/our-people" },
-        { id: "client-care", label: "Client Care", path: "/about/client-care" },
+        { id: "our-people", label: "Our People", path: "/about-us?tab=people" },
+        {
+          id: "client-care",
+          label: "Client Care",
+          path: "/about-us?tab=client-care",
+        },
         {
           id: "terms-condition",
           label: "Terms And Condition",
-          path: "/about/terms-condition",
+          path: "/about-us?tab=terms",
         },
       ],
     },
@@ -51,6 +56,7 @@ const SideBar = ({
       id: "services",
       label: "Services",
       icon: <Briefcase className="w-5 h-5" />,
+      path: "/services",
       dropdown: servicesData.map((service) => ({
         id: service.id,
         label: service.service_name,
@@ -61,19 +67,20 @@ const SideBar = ({
       id: "careers",
       label: "Careers",
       icon: <Package className="w-5 h-5" />,
+      path: "/careers",
       dropdown: [
         {
           id: "why-work-with-us",
           label: "Why Work With Us",
-          path: "/careers/why-work-with-us",
+          path: "/careers?tab=why-work",
         },
-        { id: "vacensis", label: "Vacensis", path: "/careers/vacensis" },
+        { id: "vacensis", label: "Vacensis", path: "/careers?tab=vacancies" },
       ],
     },
     {
       id: "contact",
       label: "Contact Us",
-      path: "/contact",
+      path: "contact-us",
       icon: <Mail className="w-5 h-5" />,
     },
   ];
@@ -255,7 +262,7 @@ const SideBar = ({
               <img
                 src={`${baseUrl}${siteSettings.logo}`}
                 alt={siteSettings.logo_alt || "Logo"}
-                className="h-15 w-auto"
+                className="h-12 w-auto"
               />
             ) : (
               <>
