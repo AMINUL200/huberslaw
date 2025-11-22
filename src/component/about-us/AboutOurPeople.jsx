@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
-const AboutOurPeople = ({  teamInfo = [] }) => {
+const AboutOurPeople = ({ teamInfo = [] }) => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   return (
     <div className="space-y-8">
@@ -38,7 +38,8 @@ const AboutOurPeople = ({  teamInfo = [] }) => {
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-500">Education</span>
                   <span className="text-sm font-semibold text-[#0A1A2F]">
-                    {member?.education[0]}
+                    {/* {member?.education[0]} */}
+                    {member?.education && member?.education[0]}
                   </span>
                 </div>
               </div>

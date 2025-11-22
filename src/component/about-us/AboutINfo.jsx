@@ -109,7 +109,7 @@ const AboutINfo = ({
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 text-white">
-                  <h3 className="text-xl font-bold">{member.name}</h3>
+                  <h3 className="text-xl font-bold">{member?.name}</h3>
                   {/* <p className="text-[#CBA054] font-semibold">{member.role}</p> */}
                 </div>
               </div>
@@ -125,19 +125,20 @@ const AboutINfo = ({
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500">Experience</span>
                     <span className="text-sm font-semibold text-[#CBA054]">
-                      {member.experience}
+                      {member?.experience}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm text-gray-500">Education</span>
                     <span className="text-sm font-semibold text-[#0A1A2F]">
-                      {member?.education[0]}
+                      {/* {member?.education[0]} */}
+                      {member?.education && member?.education[0]}
                     </span>
                   </div>
                 </div>
 
                 <Link
-                  to={`/team/${member?.slug ? member.slug : member.name}`}
+                  to={`/team/${member?.slug ? member?.slug : member?.name}`}
                   className="w-full bg-[#F4EEDC] text-[#0A1A2F] py-2 rounded-lg font-semibold hover:bg-[#CBA054] hover:text-white transition-all duration-300 flex items-center justify-center space-x-2 group/btn"
                 >
                   <span>View Profile</span>

@@ -34,7 +34,7 @@ const HandleTeam = () => {
   const handleDelete = async (memberId) => {
     if (window.confirm('Are you sure you want to delete this team member?')) {
       try {
-        await api.delete(`/team-members/delete/${memberId}`) // Adjust endpoint
+        await api.delete(`/teams/${memberId}`) // Adjust endpoint
         fetchTeamMembers() // Refresh the list
       } catch (err) {
         setError(err.message || 'Failed to delete team member')
