@@ -243,7 +243,6 @@ const HandleVacancies = () => {
                     name="job_title"
                     value={formData.job_title}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-4 py-2 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                     placeholder="e.g., Litigation Paralegal"
                   />
@@ -259,7 +258,6 @@ const HandleVacancies = () => {
                     name="job_location"
                     value={formData.job_location}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-4 py-2 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                     placeholder="e.g., London, United Kingdom"
                   />
@@ -274,7 +272,6 @@ const HandleVacancies = () => {
                     name="job_type"
                     value={formData.job_type}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-4 py-2 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                   >
                     <option value="Full-Time">Full-Time</option>
@@ -294,7 +291,6 @@ const HandleVacancies = () => {
                     name="experience"
                     value={formData.experience}
                     onChange={handleInputChange}
-                    required
                     className="w-full px-4 py-2 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                     placeholder="e.g., 5+ Years"
                   />
@@ -340,7 +336,6 @@ const HandleVacancies = () => {
                   name="job_description"
                   value={formData.job_description}
                   onChange={handleInputChange}
-                  required
                   rows={4}
                   className="w-full px-4 py-2 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                   placeholder="Enter detailed job description..."
@@ -359,7 +354,7 @@ const HandleVacancies = () => {
                         type="text"
                         value={requirement}
                         onChange={(e) => handleRequirementChange(index, e.target.value)}
-                        required
+                        
                         className="flex-1 px-4 py-2 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                         placeholder={`Requirement ${index + 1}`}
                       />

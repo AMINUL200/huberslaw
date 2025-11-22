@@ -152,7 +152,6 @@ const HandleWhyWorkWithUs = () => {
                   name="page_title"
                   value={formData.page_title}
                   onChange={handleInputChange}
-                  required
                   className="w-full px-4 py-3 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-lg font-semibold text-[#0A1A2F]"
                   placeholder="Careers at Hubers Law"
                 />
@@ -182,7 +181,6 @@ const HandleWhyWorkWithUs = () => {
                   name="page_desc"
                   value={formData.page_desc}
                   onChange={handleInputChange}
-                  required
                   rows={3}
                   className="w-full px-4 py-2 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                   placeholder="Join our team of legal professionals and build your career with a firm that values excellence, integrity, and growth."
@@ -212,7 +210,6 @@ const HandleWhyWorkWithUs = () => {
                   name="button_name"
                   value={formData.button_name}
                   onChange={handleInputChange}
-                  required
                   className="w-full px-4 py-2 border border-[#CBA054] rounded-lg focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                   placeholder="See Our Current Vacancies"
                 />

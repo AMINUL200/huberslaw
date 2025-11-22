@@ -67,7 +67,7 @@ const HandleServices = () => {
   const handleDelete = async (serviceId) => {
     if (window.confirm("Are you sure you want to delete this service?")) {
       try {
-        await api.delete(`/services/delete/${serviceId}`);
+        await api.delete(`/services/${serviceId}`);
         fetchServices(); // Refresh the list
       } catch (err) {
         setError(err.message || "Failed to delete service");
