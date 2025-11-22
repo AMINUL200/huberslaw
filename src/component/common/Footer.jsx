@@ -9,9 +9,9 @@ import {
   Linkedin,
   Instagram,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = ({ siteSettings = {}, servicesData = [] }) => {
-  // console.log(siteSettings);
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
   const footerLinks = {
@@ -21,17 +21,6 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
         name: service.service_name,
         url: `/services/${service.slug}`,
       })),
-    },
-
-    legal: {
-      title: "Legal",
-      links: [
-        { name: "Terms & Conditions", url: "/terms" },
-        { name: "Privacy Policy", url: "/privacy" },
-        { name: "Cookie Policy", url: "/cookies" },
-        { name: "Disclaimer", url: "/disclaimer" },
-        { name: "Accessibility", url: "/accessibility" },
-      ],
     },
   };
 
@@ -166,11 +155,13 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
             {/* Brand */}
             <div className="flex items-center space-x-3">
               {siteSettings?.logo ? (
-                <img
-                  src={`${baseUrl}${siteSettings?.logo}`}
-                  alt={siteSettings.logo_alt || companyName}
-                  className="w-30 h-15 rounded-lg object-contain"
-                />
+                <Link className="block bg-[#1E354F] rounded-lg p-4 border border-[#CBA054]/20 hover:border-[#CBA054] transition-all duration-300 transform hover:scale-105">
+                  <img
+                    src={`${baseUrl}${siteSettings?.logo}`}
+                    alt={siteSettings.logo_alt || companyName}
+                    className="w-40 h-15 rounded-lg object-contain"
+                  />
+                </Link>
               ) : (
                 <>
                   <div className="w-10 h-10 bg-[#CBA054] rounded-lg flex items-center justify-center">
@@ -242,7 +233,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
           </div>
 
           {/* Right Column - Links Grid & Accreditation */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Practice Areas Links */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
@@ -250,25 +241,6 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
               </h3>
               <ul className="space-y-3">
                 {footerLinks.practiceAreas.links.map((link, index) => (
-                  <li key={index}>
-                    <a
-                      href={link.url}
-                      className="text-gray-300 hover:text-[#CBA054] transition-colors duration-200 text-sm hover:underline hover:underline-offset-2"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Legal Links */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
-                {footerLinks.legal.title}
-              </h3>
-              <ul className="space-y-3">
-                {footerLinks.legal.links.map((link, index) => (
                   <li key={index}>
                     <a
                       href={link.url}
