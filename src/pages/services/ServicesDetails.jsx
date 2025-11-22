@@ -151,7 +151,7 @@ const ServicesDetails = () => {
               itemType="https://schema.org/LegalService"
             >
               {/* Service Header */}
-              <div className="flex items-center space-x-4 mb-6">
+              <div className="flex items-center space-x-4 mb-6 flex-col md:flex-row">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center">
                   <div className="text-white">
                     {getServiceIcon(serviceData.service_name)}
