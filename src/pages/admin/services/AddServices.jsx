@@ -185,7 +185,6 @@ const AddServices = () => {
                 name="service_name"
                 value={formData.service_name}
                 onChange={handleInputChange}
-                required
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                 placeholder="Enter service name"
               />
@@ -215,7 +214,6 @@ const AddServices = () => {
                 name="service_description"
                 value={formData.service_description}
                 onChange={handleInputChange}
-                required
                 rows="3"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#CBA054] focus:border-transparent text-[#0A1A2F]"
                 placeholder="Enter brief service description"

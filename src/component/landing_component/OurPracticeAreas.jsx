@@ -91,7 +91,7 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
             }}
             className="practice-areas-swiper"
           >
-            {servicesData.map((service) => (
+            {servicesData.slice(0,7).map((service) => (
               <SwiperSlide key={service.id}>
                 <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] overflow-hidden transform transition-all duration-500 hover:shadow-2xl hover:scale-105 group flex flex-col h-full">
                   {/* Header */}
