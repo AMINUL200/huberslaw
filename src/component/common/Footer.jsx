@@ -288,9 +288,9 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
                 LIKE US ON FACEBOOK
               </h3>
 
-              <div className="bg-[#1E354F] p-3 rounded-lg border border-[#CBA054]/20">
+              {/* <div className="bg-[#1E354F] p-3 rounded-lg border border-[#CBA054]/20"> */}
                 <FacebookFeed />
-              </div>
+              {/* </div> */}
             </div>
           </div>
         </div>

@@ -4,6 +4,12 @@ import { Link } from "react-router-dom";
 
 const AboutOurPeople = ({ teamInfo = [] }) => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
+  
+  // Return null if teamInfo is empty, null, or undefined
+  if (!teamInfo || teamInfo.length === 0) {
+    return null;
+  }
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -23,25 +29,35 @@ const AboutOurPeople = ({ teamInfo = [] }) => {
             </div>
             <div className="p-6">
               <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">Specialty</span>
-                  <span className="text-sm font-semibold text-[#0A1A2F]">
-                    {member.service?.service_name}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">Experience</span>
-                  <span className="text-sm font-semibold text-[#CBA054]">
-                    {member.experience}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">Education</span>
-                  <span className="text-sm font-semibold text-[#0A1A2F]">
-                    {/* {member?.education[0]} */}
-                    {member?.education && member?.education[0]}
-                  </span>
-                </div>
+                {/* Show specialty only if service_name exists */}
+                {member.service?.service_name && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">Specialty</span>
+                    <span className="text-sm font-semibold text-[#0A1A2F]">
+                      {member.service.service_name}
+                    </span>
+                  </div>
+                )}
+
+                {/* Show experience only if it exists */}
+                {member.experience && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">Experience</span>
+                    <span className="text-sm font-semibold text-[#CBA054]">
+                      {member.experience}
+                    </span>
+                  </div>
+                )}
+
+                {/* Show education only if it exists and has at least one item */}
+                {member?.education && member.education[0] && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">Education</span>
+                    <span className="text-sm font-semibold text-[#0A1A2F]">
+                      {member.education[0]}
+                    </span>
+                  </div>
+                )}
               </div>
               <Link
                 to={`/team/${member?.slug ? member.slug : member.name}`}

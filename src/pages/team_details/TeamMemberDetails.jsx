@@ -70,9 +70,12 @@ const TeamMemberDetails = () => {
   const generateDescriptionHTML = () => {
     return `
       <div class="space-y-6">
+        ${teamMember.description ? `
         <p class="text-lg text-gray-700 leading-relaxed">
-          <strong class="text-[#0A1A2F]">${teamMember.name}</strong> ${teamMember.description}
+          ${teamMember.name ? `<strong class="text-[#0A1A2F]">${teamMember.name}</strong>` : ''} 
+          ${teamMember.description}
         </p>
+        ` : ''}
 
         ${teamMember.p_philosophy ? `
         <div class="bg-[#F4EEDC] rounded-xl p-6 border-l-4 border-[#CBA054]">
@@ -153,45 +156,61 @@ const TeamMemberDetails = () => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-6 sticky top-32">
               {/* Profile Image */}
-              <div className="mb-6">
-                <img
-                  src={`${baseUrl}/${teamMember.image}`}
-                  alt={teamMember.image_alt || teamMember.name}
-                  className="w-full h-64 object-cover rounded-2xl shadow-lg"
-                />
-              </div>
+              {teamMember.image && (
+                <div className="mb-6">
+                  <img
+                    src={`${baseUrl}/${teamMember.image}`}
+                    alt={teamMember.image_alt || teamMember.name}
+                    className="w-full h-64 object-cover rounded-2xl shadow-lg"
+                  />
+                </div>
+              )}
 
               {/* Basic Information */}
               <div className="space-y-4">
                 <div>
-                  <h1 className="text-2xl font-bold text-[#0A1A2F]">
-                    {teamMember.name}
-                  </h1>
-                  <p className="text-[#CBA054] font-semibold text-lg">
-                    {teamMember.designation}
-                  </p>
-                  <p className="text-gray-600">{teamMember.service?.service_name}</p>
+                  {teamMember.name && (
+                    <h1 className="text-2xl font-bold text-[#0A1A2F]">
+                      {teamMember.name}
+                    </h1>
+                  )}
+                  {teamMember.designation && (
+                    <p className="text-[#CBA054] font-semibold text-lg">
+                      {teamMember.designation}
+                    </p>
+                  )}
+                  {teamMember.service?.service_name && (
+                    <p className="text-gray-600">{teamMember.service.service_name}</p>
+                  )}
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex items-center space-x-3">
-                    <Phone className="w-4 h-4 text-[#CBA054]" />
-                    <span className="text-gray-700">{teamMember.phone_no}</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Mail className="w-4 h-4 text-[#CBA054]" />
-                    <span className="text-gray-700">{teamMember.email}</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <MapPin className="w-4 h-4 text-[#CBA054]" />
-                    <span className="text-gray-700">{teamMember.address}</span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Calendar className="w-4 h-4 text-[#CBA054]" />
-                    <span className="text-gray-700">
-                      {teamMember.experience} Experience
-                    </span>
-                  </div>
+                  {teamMember.phone_no && (
+                    <div className="flex items-center space-x-3">
+                      <Phone className="w-4 h-4 text-[#CBA054]" />
+                      <span className="text-gray-700">{teamMember.phone_no}</span>
+                    </div>
+                  )}
+                  {teamMember.email && (
+                    <div className="flex items-center space-x-3">
+                      <Mail className="w-4 h-4 text-[#CBA054]" />
+                      <span className="text-gray-700">{teamMember.email}</span>
+                    </div>
+                  )}
+                  {teamMember.address && (
+                    <div className="flex items-center space-x-3">
+                      <MapPin className="w-4 h-4 text-[#CBA054]" />
+                      <span className="text-gray-700">{teamMember.address}</span>
+                    </div>
+                  )}
+                  {teamMember.experience && (
+                    <div className="flex items-center space-x-3">
+                      <Calendar className="w-4 h-4 text-[#CBA054]" />
+                      <span className="text-gray-700">
+                        {teamMember.experience} Experience
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Education */}
@@ -250,13 +269,17 @@ const TeamMemberDetails = () => {
 
           {/* Right Side - Detailed Description */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Main Description */}
-            <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-8">
-              <div
-                className="prose prose-lg max-w-none"
-                dangerouslySetInnerHTML={{ __html: generateDescriptionHTML() }}
-              />
-            </div>
+            {/* Main Description - Only show if there's content */}
+            {(teamMember.description || teamMember.p_philosophy || 
+              (teamMember.expertise && teamMember.expertise.length > 0) || 
+              (teamMember.cases && teamMember.cases.length > 0)) && (
+              <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-8">
+                <div
+                  className="prose prose-lg max-w-none"
+                  dangerouslySetInnerHTML={{ __html: generateDescriptionHTML() }}
+                />
+              </div>
+            )}
 
             {/* Awards & Recognition */}
             {teamMember.awards && teamMember.awards.length > 0 && (
