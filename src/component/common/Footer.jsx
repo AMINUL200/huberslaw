@@ -10,6 +10,7 @@ import {
   Instagram,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import FacebookFeed from "./FacebookFeed";
 
 const Footer = ({ siteSettings = {}, servicesData = [] }) => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -148,10 +149,10 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
   return (
     <footer className="bg-[#0A1A2F] text-white">
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column - Brand & Contact */}
-          <div className="space-y-8">
+          <div className="space-y-6 lg:col-span-4">
             {/* Brand */}
             <div className="flex items-center space-x-3">
               {siteSettings?.logo ? (
@@ -233,7 +234,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
           </div>
 
           {/* Right Column - Links Grid & Accreditation */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:col-span-8">
             {/* Practice Areas Links */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
@@ -278,6 +279,17 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
                     </div>
                   </a>
                 ))}
+              </div>
+            </div>
+
+            {/* ⭐ Facebook Feed Section */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
+                LIKE US ON FACEBOOK
+              </h3>
+
+              <div className="bg-[#1E354F] p-3 rounded-lg border border-[#CBA054]/20">
+                <FacebookFeed />
               </div>
             </div>
           </div>
