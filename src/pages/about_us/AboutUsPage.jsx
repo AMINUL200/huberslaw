@@ -185,13 +185,13 @@ const AboutUsPage = () => {
 
         {/* Tabs Navigation */}
         <div className="flex overflow-x-auto pb-2 mb-8">
-          <div className="mx-auto flex space-x-1 bg-white rounded-2xl p-2 shadow-lg border border-[#E8EEF4]">
+          <div className="mx-auto flex flex-col md:flex-row space-x-1 bg-white rounded-2xl p-2 shadow-lg border border-[#E8EEF4]">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => handleTabChange(tab.id)}
                 disabled={tabTransition}
-                className={`flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap ${
+                className={`flex items-center space-x-2 px-16 md:px-6 py-3 rounded-xl font-semibold transition-all duration-300 whitespace-nowrap ${
                   activeTab === tab.id
                     ? "bg-[#0A1A2F] text-white shadow-md"
                     : "text-[#0A1A2F] hover:bg-[#F4EEDC] hover:text-[#CBA054]"

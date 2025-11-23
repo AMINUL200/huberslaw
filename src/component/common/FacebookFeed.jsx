@@ -15,7 +15,7 @@ export default function FacebookFeed() {
           "&hide_cover=false" +
           "&show_facepile=true"
         }
-        width="100%"
+        width="110%"
         height="500"
         style={{ border: "none", overflow: "hidden" }}
         scrolling="yes"

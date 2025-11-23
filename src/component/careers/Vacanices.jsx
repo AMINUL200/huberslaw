@@ -40,7 +40,6 @@ const Vacancies = ({ vacancies = [] }) => {
 
   // Handle Apply Now button click
   const handleApplyClick = (vacancy) => {
-    // console.log("Applying for vacancy:", vacancy);
     setSelectedVacancy(vacancy);
     setFormData({
       recruitment_id: vacancy.id,
@@ -116,11 +115,6 @@ const Vacancies = ({ vacancies = [] }) => {
       submitData.append("message", formData.message);
       submitData.append("cv", formData.cv);
 
-      //  debug log
-      for (let pair of submitData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
-
       const res = await api.post("/apply-job", submitData);
       if (res.data.status) {
         toast.success(res.data.message || "Application submitted successfully");
@@ -154,6 +148,11 @@ const Vacancies = ({ vacancies = [] }) => {
     setSelectedVacancy(null);
   };
 
+  // Return null if no vacancies
+  if (!vacancies || vacancies.length === 0) {
+    return null;
+  }
+
   return (
     <div className="space-y-8">
       {/* Vacancies List */}
@@ -166,89 +165,108 @@ const Vacancies = ({ vacancies = [] }) => {
             <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <h3 className="text-2xl font-bold text-[#0A1A2F]">
-                    {vacancy.job_title}
-                  </h3>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      vacancy.status === "open"
-                        ? "bg-green-100 text-green-800 border border-green-200"
-                        : "bg-red-100 text-red-800 border border-red-200"
-                    }`}
-                  >
-                    {vacancy.status === "open" ? "Open" : "Closed"}
-                  </span>
+                  {vacancy.job_title && (
+                    <h3 className="text-2xl font-bold text-[#0A1A2F]">
+                      {vacancy.job_title}
+                    </h3>
+                  )}
+                  {vacancy.status && (
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-medium ${
+                        vacancy.status === "open"
+                          ? "bg-green-100 text-green-800 border border-green-200"
+                          : "bg-red-100 text-red-800 border border-red-200"
+                      }`}
+                    >
+                      {vacancy.status === "open" ? "Open" : "Closed"}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex flex-wrap gap-4 mb-4">
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <MapPin className="w-4 h-4 text-[#CBA054]" />
-                    <span>{vacancy.job_location}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <Briefcase className="w-4 h-4 text-[#CBA054]" />
-                    <span>{vacancy.job_type}</span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <IndianRupee className="w-4 h-4 text-[#CBA054]" />
-                    <span>
-                      ₹{parseFloat(vacancy.min_salary).toLocaleString()}
-                    </span>
-                    <span>-</span>
-                    <span>
-                      ₹{parseFloat(vacancy.max_salary).toLocaleString()}
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-2 text-gray-600">
-                    <Clock className="w-4 h-4 text-[#CBA054]" />
-                    <span>{vacancy.experience}</span>
-                  </div>
+                  {vacancy.job_location && (
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <MapPin className="w-4 h-4 text-[#CBA054]" />
+                      <span>{vacancy.job_location}</span>
+                    </div>
+                  )}
+                  {vacancy.job_type && (
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <Briefcase className="w-4 h-4 text-[#CBA054]" />
+                      <span>{vacancy.job_type}</span>
+                    </div>
+                  )}
+                  {(vacancy.min_salary || vacancy.max_salary) && (
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <DollarSign className="w-4 h-4 text-[#CBA054]" />
+                      <span>
+                        {vacancy.min_salary && `£${parseFloat(vacancy.min_salary).toLocaleString()}`}
+                        {vacancy.min_salary && vacancy.max_salary && " - "}
+                        {vacancy.max_salary && `£${parseFloat(vacancy.max_salary).toLocaleString()}`}
+                      </span>
+                    </div>
+                  )}
+                  {vacancy.experience && (
+                    <div className="flex items-center space-x-2 text-gray-600">
+                      <Clock className="w-4 h-4 text-[#CBA054]" />
+                      <span>{vacancy.experience}</span>
+                    </div>
+                  )}
                 </div>
 
-                <p className="text-gray-600 mb-4 leading-relaxed">
-                  {vacancy.job_description}
-                </p>
-
-                <div className="mb-4">
-                  <h4 className="font-semibold text-[#0A1A2F] mb-2">
-                    Requirements:
-                  </h4>
-                  <ul className="list-disc list-inside space-y-1 text-gray-600">
-                    {vacancy.requirment.map((req, index) => (
-                      <li key={index}>{req}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="flex items-center space-x-2 text-sm text-gray-500">
-                  <Calendar className="w-4 h-4 text-[#CBA054]" />
-                  <span>Posted: {formatDate(vacancy.created_at)}</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-end gap-3">
-                {vacancy.status === "open" ? (
-                  <button
-                    onClick={() => handleApplyClick(vacancy)}
-                    className="bg-[#0A1A2F] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#CBA054] transition-all duration-300 whitespace-nowrap text-center"
-                  >
-                    {vacancy.button_name || "Apply Now"}
-                  </button>
-                ) : (
-                  <button
-                    disabled
-                    className="bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed whitespace-nowrap"
-                  >
-                    Position Closed
-                  </button>
-                )}
-
-                {vacancy.status === "closed" && (
-                  <p className="text-xs text-gray-500 text-center max-w-[140px]">
-                    This position is no longer accepting applications
+                {vacancy.job_description && (
+                  <p className="text-gray-600 mb-4 leading-relaxed">
+                    {vacancy.job_description}
                   </p>
                 )}
+
+                {vacancy.requirment && vacancy.requirment.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="font-semibold text-[#0A1A2F] mb-2">
+                      Requirements:
+                    </h4>
+                    <ul className="list-disc list-inside space-y-1 text-gray-600">
+                      {vacancy.requirment.map((req, index) => (
+                        <li key={index}>{req}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {vacancy.created_at && (
+                  <div className="flex items-center space-x-2 text-sm text-gray-500">
+                    <Calendar className="w-4 h-4 text-[#CBA054]" />
+                    <span>Posted: {formatDate(vacancy.created_at)}</span>
+                  </div>
+                )}
               </div>
+
+              {/* Apply Button Section */}
+              {(vacancy.status === "open" || vacancy.status === "closed") && (
+                <div className="flex flex-col items-end gap-3">
+                  {vacancy.status === "open" ? (
+                    <button
+                      onClick={() => handleApplyClick(vacancy)}
+                      className="bg-[#0A1A2F] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#CBA054] transition-all duration-300 whitespace-nowrap text-center"
+                    >
+                      {vacancy.button_name || "Apply Now"}
+                    </button>
+                  ) : (
+                    <button
+                      disabled
+                      className="bg-gray-400 text-white px-6 py-3 rounded-lg font-semibold cursor-not-allowed whitespace-nowrap"
+                    >
+                      Position Closed
+                    </button>
+                  )}
+
+                  {vacancy.status === "closed" && (
+                    <p className="text-xs text-gray-500 text-center max-w-[140px]">
+                      This position is no longer accepting applications
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         ))}
@@ -261,12 +279,18 @@ const Vacancies = ({ vacancies = [] }) => {
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <div>
-                <h2 className="text-2xl font-bold text-[#0A1A2F]">
-                  Apply for {selectedVacancy.job_title}
-                </h2>
-                <p className="text-gray-600 mt-1">
-                  {selectedVacancy.job_location} • {selectedVacancy.job_type}
-                </p>
+                {selectedVacancy.job_title && (
+                  <h2 className="text-2xl font-bold text-[#0A1A2F]">
+                    Apply for {selectedVacancy.job_title}
+                  </h2>
+                )}
+                {(selectedVacancy.job_location || selectedVacancy.job_type) && (
+                  <p className="text-gray-600 mt-1">
+                    {selectedVacancy.job_location && selectedVacancy.job_location}
+                    {selectedVacancy.job_location && selectedVacancy.job_type && " • "}
+                    {selectedVacancy.job_type && selectedVacancy.job_type}
+                  </p>
+                )}
               </div>
               <button
                 onClick={closePopup}
@@ -346,7 +370,7 @@ const Vacancies = ({ vacancies = [] }) => {
               {/* Salary Expectation */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Salary Expectation (₹)
+                  Salary Expectation (£)
                 </label>
                 <input
                   type="text"

@@ -18,7 +18,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
   const footerLinks = {
     practiceAreas: {
       title: "Practice Areas",
-      links: servicesData.slice(0, 5).map((service) => ({
+      links: servicesData.slice(0, 9).map((service) => ({
         name: service.service_name,
         url: `/services/${service.slug}`,
       })),
@@ -287,10 +287,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
               <h3 className="text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
                 LIKE US ON FACEBOOK
               </h3>
-
-              {/* <div className="bg-[#1E354F] p-3 rounded-lg border border-[#CBA054]/20"> */}
                 <FacebookFeed />
-              {/* </div> */}
             </div>
           </div>
         </div>
