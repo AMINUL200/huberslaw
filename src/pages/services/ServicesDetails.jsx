@@ -226,7 +226,7 @@ const ServicesDetails = () => {
                       href={`${baseUrl}/${pdf.pdf}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full flex items-center justify-between p-4 bg-[#F4EEDC] rounded-lg hover:bg-[#CBA054] hover:text-white transition-all duration-300 group block"
+                      className="w-full flex items-center justify-between p-2 bg-[#F4EEDC] rounded-lg hover:bg-[#CBA054] hover:text-white transition-all duration-300 group block"
                     >
                       <div className="flex items-center space-x-3">
                         <div className="text-[#0A1A2F] group-hover:text-white">
@@ -283,29 +283,10 @@ const ServicesDetails = () => {
                   </h4>
                   <div className="space-y-1 text-white/80">
                     <div className="flex justify-between">
-                      <span>Monday:</span>
+                      <span>Monday to Saturday: </span>
                       <span>{contactInfo?.mon || "9:00 AM - 6:00 PM"}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span>Tuesday:</span>
-                      <span>{contactInfo?.tues || "9:00 AM - 7:00 PM"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Wednesday:</span>
-                      <span>{contactInfo?.wed || "9:00 AM - 6:00 PM"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Thursday:</span>
-                      <span>{contactInfo?.thus || "9:00 AM - 6:00 PM"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Friday:</span>
-                      <span>{contactInfo?.fri || "9:00 AM - 6:00 PM"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Saturday:</span>
-                      <span>{contactInfo?.sat || "10:00 AM - 2:00 PM"}</span>
-                    </div>
+                  
                     <div className="flex justify-between">
                       <span>Sunday:</span>
                       <span

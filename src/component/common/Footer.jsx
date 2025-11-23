@@ -83,7 +83,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
         <img
           src={`${baseUrl}${siteSettings?.sra_logo}`}
           alt={siteSettings?.sra_alt || "SRA Accreditation"}
-          className="h-10 w-auto object-contain"
+          className="h-full w-auto object-contain"
         />
       ) : (
         <svg width="80" height="40" viewBox="0 0 80 40" className="text-white">
@@ -112,7 +112,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
         <img
           src={`${baseUrl}${siteSettings?.law_socity_logo}`}
           alt={siteSettings?.law_socity_alt || "The Law Society Membership"}
-          className="h-10 w-auto object-contain"
+          className="h-full w-auto object-contain"
         />
       ) : (
         <svg width="80" height="40" viewBox="0 0 80 40" className="text-white">
@@ -269,7 +269,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
                     className="block bg-[#1E354F] rounded-lg p-4 border border-[#CBA054]/20 hover:border-[#CBA054] transition-all duration-300 transform hover:scale-105"
                   >
                     <div className="flex flex-col items-center space-y-2">
-                      <div className="flex justify-center">
+                      <div className="flex justify-center ">
                         {accreditation.logo}
                       </div>
                       <span className="text-xs text-gray-300 text-center">
