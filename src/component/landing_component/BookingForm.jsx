@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import { api } from "../../utils/app";
 
 const BookingForm = ({ servicesList = [], teamList = [] }) => {
- 
   const [submitLoading, setSubmitLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -17,8 +16,6 @@ const BookingForm = ({ servicesList = [], teamList = [] }) => {
     organization: "",
     message: "",
   });
-
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,7 +49,6 @@ const BookingForm = ({ servicesList = [], teamList = [] }) => {
       preferred_lawyer: getLawyerNameById(formData.lawyer),
       message: formData.message,
     };
-
 
     try {
       const response = await api.post("/contacts", payload);
@@ -89,8 +85,8 @@ const BookingForm = ({ servicesList = [], teamList = [] }) => {
             </h2>
 
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Ready to discuss your legal matters? Fill out the form below and
-              our team will get back to you within 24 hours.
+              Fill in below form as complete as possible and one of our
+              Solicitors will be in touch with you shortly
             </p>
           </div>
 

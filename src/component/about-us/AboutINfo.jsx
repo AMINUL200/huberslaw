@@ -74,7 +74,7 @@ const AboutINfo = ({
       <section className="bg-gradient-to-r from-[#F4EEDC] to-[#E8EEF4] rounded-2xl p-8 lg:p-12">
         <div className="max-w-8xl mx-auto">
           <h2 className="text-3xl lg:text-4xl font-bold text-[#0A1A2F] mb-8 text-center">
-            Our Story & Mission
+            WORLD CLASS LONDON BASED LAWYERS
           </h2>
           <div
             className="prose prose-lg max-w-none"

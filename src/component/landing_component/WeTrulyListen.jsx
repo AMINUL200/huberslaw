@@ -1,7 +1,6 @@
 import React from "react";
 
 const WeTrulyListen = ({ trulyListenData = {} }) => {
-
   const storageUrl = import.meta.env.VITE_APP_BASE_URL;
 
   // Build final background image URL
@@ -23,6 +22,17 @@ const WeTrulyListen = ({ trulyListenData = {} }) => {
 
       <div className="relative container mx-auto px-4 lg:px-8">
         <div className="max-w-5xl mx-auto text-center">
+          {trulyListenData?.section_title && (
+            <h4
+              className="text-[#CBA054] text-lg lg:text-xl font-semibold tracking-wide uppercase mb-4"
+              aria-label={
+                trulyListenData?.sec_title_meta ||
+                trulyListenData?.section_title
+              }
+            >
+              {trulyListenData?.section_title}
+            </h4>
+          )}
           {/* Big Title */}
           <h1
             className="text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight"
