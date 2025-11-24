@@ -251,58 +251,69 @@ const Vacancies = ({ vacancies = [] }) => {
                   </div>
                 )}
                 {/* Share Job Section */}
-                <div className="mt-6 flex items-center gap-4 flex-wrap">
-                  <h3 className="text-[#0A1A2F] font-semibold tracking-wide">
+                <div className="mt-6 w-full">
+                  <h3 className="text-[#0A1A2F] font-semibold tracking-wide text-base mb-3 text-center md:text-left">
                     SHARE JOB :
                   </h3>
 
-                  {/* Facebook */}
-                  <a
-                    href={`https://www.facebook.com/sharer/sharer.php?u=${currentPageUrl}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
-                    title="Share on Facebook"
+                  <div
+                    className="
+    flex 
+    items-center 
+    justify-center 
+    md:justify-start 
+    gap-4 
+    flex-wrap
+  "
                   >
-                    <Facebook className="w-5 h-5" />
-                  </a>
+                    {/* Facebook */}
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${currentPageUrl}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                      title="Share on Facebook"
+                    >
+                      <Facebook className="w-5 h-5" />
+                    </a>
 
-                  {/* X / Twitter */}
-                  <a
-                    href={`https://x.com/intent/tweet?url=${currentPageUrl}&text=Check this job opening:`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
-                    title="Share on X / Twitter"
-                  >
-                    <Twitter className="w-5 h-5" />
-                  </a>
+                    {/* X / Twitter */}
+                    <a
+                      href={`https://x.com/intent/tweet?url=${currentPageUrl}&text=Check this job opening:`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                      title="Share on X / Twitter"
+                    >
+                      <Twitter className="w-5 h-5" />
+                    </a>
 
-                  {/* LinkedIn */}
-                  <a
-                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${currentPageUrl}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
-                    title="Share on LinkedIn"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                  </a>
+                    {/* LinkedIn */}
+                    <a
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${currentPageUrl}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                      title="Share on LinkedIn"
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
 
-                  {/* Instagram → Copy Link */}
-                  <button
-                    onClick={copyLink}
-                    className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
-                    title="Copy link for Instagram"
-                  >
-                    <Instagram className="w-5 h-5" />
-                  </button>
+                    {/* Instagram → Copy Link */}
+                    <button
+                      onClick={copyLink}
+                      className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                      title="Copy link for Instagram"
+                    >
+                      <Instagram className="w-5 h-5" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
               {/* Apply Button Section */}
               {(vacancy.status === "open" || vacancy.status === "closed") && (
-                <div className="flex flex-col items-end gap-3">
+                <div className="flex flex-col items-center md:items-end  gap-3">
                   {vacancy.status === "open" ? (
                     <button
                       onClick={() => handleApplyClick(vacancy)}
