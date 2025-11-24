@@ -10,8 +10,11 @@ import {
   Users,
   Phone,
   Mail,
+  Facebook,
+  Twitter,
+  Linkedin,
   Building,
-
+  Instagram,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { api } from "../../utils/app";
@@ -24,6 +27,10 @@ const ServicesDetails = () => {
   const [loading, setLoading] = React.useState(true);
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const [contactInfo, setContactInfo] = React.useState(null);
+  const currentPageUrl = encodeURIComponent(window.location.href);
+
+  console.log(currentPageUrl);
+  
 
   const fetchServiceData = async () => {
     try {
@@ -203,6 +210,51 @@ const ServicesDetails = () => {
                 </div>
               )}
             </div>
+            {/* Social Share Buttons */}
+            <div className="mt-10 flex items-center space-x-4 justify-center">
+             <h3 className="text-[#0A1A2F] font-semibold tracking-wide">SHARE :</h3>
+              {/* Facebook */}
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${currentPageUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                 className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                title="Share on Facebook"
+              >
+                <Facebook className="w-5 h-5"/>
+              </a>
+
+              {/* Twitter */}
+              <a
+                href={`https://x.com/intent/post?source=${currentPageUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                 className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                title="Share on Twitter"
+              >
+                <Twitter className="w-5 h-5"/>
+              </a>
+
+              {/* Instagram */}
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${currentPageUrl}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                title="Share on LinkedIn"
+              >
+                <Instagram className="w-5 h-5"/>
+              </a>
+
+              {/* Email */}
+              <a
+                href={`mailto:?subject=Check this service&body=${currentPageUrl}`}
+                className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                title="Share via Email"
+              >
+                <Mail className="w-5 h-5" />
+              </a>
+            </div>
           </div>
 
           {/* Right Side - Documents & Contact */}
@@ -286,7 +338,7 @@ const ServicesDetails = () => {
                       <span>Monday to Saturday: </span>
                       <span>{contactInfo?.mon || "9:00 AM - 6:00 PM"}</span>
                     </div>
-                  
+
                     <div className="flex justify-between">
                       <span>Sunday:</span>
                       <span
