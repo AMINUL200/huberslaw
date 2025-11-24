@@ -84,7 +84,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
         <img
           src={`${baseUrl}${siteSettings?.sra_logo}`}
           alt={siteSettings?.sra_alt || "SRA Accreditation"}
-          className=" w-full object-contain h-full"
+          className=" w-full object-contain h-[50%]"
         />
       ) : (
         <svg width="60" height="30" viewBox="0 0 60 30" className="text-white sm:w-20 sm:h-10">
@@ -150,10 +150,11 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
     <footer className="bg-[#0A1A2F] text-white">
       {/* Main Footer Content */}
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
-        {/* Flex container for all sections */}
-        <div className="flex flex-wrap justify-between gap-8 lg:gap-12">
-          {/* Brand & Contact Section */}
-          <div className="flex-1 min-w-[300px] lg:min-w-[400px] xl:min-w-[450px] space-y-6">
+        {/* Grid container for all sections - 12 column grid for precise control */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 mx-auto">
+          
+          {/* Brand & Contact Section - 4 columns */}
+          <div className="md:col-span-6 lg:col-span-4 space-y-6">
             {/* Brand */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-3 sm:space-y-0">
               {siteSettings?.logo ? (
@@ -234,8 +235,8 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
             </div>
           </div>
 
-          {/* Practice Areas Section */}
-          <div className="flex-1 min-w-[250px] lg:min-w-[200px] space-y-4">
+          {/* Practice Areas Section - 2 columns */}
+          <div className="md:col-span-3 lg:col-span-2 space-y-3">
             <h3 className="text-base sm:text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
               {footerLinks.practiceAreas.title}
             </h3>
@@ -253,8 +254,8 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
             </ul>
           </div>
 
-          {/* Accreditation Section */}
-          <div className="flex-1 min-w-[250px] lg:min-w-[200px] space-y-4 sm:space-y-6">
+          {/* Accreditation Section - 2 columns */}
+          <div className="md:col-span-3 lg:col-span-2 space-y-3 sm:space-y-3">
             <h3 className="text-base sm:text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
               Accreditation
             </h3>
@@ -281,8 +282,8 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
             </div>
           </div>
 
-          {/* Facebook Feed Section */}
-          <div className="flex-1 min-w-[300px] lg:min-w-[350px] space-y-4">
+          {/* Facebook Feed Section - 4 columns */}
+          <div className="md:col-span-12 lg:col-span-4 space-y-6">
             <h3 className="text-base sm:text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
               LIKE US ON FACEBOOK
             </h3>

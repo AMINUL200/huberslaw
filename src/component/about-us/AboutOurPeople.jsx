@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 const AboutOurPeople = ({ teamInfo = [] }) => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
+  // console.log(encodeURIComponent(window.location.href));
+
   // Return null if teamInfo is empty, null, or undefined
   if (!teamInfo || teamInfo.length === 0) {
     return null;

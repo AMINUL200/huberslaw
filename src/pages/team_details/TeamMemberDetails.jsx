@@ -23,6 +23,7 @@ const TeamMemberDetails = () => {
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
   const [teamMember, setTeamMember] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  console.log(encodeURIComponent(window.location.href));
 
   const fetchTeamMember = async (slug) => {
     try {

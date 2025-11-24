@@ -9,11 +9,7 @@ import {
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const AboutINfo = ({
-  aboutInfo = {},
-  teamInfo = [],
-  solicitorInfo = [],
-}) => {
+const AboutINfo = ({ aboutInfo = {}, teamInfo = [], solicitorInfo = [] }) => {
   // console.log("About Info in AboutINfo Component:", aboutInfo);
   // console.log("Team Info in AboutINfo Component:", teamInfo);
   // console.log("Solicitor Info in AboutINfo Component:", solicitorInfo);
@@ -55,7 +51,9 @@ const AboutINfo = ({
               className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-[#E8EEF4] text-center"
             >
               <div className="w-16 h-16 bg-gradient-to-br from-[#CBA054] to-[#DBAE5D] rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <div className="text-white">{iconMap[card.title] || <HelpCircle className="w-8 h-8" />}</div>
+                <div className="text-white">
+                  {iconMap[card.title] || <HelpCircle className="w-8 h-8" />}
+                </div>
               </div>
 
               <h3 className="text-xl font-bold text-[#0A1A2F] mb-3 group-hover:text-[#CBA054] transition-colors duration-300">
@@ -83,6 +81,28 @@ const AboutINfo = ({
         </div>
       </section>
 
+      {/* Section 2.5: Horizontal Text + Contact Button */}
+      <section className="my-16">
+        <div className="bg-[#F4EEDC] rounded-2xl py-8 px-12 shadow-lg">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            {/* Left Side Text */}
+            <p className="text-xl lg:text-2xl font-bold text-[#0A1A2F] lg:text-left text-center">
+              Join many clients around the world that use Hubers Law to
+              smoothens their legal matters
+            </p>
+
+            {/* Right Side Button */}
+            <Link
+              to="/contact-us"
+              className="inline-flex items-center bg-[#0A1A2F] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#CBA054] hover:text-white transition-all duration-300 group"
+            >
+              Contact Us Now
+              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Section 3: Meet Our Team - Only show if teamInfo has data */}
       {teamInfo && teamInfo.length > 0 && (
         <section>
@@ -91,8 +111,8 @@ const AboutINfo = ({
               Meet Our Team
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Get to know the experienced legal professionals who will be handling
-              your case.
+              Get to know the experienced legal professionals who will be
+              handling your case.
             </p>
           </div>
 
@@ -105,7 +125,9 @@ const AboutINfo = ({
                 {member.image && (
                   <div
                     className="h-48 bg-cover bg-center relative overflow-hidden"
-                    style={{ backgroundImage: `url(${baseUrl}${member.image})` }}
+                    style={{
+                      backgroundImage: `url(${baseUrl}${member.image})`,
+                    }}
                   >
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                     <div className="absolute bottom-4 left-4 text-white">
@@ -126,7 +148,9 @@ const AboutINfo = ({
                     )}
                     {member?.experience && (
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">Experience</span>
+                        <span className="text-sm text-gray-500">
+                          Experience
+                        </span>
                         <span className="text-sm font-semibold text-[#CBA054]">
                           {member.experience}
                         </span>

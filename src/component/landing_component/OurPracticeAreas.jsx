@@ -20,10 +20,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { getServiceIcon } from "../../utils/getServiceIcon";
 
 const OurPracticeAreas = ({ servicesData = [] }) => {
-  
-
-
-
   // Swiper breakpoints configuration
   const swiperBreakpoints = {
     320: {
@@ -49,16 +45,14 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
       <div className="container mx-auto px-4 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-         
-
-           <h1
+          <h1
             className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-6 leading-tight"
             itemProp="headline"
           >
-            {servicesData[0]?.page_heading }
+            {servicesData[0]?.page_heading}
           </h1>
 
-         <p
+          <p
             className="text-xl text-gray-600 max-w-3xl mx-auto"
             itemProp="description"
           >
@@ -91,7 +85,7 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
             }}
             className="practice-areas-swiper"
           >
-            {servicesData.slice(0,7).map((service) => (
+            {servicesData.slice(0, 7).map((service) => (
               <SwiperSlide key={service.id}>
                 <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] overflow-hidden transform transition-all duration-500 hover:shadow-2xl hover:scale-105 group flex flex-col h-full">
                   {/* Header */}
@@ -145,6 +139,36 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
           <div className="custom-pagination flex justify-center space-x-2 mt-8"></div>
         </div>
       </div>
+      
+      {/* Bottom Scrolling Text - Improved */}
+      <div className="mt-12 w-full overflow-hidden bg-[#0A1A2F] py-4 relative">
+        <div className="scrolling-text-container">
+          <div className="scrolling-text-content">
+            <span className="text-[#CBA054] text-3xl font-semibold whitespace-nowrap">
+             The relationship between lawyer and client is the key to success
+            </span>
+          </div>
+          {/* Duplicate for seamless loop */}
+          <div className="scrolling-text-content" aria-hidden="true">
+            <span className="text-[#CBA054] text-3xl font-semibold whitespace-nowrap">
+             The relationship between lawyer and client is the key to success
+            </span>
+          </div>
+          {/* Duplicate for seamless loop */}
+          <div className="scrolling-text-content" aria-hidden="true">
+            <span className="text-[#CBA054] text-3xl font-semibold whitespace-nowrap">
+             The relationship between lawyer and client is the key to success
+            </span>
+          </div>
+          {/* Duplicate for seamless loop */}
+          <div className="scrolling-text-content" aria-hidden="true">
+            <span className="text-[#CBA054] text-3xl font-semibold whitespace-nowrap">
+             The relationship between lawyer and client is the key to success
+            </span>
+          </div>
+         
+        </div>
+      </div>
 
       <style jsx>{`
         .practice-areas-swiper {
@@ -195,7 +219,7 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
           opacity: 0.7;
           transform: scale(0.9);
           transition: all 0.4s ease;
-          height: auto; /* Ensure slides take full height */
+          height: auto;
         }
 
         .swiper-slide-active {
@@ -208,6 +232,33 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
           height: 100%;
         }
 
+        /* Improved Scrolling Text Styles */
+        .scrolling-text-container {
+          display: flex;
+          width: max-content;
+          animation: scrollText 30s linear infinite;
+        }
+
+        .scrolling-text-content {
+          display: flex;
+          align-items: center;
+          padding-right: 2rem;
+        }
+
+        @keyframes scrollText {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+
+        /* Pause animation on hover */
+        .scrolling-text-container:hover {
+          animation-play-state: paused;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
           .custom-nav-btn {
@@ -217,12 +268,29 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
           .practice-areas-swiper {
             padding: 10px 5px 40px;
           }
+
+          .scrolling-text-content span {
+            font-size: 1rem;
+          }
+
+          @keyframes scrollText {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
+          }
         }
 
         @media (max-width: 640px) {
           .swiper-slide {
             opacity: 1;
             transform: scale(1);
+          }
+
+          .scrolling-text-content span {
+            font-size: 0.875rem;
           }
         }
       `}</style>
