@@ -106,22 +106,22 @@ const WeAreSolicitors = ({ aboutData = {} }) => {
 
               {/* Description - Using dangerouslySetInnerHTML for HTML content */}
               <div
-                className="text-lg text-gray-600 mb-8 leading-relaxed prose prose-lg max-w-none"
+                className="text-lg  text-gray-600 mb-8 leading-relaxed prose prose-lg max-w-none"
                 dangerouslySetInnerHTML={{
                   __html: data.description || defaultData.description,
                 }}
               />
 
               {/* Features Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+              <div className="grid grid-cols-1  gap-4 mb-8">
                 {(data.about_feature || defaultData.about_feature).map(
                   (feature, index) => (
                     <div key={index} className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 w-12 h-12 bg-[#F4EEDC] rounded-lg flex items-center justify-center">
+                      {/* <div className="flex-shrink-0 w-12 h-12 bg-[#F4EEDC] rounded-lg flex items-center justify-center">
                         <div className="text-[#CBA054]">
                           {getFeatureIcon(feature.title)}
                         </div>
-                      </div>
+                      </div> */}
                       <div>
                         <h3 className="font-semibold text-[#0A1A2F] mb-1">
                           {feature.title}

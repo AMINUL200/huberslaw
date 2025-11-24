@@ -10,6 +10,10 @@ import {
   Calendar,
   Award,
   FileText,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Share2,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { api } from "../../utils/app";
@@ -57,8 +61,13 @@ const TeamMemberDetails = () => {
     return (
       <div className="min-h-screen bg-linear-to-br from-[#F4EEDC] to-[#E8EEF4] pt-20 pb-16 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-[#0A1A2F] mb-4">Team Member Not Found</h2>
-          <Link to="/about-us?tab=people" className="text-[#CBA054] hover:underline">
+          <h2 className="text-2xl font-bold text-[#0A1A2F] mb-4">
+            Team Member Not Found
+          </h2>
+          <Link
+            to="/about-us?tab=people"
+            className="text-[#CBA054] hover:underline"
+          >
             Back to Our Team
           </Link>
         </div>
@@ -70,45 +79,79 @@ const TeamMemberDetails = () => {
   const generateDescriptionHTML = () => {
     return `
       <div class="space-y-6">
-        ${teamMember.description ? `
+        ${
+          teamMember.description
+            ? `
         <p class="text-lg text-gray-700 leading-relaxed">
-          ${teamMember.name ? `<strong class="text-[#0A1A2F]">${teamMember.name}</strong>` : ''} 
+          ${
+            teamMember.name
+              ? `<strong class="text-[#0A1A2F]">${teamMember.name}</strong>`
+              : ""
+          } 
           ${teamMember.description}
         </p>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${teamMember.p_philosophy ? `
+        ${
+          teamMember.p_philosophy
+            ? `
         <div class="bg-[#F4EEDC] rounded-xl p-6 border-l-4 border-[#CBA054]">
           <h3 class="text-xl font-bold text-[#0A1A2F] mb-3">Professional Philosophy</h3>
           <p class="text-gray-700 italic !p-0 !m-0">
             "${teamMember.p_philosophy}"
           </p>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${teamMember.expertise && teamMember.expertise.length > 0 ? `
-        <h3 class="text-2xl font-bold text-[#0A1A2F] mt-8 mb-4">${teamMember.expertise_heading || 'Areas of Expertise'}</h3>
+        ${
+          teamMember.expertise && teamMember.expertise.length > 0
+            ? `
+        <h3 class="text-2xl font-bold text-[#0A1A2F] mt-8 mb-4">${
+          teamMember.expertise_heading || "Areas of Expertise"
+        }</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <ul class="list-disc list-inside space-y-2 text-gray-700">
-            ${teamMember.expertise.slice(0, Math.ceil(teamMember.expertise.length / 2)).map(item => `<li>${item}</li>`).join('')}
+            ${teamMember.expertise
+              .slice(0, Math.ceil(teamMember.expertise.length / 2))
+              .map((item) => `<li>${item}</li>`)
+              .join("")}
           </ul>
           <ul class="list-disc list-inside space-y-2 text-gray-700">
-            ${teamMember.expertise.slice(Math.ceil(teamMember.expertise.length / 2)).map(item => `<li>${item}</li>`).join('')}
+            ${teamMember.expertise
+              .slice(Math.ceil(teamMember.expertise.length / 2))
+              .map((item) => `<li>${item}</li>`)
+              .join("")}
           </ul>
         </div>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${teamMember.cases && teamMember.cases.length > 0 ? `
-        <h3 class="text-2xl font-bold text-[#0A1A2F] mt-8 mb-4">${teamMember.cases_heading || 'Notable Cases'}</h3>
+        ${
+          teamMember.cases && teamMember.cases.length > 0
+            ? `
+        <h3 class="text-2xl font-bold text-[#0A1A2F] mt-8 mb-4">${
+          teamMember.cases_heading || "Notable Cases"
+        }</h3>
         <div class="space-y-4">
-          ${teamMember.cases.map(caseItem => `
+          ${teamMember.cases
+            .map(
+              (caseItem) => `
             <div class="border-l-4 border-[#CBA054] pl-4">
               <h4 class="font-semibold text-[#0A1A2F]">${caseItem.title}</h4>
               <p class="text-gray-600 text-sm">${caseItem.description}</p>
             </div>
-          `).join('')}
+          `
+            )
+            .join("")}
         </div>
-        ` : ''}
+        `
+            : ""
+        }
       </div>
     `;
   };
@@ -180,7 +223,9 @@ const TeamMemberDetails = () => {
                     </p>
                   )}
                   {teamMember.service?.service_name && (
-                    <p className="text-gray-600">{teamMember.service.service_name}</p>
+                    <p className="text-gray-600">
+                      {teamMember.service.service_name}
+                    </p>
                   )}
                 </div>
 
@@ -188,7 +233,9 @@ const TeamMemberDetails = () => {
                   {teamMember.phone_no && (
                     <div className="flex items-center space-x-3">
                       <Phone className="w-4 h-4 text-[#CBA054]" />
-                      <span className="text-gray-700">{teamMember.phone_no}</span>
+                      <span className="text-gray-700">
+                        {teamMember.phone_no}
+                      </span>
                     </div>
                   )}
                   {teamMember.email && (
@@ -200,7 +247,9 @@ const TeamMemberDetails = () => {
                   {teamMember.address && (
                     <div className="flex items-center space-x-3">
                       <MapPin className="w-4 h-4 text-[#CBA054]" />
-                      <span className="text-gray-700">{teamMember.address}</span>
+                      <span className="text-gray-700">
+                        {teamMember.address}
+                      </span>
                     </div>
                   )}
                   {teamMember.experience && (
@@ -213,11 +262,62 @@ const TeamMemberDetails = () => {
                   )}
                 </div>
 
+                {/* Share Profile */}
+                <div className="pt-4 border-t border-[#E8EEF4]">
+                  <h3 className="font-semibold text-[#0A1A2F] mb-2 flex items-center">
+                    <Share2 className="w-4 h-4 text-[#CBA054] mr-2" />
+                    Share Profile
+                  </h3>
+
+                  <div className="flex space-x-3">
+                    {/* Facebook */}
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-9 h-9 bg-[#1E354F] rounded-lg flex items-center justify-center text-gray-300 hover:bg-[#CBA054] hover:text-white transition-all duration-300"
+                    >
+                      <Facebook className="w-4 h-4" />
+                    </a>
+
+                    {/* Twitter */}
+                    <a
+                      href={`https://twitter.com/intent/tweet?url=${window.location.href}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-9 h-9 bg-[#1E354F] rounded-lg flex items-center justify-center text-gray-300 hover:bg-[#CBA054] hover:text-white transition-all duration-300"
+                    >
+                      <Twitter className="w-4 h-4" />
+                    </a>
+
+                    {/* LinkedIn */}
+                    <a
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-9 h-9 bg-[#1E354F] rounded-lg flex items-center justify-center text-gray-300 hover:bg-[#CBA054] hover:text-white transition-all duration-300"
+                    >
+                      <Linkedin className="w-4 h-4" />
+                    </a>
+
+                    {/* Copy Link */}
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(window.location.href);
+                        toast.success("Link copied to clipboard!");
+                      }}
+                      className="w-9 h-9 bg-[#1E354F] rounded-lg flex items-center justify-center text-gray-300 hover:bg-[#CBA054] hover:text-white transition-all duration-300"
+                    >
+                      <Share2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
                 {/* Education */}
                 {teamMember.education && teamMember.education.length > 0 && (
                   <div className="pt-4 border-t border-[#E8EEF4]">
                     <h3 className="font-semibold text-[#0A1A2F] mb-2">
-                      {teamMember.education_heading || 'Education'}
+                      {teamMember.education_heading || "Education"}
                     </h3>
                     <div className="space-y-2">
                       {teamMember.education.map((item, index) => (
@@ -230,26 +330,27 @@ const TeamMemberDetails = () => {
                 )}
 
                 {/* Bar Admission */}
-                {teamMember.bar_association && teamMember.bar_association.length > 0 && (
-                  <div className="pt-4 border-t border-[#E8EEF4]">
-                    <h3 className="font-semibold text-[#0A1A2F] mb-2">
-                      {teamMember.bar_association_heading || 'Bar Admission'}
-                    </h3>
-                    <div className="space-y-2">
-                      {teamMember.bar_association.map((item, index) => (
-                        <p key={index} className="text-gray-600 text-sm">
-                          {item}
-                        </p>
-                      ))}
+                {teamMember.bar_association &&
+                  teamMember.bar_association.length > 0 && (
+                    <div className="pt-4 border-t border-[#E8EEF4]">
+                      <h3 className="font-semibold text-[#0A1A2F] mb-2">
+                        {teamMember.bar_association_heading || "Bar Admission"}
+                      </h3>
+                      <div className="space-y-2">
+                        {teamMember.bar_association.map((item, index) => (
+                          <p key={index} className="text-gray-600 text-sm">
+                            {item}
+                          </p>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 {/* Languages */}
                 {teamMember.language && teamMember.language.length > 0 && (
                   <div className="pt-4 border-t border-[#E8EEF4]">
                     <h3 className="font-semibold text-[#0A1A2F] mb-2">
-                      {teamMember.language_heading || 'Languages'}
+                      {teamMember.language_heading || "Languages"}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {teamMember.language.map((language, index) => (
@@ -270,13 +371,16 @@ const TeamMemberDetails = () => {
           {/* Right Side - Detailed Description */}
           <div className="lg:col-span-2 space-y-8">
             {/* Main Description - Only show if there's content */}
-            {(teamMember.description || teamMember.p_philosophy || 
-              (teamMember.expertise && teamMember.expertise.length > 0) || 
+            {(teamMember.description ||
+              teamMember.p_philosophy ||
+              (teamMember.expertise && teamMember.expertise.length > 0) ||
               (teamMember.cases && teamMember.cases.length > 0)) && (
               <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-8">
                 <div
                   className="prose prose-lg max-w-none"
-                  dangerouslySetInnerHTML={{ __html: generateDescriptionHTML() }}
+                  dangerouslySetInnerHTML={{
+                    __html: generateDescriptionHTML(),
+                  }}
                 />
               </div>
             )}
@@ -286,7 +390,7 @@ const TeamMemberDetails = () => {
               <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-8">
                 <h2 className="text-2xl font-bold text-[#0A1A2F] mb-6 flex items-center">
                   <Award className="w-6 h-6 mr-2 text-[#CBA054]" />
-                  {teamMember.awards_heading || 'Awards & Recognition'}
+                  {teamMember.awards_heading || "Awards & Recognition"}
                 </h2>
                 <div className="space-y-4">
                   {teamMember.awards.map((award, index) => (
