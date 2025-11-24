@@ -10,8 +10,7 @@ const WhyHireSolicitorTalent = ({ solicitorTalentData = [] }) => {
       solicitorTalentData[0]?.section_title_meta ||
       "Why Hire Solicitor Talent?",
     description:
-      solicitorTalentData[0]?.section_description ||
-      "Discover the unique advantages of working with our dedicated legal team. We combine expertise with innovation to deliver exceptional results for our clients.",
+      solicitorTalentData[0]?.section_description
   };
 
   
