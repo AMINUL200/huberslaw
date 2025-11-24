@@ -7,6 +7,10 @@ import {
   IndianRupee,
   X,
   Upload,
+  Instagram,
+  Linkedin,
+  Twitter,
+  Facebook,
 } from "lucide-react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
@@ -14,6 +18,7 @@ import { api } from "../../utils/app";
 import { toast } from "react-toastify";
 
 const Vacancies = ({ vacancies = [] }) => {
+  const currentPageUrl = encodeURIComponent(window.location.href);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedVacancy, setSelectedVacancy] = useState(null);
   const [formData, setFormData] = useState({
@@ -27,6 +32,10 @@ const Vacancies = ({ vacancies = [] }) => {
     cv: null,
   });
   const [formLoading, setFormLoading] = useState(false);
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success("Job link copied to clipboard!");
+  };
 
   // Format date function
   const formatDate = (dateString) => {
@@ -137,8 +146,8 @@ const Vacancies = ({ vacancies = [] }) => {
         expectation: "",
         location: "",
         message: "",
-        cv: null
-      })
+        cv: null,
+      });
     }
   };
 
@@ -200,9 +209,11 @@ const Vacancies = ({ vacancies = [] }) => {
                     <div className="flex items-center space-x-2 text-gray-600">
                       <DollarSign className="w-4 h-4 text-[#CBA054]" />
                       <span>
-                        {vacancy.min_salary && `£${parseFloat(vacancy.min_salary).toLocaleString()}`}
+                        {vacancy.min_salary &&
+                          `£${parseFloat(vacancy.min_salary).toLocaleString()}`}
                         {vacancy.min_salary && vacancy.max_salary && " - "}
-                        {vacancy.max_salary && `£${parseFloat(vacancy.max_salary).toLocaleString()}`}
+                        {vacancy.max_salary &&
+                          `£${parseFloat(vacancy.max_salary).toLocaleString()}`}
                       </span>
                     </div>
                   )}
@@ -239,6 +250,54 @@ const Vacancies = ({ vacancies = [] }) => {
                     <span>Posted: {formatDate(vacancy.created_at)}</span>
                   </div>
                 )}
+                {/* Share Job Section */}
+                <div className="mt-6 flex items-center gap-4 flex-wrap">
+                  <h3 className="text-[#0A1A2F] font-semibold tracking-wide">
+                    SHARE JOB :
+                  </h3>
+
+                  {/* Facebook */}
+                  <a
+                    href={`https://www.facebook.com/sharer/sharer.php?u=${currentPageUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                    title="Share on Facebook"
+                  >
+                    <Facebook className="w-5 h-5" />
+                  </a>
+
+                  {/* X / Twitter */}
+                  <a
+                    href={`https://x.com/intent/tweet?url=${currentPageUrl}&text=Check this job opening:`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                    title="Share on X / Twitter"
+                  >
+                    <Twitter className="w-5 h-5" />
+                  </a>
+
+                  {/* LinkedIn */}
+                  <a
+                    href={`https://www.linkedin.com/sharing/share-offsite/?url=${currentPageUrl}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                    title="Share on LinkedIn"
+                  >
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+
+                  {/* Instagram → Copy Link */}
+                  <button
+                    onClick={copyLink}
+                    className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                    title="Copy link for Instagram"
+                  >
+                    <Instagram className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
 
               {/* Apply Button Section */}
@@ -286,8 +345,11 @@ const Vacancies = ({ vacancies = [] }) => {
                 )}
                 {(selectedVacancy.job_location || selectedVacancy.job_type) && (
                   <p className="text-gray-600 mt-1">
-                    {selectedVacancy.job_location && selectedVacancy.job_location}
-                    {selectedVacancy.job_location && selectedVacancy.job_type && " • "}
+                    {selectedVacancy.job_location &&
+                      selectedVacancy.job_location}
+                    {selectedVacancy.job_location &&
+                      selectedVacancy.job_type &&
+                      " • "}
                     {selectedVacancy.job_type && selectedVacancy.job_type}
                   </p>
                 )}

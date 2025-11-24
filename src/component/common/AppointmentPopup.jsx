@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
   console.log("popup");
 
-  console.log(servicesData, teamData);
+  // console.log(servicesData, teamData);
 
   const [formData, setFormData] = useState({
     name: "",
