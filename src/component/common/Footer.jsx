@@ -87,7 +87,12 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
           className=" w-full object-contain h-[50%]"
         />
       ) : (
-        <svg width="60" height="30" viewBox="0 0 60 30" className="text-white sm:w-20 sm:h-10">
+        <svg
+          width="60"
+          height="30"
+          viewBox="0 0 60 30"
+          className="text-white sm:w-20 sm:h-10"
+        >
           <rect width="60" height="30" fill="#0A1A2F" rx="3" />
           <text
             x="30"
@@ -116,7 +121,12 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
           className="h-full w-full object-contain s"
         />
       ) : (
-        <svg width="60" height="30" viewBox="0 0 60 30" className="text-white sm:w-20 sm:h-10">
+        <svg
+          width="60"
+          height="30"
+          viewBox="0 0 60 30"
+          className="text-white sm:w-20 sm:h-10"
+        >
           <rect width="60" height="30" fill="#0A1A2F" rx="3" />
           <text
             x="30"
@@ -151,8 +161,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
       {/* Main Footer Content */}
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16">
         {/* Grid container for all sections - 12 column grid for precise control */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 mx-auto">
-          
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 px-2 sm:px-4">
           {/* Brand & Contact Section - 4 columns */}
           <div className="md:col-span-6 lg:col-span-4 space-y-6">
             {/* Brand */}
@@ -213,7 +222,9 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
                   <div className="text-[#CBA054] group-hover:scale-110 transition-transform duration-200 flex-shrink-0 mt-0.5 sm:mt-0">
                     {item.icon}
                   </div>
-                  <span className="text-sm sm:text-base break-words">{item.text}</span>
+                  <span className="text-sm sm:text-base break-words">
+                    {item.text}
+                  </span>
                 </a>
               ))}
             </div>
@@ -255,7 +266,7 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
           </div>
 
           {/* Accreditation Section - 2 columns */}
-          <div className="md:col-span-3 lg:col-span-2 space-y-3 sm:space-y-3">
+          <div className="md:col-span-3 lg:col-span-3 space-y-3 sm:space-y-3">
             <h3 className="text-base sm:text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
               Accreditation
             </h3>
@@ -283,11 +294,12 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
           </div>
 
           {/* Facebook Feed Section - 4 columns */}
-          <div className="md:col-span-12 lg:col-span-4 space-y-6">
+         <div className="md:col-span-12 lg:col-span-3 space-y-6 pr-0 lg:pr-4">
+
             <h3 className="text-base sm:text-lg font-semibold text-white border-l-4 border-[#CBA054] pl-3">
               LIKE US ON FACEBOOK
             </h3>
-            <div className="transform scale-90 sm:scale-100 origin-top-left">
+            <div className="transform w-full origin-top-left">
               <FacebookFeed />
             </div>
           </div>
@@ -306,7 +318,9 @@ const Footer = ({ siteSettings = {}, servicesData = [] }) => {
             {/* Additional Links */}
             <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-400">
               <span className="whitespace-nowrap">SRA Number: 123456</span>
-              <span className="whitespace-nowrap">VAT Number: GB 123 4567 89</span>
+              <span className="whitespace-nowrap">
+                VAT Number: GB 123 4567 89
+              </span>
               <span className="whitespace-nowrap">Regulated by the SRA</span>
             </div>
 

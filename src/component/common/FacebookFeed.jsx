@@ -8,14 +8,14 @@ export default function FacebookFeed() {
           "href=" +
           encodeURIComponent("https://www.facebook.com/huberslaw") +
           "&tabs=timeline" +
-          "&width=340" +
+          "&width=320" +
           "&height=500" +
           "&small_header=false" +
           "&adapt_container_width=true" +
           "&hide_cover=false" +
           "&show_facepile=true"
         }
-        width="110%"
+        width="120%"
         height="500"
         style={{ border: "none", overflow: "hidden" }}
         scrolling="yes"

@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Edit, Trash2, Save, X, FileText, Eye, Download, Upload } from "lucide-react";
+import {
+  Plus,
+  Edit,
+  Trash2,
+  Save,
+  X,
+  FileText,
+  Eye,
+  Download,
+  Upload,
+} from "lucide-react";
 import { api } from "../../../utils/app";
 import CustomTextEditor from "../../../component/form/TextEditor";
 
@@ -17,7 +27,7 @@ const HandleAboutTerms = () => {
     short_desc: "",
     image: "",
     image_alt: "",
-    files: []
+    files: [],
   });
   const [isEditing, setIsEditing] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -81,8 +91,8 @@ const HandleAboutTerms = () => {
       setImageError("");
       setImagePreview(URL.createObjectURL(file));
       setHasImageChanged(true);
-      setFormData((prev) => ({ 
-        ...prev, 
+      setFormData((prev) => ({
+        ...prev,
         image: file,
       }));
     }
@@ -93,15 +103,15 @@ const HandleAboutTerms = () => {
     if (terms && terms.image) {
       setImagePreview(null);
       setHasImageChanged(true);
-      setFormData((prev) => ({ 
-        ...prev, 
+      setFormData((prev) => ({
+        ...prev,
         image: null,
       }));
     } else {
       setImagePreview(null);
       setHasImageChanged(false);
-      setFormData((prev) => ({ 
-        ...prev, 
+      setFormData((prev) => ({
+        ...prev,
         image: null,
       }));
     }
@@ -138,10 +148,26 @@ const HandleAboutTerms = () => {
   };
 
   // Remove file input
-  const removeFileInput = (index) => {
-    if (fileInputs.length > 1) {
-      const updatedInputs = fileInputs.filter((_, i) => i !== index);
-      setFileInputs(updatedInputs);
+  const removeFileInput = async (input) => {
+    console.log(input.id);
+
+    // if(input) return;
+
+    if (window.confirm("Are you sure you want to delete this term?")) {
+      try {
+        const response = await api.delete(`/terms-conditions/${input.id}`);
+
+        if (response.data.status) {
+          fetchTerms();
+          resetForm();
+        } else {
+          console.error("Failed to delete term");
+          alert("Error deleting data. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error deleting term:", error);
+        alert("Error deleting data. Please try again.");
+      }
     }
   };
 
@@ -156,15 +182,16 @@ const HandleAboutTerms = () => {
       short_desc: terms?.short_desc || "",
       image: null,
       image_alt: terms?.image_alt || "",
-      files: terms?.files || []
+      files: terms?.files || [],
     });
-    setFileInputs(terms?.files && terms.files.length > 0 
-      ? terms.files.map(file => ({
-          file_name: file.file_name,
-          file: null,
-          existing_file_path: file.file_path
-        }))
-      : [{ file_name: "", file: null }]
+    setFileInputs(
+      terms?.files && terms.files.length > 0
+        ? terms.files.map((file) => ({
+            file_name: file.file_name,
+            file: null,
+            existing_file_path: file.file_path,
+          }))
+        : [{ file_name: "", file: null }]
     );
     setImagePreview(terms?.image ? `${baseUrl}/${terms.image}` : null);
     setHasImageChanged(false);
@@ -201,25 +228,39 @@ const HandleAboutTerms = () => {
       // Append files
       fileInputs.forEach((fileInput, index) => {
         if (fileInput.file_name) {
-          formDataToSend.append(`files[${index}][file_name]`, fileInput.file_name);
+          formDataToSend.append(
+            `files[${index}][file_name]`,
+            fileInput.file_name || ""
+          );
         }
-        if (fileInput.file) {
-          formDataToSend.append(`files[${index}][file]`, fileInput.file);
+        // CASE 1 → New file uploaded → file_path = File object
+        if (fileInput.file instanceof File) {
+          formDataToSend.append(`files[${index}][file_path]`, fileInput.file);
+        } else {
+          formDataToSend.append(
+            `files[${index}][file_path]`,
+            fileInput.file_path || ""
+          );
         }
       });
+
+      // Debug formData:
+      console.log("------- DEBUG FORMDATA START -------");
+
+      for (let pair of formDataToSend.entries()) {
+        console.log(pair[0] + ": ", pair[1]);
+      }
+
+      console.log("------- DEBUG FORMDATA END -------");
 
       let response;
       if (terms) {
         // Update existing term
-        response = await api.post(
-          `/terms-conditions/update/${terms.id}`,
-          formDataToSend,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        response = await api.post(`/terms-conditions/update`, formDataToSend, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       } else {
         // Create new term
         response = await api.post("/terms-conditions", formDataToSend, {
@@ -228,9 +269,12 @@ const HandleAboutTerms = () => {
           },
         });
       }
+      console.log(response);
 
-      if (response.data.status) {
-        alert(`Terms & Conditions ${terms ? "updated" : "created"} successfully!`);
+      if (response.data.success) {
+        alert(
+          `Terms & Conditions ${terms ? "updated" : "created"} successfully!`
+        );
         resetForm();
         fetchTerms();
       } else {
@@ -256,21 +300,23 @@ const HandleAboutTerms = () => {
       short_desc: terms?.short_desc || "",
       image: null,
       image_alt: terms?.image_alt || "",
-      files: terms?.files || []
+      files: terms?.files || [],
     });
-    
+
     // Set file inputs for existing files
     if (terms?.files && terms.files.length > 0) {
-      const inputs = terms.files.map(file => ({
+      const inputs = terms.files.map((file) => ({
+        id: file.id,
         file_name: file.file_name,
+        file_path: file.file_path, // string path
         file: null,
-        existing_file_path: file.file_path
       }));
+      console.log(inputs);
       setFileInputs(inputs);
     } else {
-      setFileInputs([{ file_name: "", file: null }]);
+      setFileInputs([{ file_name: "", file_path: "", file: null }]);
     }
-    
+
     setImagePreview(terms?.image ? `${baseUrl}/${terms.image}` : null);
     setHasImageChanged(false);
     setIsEditing(true);
@@ -319,7 +365,9 @@ const HandleAboutTerms = () => {
     <div className="w-full min-h-screen px-6 py-8 bg-gradient-to-br from-[#F4EEDC] to-[#E8EEF4]">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-[#0A1A2F]">Terms & Conditions Management</h2>
+        <h2 className="text-3xl font-bold text-[#0A1A2F]">
+          Terms & Conditions Management
+        </h2>
         {terms ? (
           <div className="flex space-x-4">
             <button
@@ -351,12 +399,16 @@ const HandleAboutTerms = () => {
       {/* Display Current Data */}
       {terms && !showForm && (
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
-          <h3 className="text-xl font-bold text-[#0A1A2F] mb-6">Current Content</h3>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <h3 className="text-xl font-bold text-[#0A1A2F] mb-6">
+            Current Content
+          </h3>
+
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
             {/* Image Section */}
             <div>
-              <h4 className="text-lg font-semibold text-[#0A1A2F] mb-4">Image</h4>
+              <h4 className="text-lg font-semibold text-[#0A1A2F] mb-4">
+                Image
+              </h4>
               <div className="w-full h-64 border-2 border-dashed border-[#E8EEF4] rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden">
                 {terms.image ? (
                   <img
@@ -365,7 +417,9 @@ const HandleAboutTerms = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-gray-400 text-sm">No Image Uploaded</span>
+                  <span className="text-gray-400 text-sm">
+                    No Image Uploaded
+                  </span>
                 )}
               </div>
               {terms.image_alt && (
@@ -378,28 +432,38 @@ const HandleAboutTerms = () => {
             {/* Content Section */}
             <div className="space-y-6">
               <div>
-                <h4 className="text-lg font-semibold text-[#0A1A2F] mb-4">Content</h4>
-                
+                <h4 className="text-lg font-semibold text-[#0A1A2F] mb-4">
+                  Content
+                </h4>
+
                 <div className="space-y-4">
                   <div>
-                    <label className="text-[#0A1A2F] text-sm font-medium">Heading</label>
+                    <label className="text-[#0A1A2F] text-sm font-medium">
+                      Heading
+                    </label>
                     <p className="text-gray-800 mt-1 p-3 bg-gray-50 rounded-xl">
                       {terms.heading || "Not set"}
                     </p>
                   </div>
 
                   <div>
-                    <label className="text-[#0A1A2F] text-sm font-medium">Short Description</label>
+                    <label className="text-[#0A1A2F] text-sm font-medium">
+                      Short Description
+                    </label>
                     <p className="text-gray-800 mt-1 p-3 bg-gray-50 rounded-xl">
                       {terms.short_desc || "Not set"}
                     </p>
                   </div>
 
                   <div>
-                    <label className="text-[#0A1A2F] text-sm font-medium">Description</label>
-                    <div 
+                    <label className="text-[#0A1A2F] text-sm font-medium">
+                      Description
+                    </label>
+                    <div
                       className="text-gray-800 mt-1 p-3 bg-gray-50 rounded-xl prose prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{ __html: terms.description || "Not set" }}
+                      dangerouslySetInnerHTML={{
+                        __html: terms.description || "Not set",
+                      }}
                     />
                   </div>
                 </div>
@@ -408,13 +472,20 @@ const HandleAboutTerms = () => {
               {/* Files Section */}
               {terms.files && terms.files.length > 0 && (
                 <div>
-                  <h4 className="text-lg font-semibold text-[#0A1A2F] mb-4">Attached Files</h4>
+                  <h4 className="text-lg font-semibold text-[#0A1A2F] mb-4">
+                    Attached Files
+                  </h4>
                   <div className="space-y-2">
                     {terms.files.map((file) => (
-                      <div key={file.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                      <div
+                        key={file.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-xl"
+                      >
                         <div className="flex items-center space-x-3">
                           <FileText className="w-4 h-4 text-[#CBA054]" />
-                          <span className="text-sm text-gray-700">{file.file_name}</span>
+                          <span className="text-sm text-gray-700">
+                            {file.file_name}
+                          </span>
                         </div>
                         <div className="flex space-x-3">
                           <a
@@ -443,17 +514,23 @@ const HandleAboutTerms = () => {
 
               {/* Meta Information */}
               <div>
-                <h4 className="text-lg font-semibold text-[#0A1A2F] mb-4">SEO Information</h4>
+                <h4 className="text-lg font-semibold text-[#0A1A2F] mb-4">
+                  SEO Information
+                </h4>
                 <div className="space-y-3 text-sm">
                   {terms.heading_meta && (
                     <div>
-                      <label className="text-[#0A1A2F] font-medium">Heading Meta:</label>
+                      <label className="text-[#0A1A2F] font-medium">
+                        Heading Meta:
+                      </label>
                       <p className="text-gray-600 mt-1">{terms.heading_meta}</p>
                     </div>
                   )}
                   {terms.desc_meta && (
                     <div>
-                      <label className="text-[#0A1A2F] font-medium">Description Meta:</label>
+                      <label className="text-[#0A1A2F] font-medium">
+                        Description Meta:
+                      </label>
                       <p className="text-gray-600 mt-1">{terms.desc_meta}</p>
                     </div>
                   )}
@@ -465,19 +542,25 @@ const HandleAboutTerms = () => {
           {/* Dates */}
           <div className="mt-6 pt-6 border-t border-[#E8EEF4]">
             <div className="text-sm text-gray-500">
-              <div>Created: {new Date(terms.created_at).toLocaleDateString()}</div>
-              <div>Updated: {new Date(terms.updated_at).toLocaleDateString()}</div>
+              <div>
+                Created: {new Date(terms.created_at).toLocaleDateString()}
+              </div>
+              <div>
+                Updated: {new Date(terms.updated_at).toLocaleDateString()}
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Content Form */}
+      {/* Content Form - Single Column Layout */}
       {showForm && (
         <div className="bg-white rounded-2xl shadow-xl p-6 mb-8">
           <div className="flex justify-between items-center mb-6">
             <h3 className="text-xl font-bold text-[#0A1A2F]">
-              {terms ? "Edit Terms & Conditions" : "Create New Terms & Conditions"}
+              {terms
+                ? "Edit Terms & Conditions"
+                : "Create New Terms & Conditions"}
             </h3>
             <button
               onClick={resetForm}
@@ -488,9 +571,10 @@ const HandleAboutTerms = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Left Column - Image Upload */}
-              <div className="space-y-6">
+            {/* Single Column Layout */}
+            <div className="space-y-6">
+              {/* Image Settings */}
+              <div className="space-y-4">
                 <h4 className="text-lg font-semibold text-[#0A1A2F] border-b pb-2">
                   Image Settings
                 </h4>
@@ -498,7 +582,9 @@ const HandleAboutTerms = () => {
                 <div>
                   <label className="text-[#0A1A2F] text-sm font-medium mb-2 block">
                     Upload Image
-                    <span className="text-xs text-gray-500 ml-2">(Max 1MB, JPG, PNG, WEBP)</span>
+                    <span className="text-xs text-gray-500 ml-2">
+                      (Max 1MB, JPG, PNG, WEBP)
+                    </span>
                   </label>
                   <div className="space-y-4">
                     <div className="w-full h-64 border-2 border-dashed border-[#E8EEF4] rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden relative">
@@ -509,7 +595,8 @@ const HandleAboutTerms = () => {
                             alt="Preview"
                             className="w-full h-full object-cover"
                           />
-                          {(formData.image instanceof File || hasImageChanged) && (
+                          {(formData.image instanceof File ||
+                            hasImageChanged) && (
                             <button
                               type="button"
                               onClick={handleClearImage}
@@ -524,7 +611,7 @@ const HandleAboutTerms = () => {
                         <span className="text-gray-400 text-sm">No Image</span>
                       )}
                     </div>
-                    
+
                     <div className="flex space-x-2">
                       <label className="flex items-center justify-center space-x-2 px-4 py-2 bg-[#0A1A2F] text-white rounded-xl cursor-pointer hover:bg-[#CBA054] transition text-center flex-1">
                         <Upload className="w-4 h-4" />
@@ -538,7 +625,7 @@ const HandleAboutTerms = () => {
                           accept=".jpg,.jpeg,.png,.webp"
                         />
                       </label>
-                      
+
                       {imagePreview && (
                         <button
                           type="button"
@@ -549,11 +636,11 @@ const HandleAboutTerms = () => {
                         </button>
                       )}
                     </div>
-                    
+
                     {imageError && (
                       <p className="text-red-600 text-sm">{imageError}</p>
                     )}
-                    
+
                     {terms && !hasImageChanged && (
                       <p className="text-green-600 text-sm">
                         Using existing image. Upload a new image to replace it.
@@ -577,8 +664,8 @@ const HandleAboutTerms = () => {
                 </div>
               </div>
 
-              {/* Right Column - Content */}
-              <div className="space-y-6">
+              {/* Content Settings */}
+              <div className="space-y-4">
                 <h4 className="text-lg font-semibold text-[#0A1A2F] border-b pb-2">
                   Content Settings
                 </h4>
@@ -634,7 +721,7 @@ const HandleAboutTerms = () => {
                     value={formData.description}
                     onChange={handleEditorChange}
                     placeholder="Enter detailed description..."
-                    height={200}
+                    height={500}
                   />
                 </div>
 
@@ -652,91 +739,106 @@ const HandleAboutTerms = () => {
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Files Section */}
-            <div className="border-t border-[#E8EEF4] pt-6">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-[#0A1A2F]">Files</h3>
-                <button
-                  type="button"
-                  onClick={addFileInput}
-                  className="bg-[#0A1A2F] text-white px-4 py-2 rounded-xl hover:bg-[#CBA054] transition-all duration-300 flex items-center space-x-2 text-sm"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span>Add File</span>
-                </button>
-              </div>
+              {/* Files Section */}
+              <div className="border-t border-[#E8EEF4] pt-6">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-semibold text-[#0A1A2F]">
+                    Files
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={addFileInput}
+                    className="bg-[#0A1A2F] text-white px-4 py-2 rounded-xl hover:bg-[#CBA054] transition-all duration-300 flex items-center space-x-2 text-sm"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Add File</span>
+                  </button>
+                </div>
 
-              {fileInputs.map((fileInput, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 p-4 bg-gray-50 rounded-xl">
-                  <div>
-                    <label className="block text-sm font-semibold text-[#0A1A2F] mb-2">
-                      File Name
-                    </label>
-                    <input
-                      type="text"
-                      value={fileInput.file_name}
-                      onChange={(e) => handleFileInputChange(index, 'file_name', e.target.value)}
-                      className="w-full p-3 rounded-xl border border-[#E8EEF4] focus:border-[#CBA054] focus:ring-[#CBA054]/20"
-                      placeholder="File name"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-semibold text-[#0A1A2F] mb-2">
-                      File
-                    </label>
-                    <input
-                      type="file"
-                      onChange={(e) => handleFileInputChange(index, 'file', e.target.files[0])}
-                      className="w-full p-3 rounded-xl border border-[#E8EEF4] focus:border-[#CBA054] focus:ring-[#CBA054]/20 file:mr-2 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#0A1A2F] file:text-white hover:file:bg-[#CBA054]"
-                    />
-                  </div>
+                {fileInputs.map((fileInput, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 p-4 bg-gray-50 rounded-xl"
+                  >
+                    <div>
+                      <label className="block text-sm font-semibold text-[#0A1A2F] mb-2">
+                        File Name
+                      </label>
+                      <input
+                        type="text"
+                        value={fileInput.file_name}
+                        onChange={(e) =>
+                          handleFileInputChange(index, "file_name", e.target.value)
+                        }
+                        className="w-full p-3 rounded-xl border border-[#E8EEF4] focus:border-[#CBA054] focus:ring-[#CBA054]/20"
+                        placeholder="File name"
+                      />
+                    </div>
 
-                  <div className="flex items-end">
-                    {fileInputs.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeFileInput(index)}
-                        className="w-full bg-red-600 text-white px-3 py-3 rounded-xl hover:bg-red-700 transition-all duration-300 flex items-center justify-center space-x-2"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        <span>Remove</span>
-                      </button>
-                    )}
-                  </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-[#0A1A2F] mb-2">
+                        File
+                      </label>
+                      <input
+                        type="file"
+                        onChange={(e) =>
+                          handleFileInputChange(
+                            index,
+                            "file",
+                            e.target.files[0]
+                          )
+                        }
+                        className="w-full p-3 rounded-xl border border-[#E8EEF4] focus:border-[#CBA054] focus:ring-[#CBA054]/20 file:mr-2 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#0A1A2F] file:text-white hover:file:bg-[#CBA054]"
+                      />
+                    </div>
 
-                  {/* Existing file preview */}
-                  {fileInput.existing_file_path && (
-                    <div className="col-span-3 flex items-center space-x-3 mt-2 p-3 bg-white rounded-xl border">
-                      <FileText className="w-5 h-5 text-[#CBA054]" />
-                      <div className="flex-1">
-                        <p className="text-sm text-gray-700">{fileInput.file_name}</p>
-                        <div className="flex space-x-3 mt-1">
-                          <a
-                            href={getFileUrl(fileInput.existing_file_path)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center space-x-1 text-xs text-[#0A1A2F] hover:text-[#CBA054] transition-colors"
-                          >
-                            <Eye className="w-3 h-3" />
-                            <span>View</span>
-                          </a>
-                          <a
-                            href={getFileUrl(fileInput.existing_file_path)}
-                            download
-                            className="flex items-center space-x-1 text-xs text-[#0A1A2F] hover:text-[#CBA054] transition-colors"
-                          >
-                            <Download className="w-3 h-3" />
-                            <span>Download</span>
-                          </a>
+                    <div className="flex items-end">
+                      {fileInputs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFileInput(fileInput)}
+                          className="w-full bg-red-600 text-white px-3 py-3 rounded-xl hover:bg-red-700 transition-all duration-300 flex items-center justify-center space-x-2"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          <span>Remove</span>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Existing file preview */}
+                    {fileInput.existing_file_path && (
+                      <div className="col-span-3 flex items-center space-x-3 mt-2 p-3 bg-white rounded-xl border">
+                        <FileText className="w-5 h-5 text-[#CBA054]" />
+                        <div className="flex-1">
+                          <p className="text-sm text-gray-700">
+                            {fileInput.file_name}
+                          </p>
+                          <div className="flex space-x-3 mt-1">
+                            <a
+                              href={getFileUrl(fileInput.existing_file_path)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center space-x-1 text-xs text-[#0A1A2F] hover:text-[#CBA054] transition-colors"
+                            >
+                              <Eye className="w-3 h-3" />
+                              <span>View</span>
+                            </a>
+                            <a
+                              href={getFileUrl(fileInput.existing_file_path)}
+                              download
+                              className="flex items-center space-x-1 text-xs text-[#0A1A2F] hover:text-[#CBA054] transition-colors"
+                            >
+                              <Download className="w-3 h-3" />
+                              <span>Download</span>
+                            </a>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Form Actions */}
