@@ -104,8 +104,8 @@ const ContactUs = () => {
       email: formData.email,
       phone_no: formData.phone,
       organisation: formData.organisation,
-      service_name: getServiceNameById(formData.caseType),
-      preferred_lawyer: getLawyerNameById(formData.lawyer),
+      // service_name: getServiceNameById(formData.caseType),
+      // preferred_lawyer: getLawyerNameById(formData.lawyer),
       message: formData.message,
     };
 
@@ -297,7 +297,7 @@ const ContactUs = () => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-semibold text-[#0A1A2F] mb-2">
                         Case Type *
@@ -337,7 +337,7 @@ const ContactUs = () => {
                         <option value="any">Any Available Lawyer</option>
                       </select>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div>
                     <label className="block text-sm font-semibold text-[#0A1A2F] mb-2">

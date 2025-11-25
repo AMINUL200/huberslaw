@@ -1,14 +1,14 @@
 import React from "react";
 import { FileText, Phone, Mail, Download } from "lucide-react";
 
-const AboutTerms = ({ termsInfo = [], settingInfo = {} }) => {
-  // console.log(settingInfo);
+const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
+  console.log(termsInfo);
   
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
   // Generate terms content from termsInfo
   const generateTermsContent = () => {
-    if (!termsInfo || termsInfo.length === 0) {
+    if (!termsInfo || Object.keys(termsInfo).length === 0) {
       return `
         <div class="space-y-6">
           <section>
@@ -23,36 +23,18 @@ const AboutTerms = ({ termsInfo = [], settingInfo = {} }) => {
 
     return `
       <div class="space-y-6">
-        ${termsInfo
-          .map(
-            (term, index) => `
-          <section>
-            <h3 class="text-2xl font-bold text-[#0A1A2F] mb-4">
-              ${index + 1}. ${term.heading || "Untitled Section"}
-            </h3>
-            <div class="text-gray-600 leading-relaxed">
-              ${term.description || "No description available."}
-            </div>
-          </section>
-        `
-          )
-          .join("")}
-
-        <div class="bg-[#F4EEDC] rounded-xl p-6 border-l-4 border-[#CBA054] mt-8">
-          <h4 class="text-xl font-bold text-[#0A1A2F] mb-3">Important Notice</h4>
-          <p class="text-gray-600 leading-relaxed">
-            These terms are <strong>subject to change</strong> and should be reviewed regularly. 
-            This document does not create a solicitor-client relationship until formal 
-            engagement procedures are completed.
-          </p>
-        </div>
+        <section>
+          <div class="text-gray-600 leading-relaxed">
+            ${termsInfo.description || "No description available."}
+          </div>
+        </section>
       </div>
     `;
   };
 
-  // Generate documents list from termsInfo
+  // Generate documents list from termsInfo.files
   const generateDocuments = () => {
-    if (!termsInfo || termsInfo.length === 0) {
+    if (!termsInfo.files || termsInfo.files.length === 0) {
       return [
         {
           id: 1,
@@ -60,18 +42,18 @@ const AboutTerms = ({ termsInfo = [], settingInfo = {} }) => {
           format: "PDF",
           size: "0 KB",
           icon: <FileText className="w-6 h-6" />,
-          pdf: null,
+          file_path: null,
         },
       ];
     }
 
-    return termsInfo.map((term, index) => ({
-      id: term.id || index + 1,
-      title: term.pdf_name || `Document ${index + 1}`,
+    return termsInfo.files.map((file, index) => ({
+      id: file.id || index + 1,
+      title: file.file_name || `Document ${index + 1}`,
       format: "PDF",
       size: "1.2 MB", // You might want to calculate this from the actual file
       icon: <FileText className="w-6 h-6" />,
-      pdf: term.pdf,
+      file_path: file.file_path,
     }));
   };
 
@@ -120,8 +102,8 @@ const AboutTerms = ({ termsInfo = [], settingInfo = {} }) => {
   };
 
   const handleDownload = (document) => {
-    if (document.pdf) {
-      const fullUrl = `${baseUrl}/${document.pdf}`;
+    if (document.file_path) {
+      const fullUrl = `${baseUrl}/${document.file_path}`;
       window.open(fullUrl, "_blank");
     }
   };
@@ -147,13 +129,37 @@ const AboutTerms = ({ termsInfo = [], settingInfo = {} }) => {
               <FileText className="w-5 h-5 mr-2 text-[#CBA054]" />
               Legal Documents
             </h3>
-            <div className="space-y-3">
+            <div 
+              className="space-y-3 max-h-96 overflow-y-auto pr-2"
+              style={{
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#CBA054 #F4EEDC'
+              }}
+            >
+              {/* Custom scrollbar styles for Webkit browsers */}
+              <style jsx>{`
+                .max-h-96::-webkit-scrollbar {
+                  width: 6px;
+                }
+                .max-h-96::-webkit-scrollbar-track {
+                  background: #F4EEDC;
+                  border-radius: 3px;
+                }
+                .max-h-96::-webkit-scrollbar-thumb {
+                  background: #CBA054;
+                  border-radius: 3px;
+                }
+                .max-h-96::-webkit-scrollbar-thumb:hover {
+                  background: #A8823A;
+                }
+              `}</style>
+              
               {termsData.documents.map((doc) => (
                 <button
                   key={doc.id}
                   onClick={() => handleDownload(doc)}
                   className="w-full flex items-center justify-between p-4 bg-[#F4EEDC] rounded-lg hover:bg-[#CBA054] hover:text-white transition-all duration-300 group"
-                  disabled={!doc.pdf}
+                  disabled={!doc.file_path}
                 >
                   <div className="flex items-center space-x-3">
                     <div className="text-[#0A1A2F] group-hover:text-white">
@@ -173,6 +179,31 @@ const AboutTerms = ({ termsInfo = [], settingInfo = {} }) => {
               ))}
             </div>
           </div>
+
+          {/* New Section - Image and Short Description */}
+          {(termsInfo.image || termsInfo.short_desc) && (
+            <div className="bg-white rounded-2xl shadow-lg border border-[#E8EEF4] p-6">
+              {/* <h3 className="text-xl font-bold text-[#0A1A2F] mb-4">
+                {termsInfo.heading || "Overview"}
+              </h3> */}
+              
+              {termsInfo.image && (
+                <div className="mb-4">
+                  <img 
+                    src={`${baseUrl}/${termsInfo.image}`}
+                    alt={termsInfo.image_alt || termsInfo.heading || "Legal Services"}
+                    className="w-full h-48 object-cover rounded-lg"
+                  />
+                </div>
+              )}
+              
+              {termsInfo.short_desc && (
+                <div className="text-gray-600 leading-relaxed text-sm">
+                  {termsInfo.short_desc}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Contact Information */}
           <div className="bg-gradient-to-br from-[#0A1A2F] to-[#1E354F] rounded-2xl p-6 text-white">

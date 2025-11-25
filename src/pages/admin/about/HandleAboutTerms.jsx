@@ -236,6 +236,7 @@ const HandleAboutTerms = () => {
         // CASE 1 → New file uploaded → file_path = File object
         if (fileInput.file instanceof File) {
           formDataToSend.append(`files[${index}][file_path]`, fileInput.file);
+          
         } else {
           formDataToSend.append(
             `files[${index}][file_path]`,

@@ -28,7 +28,7 @@ const AboutUsPage = () => {
   const [aboutInfo, setAboutInfo] = useState({});
   const [teamInfo, setTeamInfo] = useState([]);
   const [clientCareInfo, setClientCareInfo] = useState({});
-  const [termsInfo, setTermsInfo] = useState([]);
+  const [termsInfo, setTermsInfo] = useState({});
   const [solicitorInfo, setSolicitorInfo] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tabTransition, setTabTransition] = useState(false);
@@ -48,7 +48,7 @@ const AboutUsPage = () => {
         const data = aboutRes.data.data;
         setAboutInfo(data.about || {});
         setClientCareInfo(data.client_care || {});
-        setTermsInfo(data.terms_condition || []);
+        setTermsInfo(data.terms_condition[0] || {});
         setTeamInfo(data.teams || []);
         setSolicitorInfo(data.solicitor_talent || []);
       }

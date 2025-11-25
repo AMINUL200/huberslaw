@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Phone, Building, Shield, Send, RefreshCw } from "lucide-react";
+import { Phone, Building, Shield, Send, RefreshCw, Calendar, Clock } from "lucide-react";
 import CustomInput from "../form/CustomInput";
 import { api } from "../../utils/app";
 import { toast } from "react-toastify";
 
 const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
   console.log("popup");
-
-  // console.log(servicesData, teamData);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -17,13 +15,28 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
     lawyer: "",
     organization: "",
     message: "",
+    date: "",
+    time: ""
   });
 
   const [submitLoading, setSubmitLoading] = useState(false);
-
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [showContent, setShowContent] = useState(false);
+
+  // Get tomorrow's date for min date
+  const getTomorrowDate = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0];
+  };
+
+  // Get date 3 months from now for max date
+  const getMaxDate = () => {
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 3);
+    return maxDate.toISOString().split('T')[0];
+  };
 
   // Smooth opening animation
   useEffect(() => {
@@ -83,11 +96,46 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
     return team ? team.name : "";
   };
 
+  const formatDateForDisplay = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate date and time
+    if (!formData.date || !formData.time) {
+      toast.error("Please select both date and time for your appointment.");
+      return;
+    }
+
+    // Validate that date is not in the past
+    const selectedDate = new Date(formData.date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (selectedDate < today) {
+      toast.error("Please select a future date for your appointment.");
+      return;
+    }
+
+    // Validate time format (basic validation)
+    const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+    if (!timeRegex.test(formData.time)) {
+      toast.error("Please enter a valid time in HH:MM format (e.g., 14:30 or 09:00)");
+      return;
+    }
+
     console.log("Appointment form submitted:", formData);
     setSubmitLoading(true);
-    // Handle form submission here
+    
     const payload = {
       full_name: formData.name,
       email: formData.email,
@@ -96,17 +144,21 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
       service_name: getServiceNameById(formData.caseType),
       preferred_lawyer: getLawyerNameById(formData.lawyer),
       message: formData.message,
+      date: formData.date,
+      time: formData.time,
     };
+
     try {
-      const response = await api.post("/contacts", payload);
+      const response = await api.post("/booking/store", payload);
 
       if (response.data.status) {
-        toast.success(response.data.message || "Message sent successfully!");
+        toast.success(response.data.message || "Appointment booked successfully!");
       } else {
-        toast.error(response.data.message || "Failed to send message.");
+        toast.error(response.data.message || "Failed to book appointment.");
       }
     } catch (error) {
       console.error("Submit error:", error);
+      toast.error("An error occurred while booking your appointment.");
     } finally {
       setSubmitLoading(false);
       setFormData({
@@ -117,6 +169,8 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
         lawyer: "",
         organization: "",
         message: "",
+        date: "",
+        time: ""
       });
       handleClose();
     }
@@ -238,6 +292,58 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
               />
             </div>
 
+            {/* Appointment Date & Time */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Date Field */}
+              <div>
+                <label className="block text-sm font-semibold text-[#0A1A2F] mb-2 flex items-center">
+                  <Calendar className="w-4 h-4 mr-2 text-[#CBA054]" />
+                  Preferred Date *
+                </label>
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                    required
+                    min={getTomorrowDate()}
+                    max={getMaxDate()}
+                    className="w-full px-4 py-3 pl-10 rounded-lg bg-white text-gray-700 outline-none focus:ring-2 focus:ring-[#CBA054]/20 focus:border-[#CBA054] duration-300 border border-[#E8EEF4] transition-all shadow-sm hover:shadow-md focus:shadow-lg"
+                  />
+                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
+                {formData.date && (
+                  <p className="text-xs text-green-600 mt-1">
+                    Selected: {formatDateForDisplay(formData.date)}
+                  </p>
+                )}
+              </div>
+
+              {/* Time Field */}
+              <div>
+                <label className="block text-sm font-semibold text-[#0A1A2F] mb-2 flex items-center">
+                  <Clock className="w-4 h-4 mr-2 text-[#CBA054]" />
+                  Preferred Time *
+                </label>
+                <div className="relative">
+                  <input
+                    type="time"
+                    name="time"
+                    value={formData.time}
+                    onChange={handleChange}
+                    required
+                    placeholder="e.g., 14:30 or 09:00"
+                    className="w-full px-4 py-3 pl-10 rounded-lg bg-white text-gray-700 outline-none focus:ring-2 focus:ring-[#CBA054]/20 focus:border-[#CBA054] duration-300 border border-[#E8EEF4] transition-all shadow-sm hover:shadow-md focus:shadow-lg"
+                  />
+                  <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Enter time in 24-hour format (HH:MM)
+                </p>
+              </div>
+            </div>
+
             {/* Case Details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -306,7 +412,7 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
                   <p className="text-sm text-[#0A1A2F] font-medium">
                     All information provided is confidential and protected by
                     attorney-client privilege. We will contact you within 24
-                    hours to schedule your consultation.
+                    hours to confirm your appointment schedule.
                   </p>
                 </div>
               </div>
@@ -335,12 +441,12 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
                 {submitLoading ? (
                   <>
                     <RefreshCw className="w-5 h-5 animate-spin" />
-                    <span>Submitting...</span>
+                    <span>Booking Appointment...</span>
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                    <span>Submit Booking Request</span>
+                    <span>Book Appointment</span>
                   </>
                 )}
               </button>

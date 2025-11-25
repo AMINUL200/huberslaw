@@ -36,6 +36,9 @@ import { api } from "./utils/app";
 import LegalLoader from "./component/common/LegalLoader";
 import { Helmet } from "react-helmet";
 import EmailSetting from "./pages/admin/settings/EmailSetting";
+import BookingAccept from "./pages/booking/BookingAccept";
+import BookingCancel from "./pages/booking/BookingCancel";
+import BookingReschedule from "./pages/booking/BookingReschedule";
 
 const App = () => {
   const { token, user } = useAuth();
@@ -101,6 +104,10 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+          <Route path="/booking/accept/:id" element={<BookingAccept/>}/>
+          <Route path="/booking/cancel/:id" element={<BookingCancel/>}/>
+          <Route path="/booking/reschedule/:id" element={<BookingReschedule/>}/>
 
           <Route element={<AppLayout />}>
             <Route index path="/" element={<LandingPage />} />
