@@ -52,6 +52,12 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
       path: "/admin/contact-us-messages",
     },
     {
+      id: "booking-appointment-messages",
+      label: "Handle Booking Appointment",
+      icon:  <Mail className="w-5 h-5" />,
+      path: "/admin/handle-booking-appoint"
+    },
+    {
       id: "homepage",
       label: "Handle Homepage",
       icon: <Users className="w-5 h-5" />,

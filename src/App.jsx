@@ -39,6 +39,7 @@ import EmailSetting from "./pages/admin/settings/EmailSetting";
 import BookingAccept from "./pages/booking/BookingAccept";
 import BookingCancel from "./pages/booking/BookingCancel";
 import BookingReschedule from "./pages/booking/BookingReschedule";
+import HandleBookingAppointment from "./pages/admin/booking_appointment/HandleBookingAppointment";
 
 const App = () => {
   const { token, user } = useAuth();
@@ -161,6 +162,7 @@ const App = () => {
               <Route path="view-apply-job" element={<ViewApplyJob />} />
 
               <Route path="email-setting" element={<EmailSetting/>}/>
+              <Route path="handle-booking-appoint" element={<HandleBookingAppointment/>}/>
 
             </Route>
           </Route>
