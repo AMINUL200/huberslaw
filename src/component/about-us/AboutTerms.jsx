@@ -2,8 +2,8 @@ import React from "react";
 import { FileText, Phone, Mail, Download } from "lucide-react";
 
 const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
-  console.log(termsInfo);
-  
+  // console.log(termsInfo);
+
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
 
   // Generate terms content from termsInfo
@@ -64,26 +64,30 @@ const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
     }
 
     const days = [
-      { day: 'Mon', time: settingInfo.mon },
-      { day: 'Tue', time: settingInfo.tues },
-      { day: 'Wed', time: settingInfo.wed },
-      { day: 'Thu', time: settingInfo.thus },
-      { day: 'Fri', time: settingInfo.fri },
-      { day: 'Sat', time: settingInfo.sat },
-      { day: 'Sun', time: settingInfo.sun }
+      { day: "Mon", time: settingInfo.mon },
+      { day: "Tue", time: settingInfo.tues },
+      { day: "Wed", time: settingInfo.wed },
+      { day: "Thu", time: settingInfo.thus },
+      { day: "Fri", time: settingInfo.fri },
+      { day: "Sat", time: settingInfo.sat },
+      { day: "Sun", time: settingInfo.sun },
     ];
 
     // Find the most common hours for weekdays
-    const weekdayHours = days.slice(0, 5).map(day => day.time);
-    const allSameHours = weekdayHours.every(time => time === weekdayHours[0]);
-    
+    const weekdayHours = days.slice(0, 5).map((day) => day.time);
+    const allSameHours = weekdayHours.every((time) => time === weekdayHours[0]);
+
     if (allSameHours && weekdayHours[0]) {
       return `Mon-Fri: ${weekdayHours[0]}`;
     }
 
     // If hours vary, return the first available hours
-    const availableHours = days.find(day => day.time && day.time !== 'Closed');
-    return availableHours ? `${availableHours.day}: ${availableHours.time}` : "Mon-Fri: 9:00 AM - 6:00 PM";
+    const availableHours = days.find(
+      (day) => day.time && day.time !== "Closed"
+    );
+    return availableHours
+      ? `${availableHours.day}: ${availableHours.time}`
+      : "Mon-Fri: 9:00 AM - 6:00 PM";
   };
 
   const termsData = {
@@ -97,7 +101,7 @@ const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
       phone: settingInfo.phone || "0203 488 0953",
       helpline: settingInfo.helpline_no || "033256885",
       hours: generateBusinessHours(),
-      address: settingInfo.address || "123 Legal Street, London, UK WC1A 1AA"
+      address: settingInfo.address || "123 Legal Street, London, UK WC1A 1AA",
     },
   };
 
@@ -124,16 +128,16 @@ const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
         {/* Right Side - Documents & Contact */}
         <div className="space-y-6">
           {/* Documents Section */}
-          <div className="bg-white rounded-2xl shadow-lg border border-[#E8EEF4] p-6">
+          <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] p-6">
             <h3 className="text-xl font-bold text-[#0A1A2F] mb-4 flex items-center">
               <FileText className="w-5 h-5 mr-2 text-[#CBA054]" />
-              Legal Documents
+              Legal Resources
             </h3>
-            <div 
+            <div
               className="space-y-3 max-h-96 overflow-y-auto pr-2"
               style={{
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#CBA054 #F4EEDC'
+                scrollbarWidth: "thin",
+                scrollbarColor: "#CBA054 #F4EEDC",
               }}
             >
               {/* Custom scrollbar styles for Webkit browsers */}
@@ -142,18 +146,18 @@ const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
                   width: 6px;
                 }
                 .max-h-96::-webkit-scrollbar-track {
-                  background: #F4EEDC;
+                  background: #f4eedc;
                   border-radius: 3px;
                 }
                 .max-h-96::-webkit-scrollbar-thumb {
-                  background: #CBA054;
+                  background: #cba054;
                   border-radius: 3px;
                 }
                 .max-h-96::-webkit-scrollbar-thumb:hover {
-                  background: #A8823A;
+                  background: #a8823a;
                 }
               `}</style>
-              
+
               {termsData.documents.map((doc) => (
                 <button
                   key={doc.id}
@@ -186,17 +190,21 @@ const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
               {/* <h3 className="text-xl font-bold text-[#0A1A2F] mb-4">
                 {termsInfo.heading || "Overview"}
               </h3> */}
-              
+
               {termsInfo.image && (
                 <div className="mb-4">
-                  <img 
+                  <img
                     src={`${baseUrl}/${termsInfo.image}`}
-                    alt={termsInfo.image_alt || termsInfo.heading || "Legal Services"}
+                    alt={
+                      termsInfo.image_alt ||
+                      termsInfo.heading ||
+                      "Legal Services"
+                    }
                     className="w-full h-48 object-cover rounded-lg"
                   />
                 </div>
               )}
-              
+
               {termsInfo.short_desc && (
                 <div className="text-gray-600 leading-relaxed text-sm">
                   {termsInfo.short_desc}

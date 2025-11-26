@@ -7,6 +7,9 @@ import {
   Users,
   Award,
   ArrowRight,
+  Linkedin,
+  Twitter,
+  Facebook,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -83,24 +86,26 @@ const WhyWork = ({ WorkData = {}, settingInfo = {} }) => {
   // Generate contact hours from settingInfo
   const generateContactHours = () => {
     if (!settingInfo.mon) return "Monday - Friday: 9:00 AM - 5:30 PM";
-    
+
     const days = [
-      { day: 'Mon', hours: settingInfo.mon },
-      { day: 'Tue', hours: settingInfo.tues },
-      { day: 'Wed', hours: settingInfo.wed },
-      { day: 'Thu', hours: settingInfo.thus },
-      { day: 'Fri', hours: settingInfo.fri },
-      { day: 'Sat', hours: settingInfo.sat },
-      { day: 'Sun', hours: settingInfo.sun }
+      { day: "Mon", hours: settingInfo.mon },
+      { day: "Tue", hours: settingInfo.tues },
+      { day: "Wed", hours: settingInfo.wed },
+      { day: "Thu", hours: settingInfo.thus },
+      { day: "Fri", hours: settingInfo.fri },
+      { day: "Sat", hours: settingInfo.sat },
+      { day: "Sun", hours: settingInfo.sun },
     ];
-    
+
     const weekdays = days.slice(0, 5);
-    const hasSameWeekdayHours = weekdays.every(day => day.hours === weekdays[0].hours);
-    
+    const hasSameWeekdayHours = weekdays.every(
+      (day) => day.hours === weekdays[0].hours
+    );
+
     if (hasSameWeekdayHours) {
       return `Monday - Friday: ${weekdays[0].hours}`;
     }
-    
+
     return "View website for detailed hours";
   };
 
@@ -134,6 +139,63 @@ const WhyWork = ({ WorkData = {}, settingInfo = {} }) => {
             {whyWorkData.button_name}
             <ArrowRight className="w-4 h-4 ml-2 inline-block" />
           </Link>
+        </div>
+
+        {/* Global Share Section */}
+        <div className="flex items-center justify-start gap-4 mt-10 text-start">
+          <h3 className="text-[#0A1A2F] font-semibold text-lg ">SHARE :</h3>
+
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            {/* Facebook */}
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+                window.location.href
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+              title="Share on Facebook"
+            >
+              <Facebook className="w-5 h-5" />
+            </a>
+
+            {/* X / Twitter */}
+            <a
+              href={`https://x.com/intent/tweet?url=${encodeURIComponent(
+                window.location.href
+              )}&text=Meet our team members:`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+              title="Share on X / Twitter"
+            >
+              <Twitter className="w-5 h-5" />
+            </a>
+
+            {/* LinkedIn */}
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+                window.location.href
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+              title="Share on LinkedIn"
+            >
+              <Linkedin className="w-5 h-5" />
+            </a>
+
+            {/* Email */}
+            <a
+              href={`mailto:?subject=Meet our legal team&body=${encodeURIComponent(
+                window.location.href
+              )}`}
+              className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+              title="Share via Email"
+            >
+              <Mail className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </div>
 
@@ -222,8 +284,6 @@ const WhyWork = ({ WorkData = {}, settingInfo = {} }) => {
             </div>
           </div>
         </div>
-
-        
       </div>
     </div>
   );

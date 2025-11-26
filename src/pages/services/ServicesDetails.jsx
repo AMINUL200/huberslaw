@@ -30,7 +30,6 @@ const ServicesDetails = () => {
   const currentPageUrl = encodeURIComponent(window.location.href);
 
   console.log(currentPageUrl);
-  
 
   const fetchServiceData = async () => {
     try {
@@ -212,16 +211,18 @@ const ServicesDetails = () => {
             </div>
             {/* Social Share Buttons */}
             <div className="mt-10 flex items-center space-x-4 justify-center">
-             <h3 className="text-[#0A1A2F] font-semibold tracking-wide">SHARE :</h3>
+              <h3 className="text-[#0A1A2F] font-semibold tracking-wide">
+                SHARE :
+              </h3>
               {/* Facebook */}
               <a
                 href={`https://www.facebook.com/sharer/sharer.php?u=${currentPageUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                 className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
                 title="Share on Facebook"
               >
-                <Facebook className="w-5 h-5"/>
+                <Facebook className="w-5 h-5" />
               </a>
 
               {/* Twitter */}
@@ -229,10 +230,10 @@ const ServicesDetails = () => {
                 href={`https://x.com/intent/post?source=${currentPageUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                 className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
+                className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
                 title="Share on Twitter"
               >
-                <Twitter className="w-5 h-5"/>
+                <Twitter className="w-5 h-5" />
               </a>
 
               {/* Instagram */}
@@ -243,7 +244,7 @@ const ServicesDetails = () => {
                 className="p-3 rounded-full bg-[#CBA054] text-white hover:bg-[#a68143] transition"
                 title="Share on LinkedIn"
               >
-                <Instagram className="w-5 h-5"/>
+                <Instagram className="w-5 h-5" />
               </a>
 
               {/* Email */}
@@ -271,7 +272,30 @@ const ServicesDetails = () => {
                   {serviceData.service_name}.
                 </p>
 
-                <div className="space-y-3">
+                <div
+                  className="space-y-3 max-h-96 overflow-y-auto pr-2"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "#CBA054 #F4EEDC",
+                  }}
+                >
+                  {/* Custom scrollbar styles for Webkit browsers */}
+                  <style jsx>{`
+                    .max-h-96::-webkit-scrollbar {
+                      width: 6px;
+                    }
+                    .max-h-96::-webkit-scrollbar-track {
+                      background: #f4eedc;
+                      border-radius: 3px;
+                    }
+                    .max-h-96::-webkit-scrollbar-thumb {
+                      background: #cba054;
+                      border-radius: 3px;
+                    }
+                    .max-h-96::-webkit-scrollbar-thumb:hover {
+                      background: #a8823a;
+                    }
+                  `}</style>
                   {serviceData.pdfs.map((pdf) => (
                     <a
                       key={pdf.id}
@@ -304,6 +328,25 @@ const ServicesDetails = () => {
                 </div>
               </div>
             )}
+            <div className="bg-white rounded-2xl shadow-lg border border-[#E8EEF4] p-6">
+             
+
+              <div className="mb-4">
+                <img
+                  src="/image/img41.jpg"
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+              </div>
+
+              <div className="text-gray-600 leading-relaxed text-sm">
+                Law firms are heavily regulated by the different authorities and
+                we are required to confirm our work with the client as well as
+                with the law society, legal aid agency and other interested
+                parties with the regulatory powers. We can assure our clients
+                that all the regulatory authorities have confirmed that we
+                follow all the regulations.
+              </div>
+            </div>
 
             {/* Contact Card */}
             <div className="bg-gradient-to-r from-[#0A1A2F] to-[#1E354F] rounded-2xl p-6 text-white">

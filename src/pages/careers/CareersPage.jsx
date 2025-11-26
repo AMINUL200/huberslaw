@@ -126,7 +126,7 @@ const CareersPage = () => {
       >
         {activeTab === "vacancies" && <Vacancies vacancies={vacanciesData} />}
         {activeTab === "self-employed" && (
-          <SelfEmployed selfEmployedData={selfEmployedData} />
+          <SelfEmployed selfEmployedData={selfEmployedData} settingInfo={settingInfo} />
         )}
         {activeTab === "why-work" && (
           <WhyWork settingInfo={settingInfo} WorkData={whyWorkData} />
