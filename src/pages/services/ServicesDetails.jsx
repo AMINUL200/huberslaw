@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
   ChevronRight,
@@ -23,6 +23,7 @@ import { getServiceIcon } from "../../utils/getServiceIcon";
 
 const ServicesDetails = () => {
   const { serviceSlug } = useParams();
+  const [pageInfo, setPageInfo] = useState(null);
   const [serviceData, setServiceData] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const baseUrl = import.meta.env.VITE_APP_BASE_URL;
@@ -37,7 +38,8 @@ const ServicesDetails = () => {
       const response = await api.get(`/service-details/${serviceSlug}`);
 
       if (response.data.status) {
-        setServiceData(response.data.data);
+        setServiceData(response.data.data?.service);
+        setPageInfo(response.data.data?.section);
       } else {
         toast.error("Failed to load service details.");
       }
@@ -329,22 +331,16 @@ const ServicesDetails = () => {
               </div>
             )}
             <div className="bg-white rounded-2xl shadow-lg border border-[#E8EEF4] p-6">
-             
-
               <div className="mb-4">
                 <img
-                  src="/image/img41.jpg"
+                  src={`${baseUrl}${pageInfo?.image}`}
+                  alt={pageInfo?.image_alt}
                   className="w-full h-48 object-cover rounded-lg"
                 />
               </div>
 
               <div className="text-gray-600 leading-relaxed text-sm">
-                Law firms are heavily regulated by the different authorities and
-                we are required to confirm our work with the client as well as
-                with the law society, legal aid agency and other interested
-                parties with the regulatory powers. We can assure our clients
-                that all the regulatory authorities have confirmed that we
-                follow all the regulations.
+                {pageInfo?.description}
               </div>
             </div>
 

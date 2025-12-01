@@ -54,8 +54,8 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
     {
       id: "booking-appointment-messages",
       label: "Handle Booking Appointment",
-      icon:  <Mail className="w-5 h-5" />,
-      path: "/admin/handle-booking-appoint"
+      icon: <Mail className="w-5 h-5" />,
+      path: "/admin/handle-booking-appoint",
     },
     {
       id: "homepage",
@@ -84,9 +84,23 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
     },
     {
       id: "services",
-      label: "Handle Services",
+      label: " Services",
       icon: <Package className="w-5 h-5" />,
-      path: "/admin/handle-services",
+      // path: "/admin/handle-services",
+      children: [
+        {
+          id: "handle-services",
+          label: "Handle Services",
+          icon: <Package className="w-5 h-5" />,
+          path: "/admin/handle-services",
+        },
+        {
+          id: "handle-page",
+          label: "Handle Page Heading",
+          icon: <Package className="w-5 h-5" />,
+          path: "/admin/handle-services-page",
+        },
+      ],
     },
     {
       id: "team",
@@ -161,7 +175,7 @@ const AdminSidebar = ({ isOpen, setIsOpen }) => {
           id: "emailSetting",
           label: "Email Setting",
           icon: <Settings className="w-4 h-4" />,
-          path :"/admin/email-setting"
+          path: "/admin/email-setting",
         },
       ],
     },

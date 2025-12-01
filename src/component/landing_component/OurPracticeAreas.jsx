@@ -20,6 +20,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { getServiceIcon } from "../../utils/getServiceIcon";
 
 const OurPracticeAreas = ({ servicesData = [] }) => {
+
+  const pageInfo = servicesData?.section;
+
+  // console.log(pageInfo);
+  
+  
   // Swiper breakpoints configuration
   const swiperBreakpoints = {
     320: {
@@ -48,16 +54,17 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
           <h1
             className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-6 leading-tight"
             itemProp="headline"
+            aria-label={pageInfo?.title_meta}
           >
-            {servicesData[0]?.page_heading}
+            {pageInfo?.section_title}
           </h1>
 
-          <p
+          {/* <p
             className="text-xl text-gray-600 max-w-3xl mx-auto"
             itemProp="description"
           >
             {servicesData[0]?.page_description}
-          </p>
+          </p> */}
         </div>
 
         {/* Swiper Cards Section */}
@@ -85,7 +92,7 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
             }}
             className="practice-areas-swiper"
           >
-            {servicesData.slice(0, 7).map((service) => (
+            {servicesData.service.slice(0, 7).map((service) => (
               <SwiperSlide key={service.id}>
                 <div className="bg-white rounded-2xl shadow-xl border border-[#E8EEF4] overflow-hidden transform transition-all duration-500 hover:shadow-2xl hover:scale-105 group flex flex-col h-full">
                   {/* Header */}
@@ -145,25 +152,25 @@ const OurPracticeAreas = ({ servicesData = [] }) => {
         <div className="scrolling-text-container">
           <div className="scrolling-text-content">
             <span className="text-[#CBA054] text-3xl font-semibold whitespace-nowrap">
-             The relationship between lawyer and client is the key to success
+             {pageInfo?.section_footer}
             </span>
           </div>
           {/* Duplicate for seamless loop */}
           <div className="scrolling-text-content" aria-hidden="true">
             <span className="text-[#CBA054] text-3xl font-semibold whitespace-nowrap">
-             The relationship between lawyer and client is the key to success
+             {pageInfo?.section_footer}
             </span>
           </div>
           {/* Duplicate for seamless loop */}
           <div className="scrolling-text-content" aria-hidden="true">
             <span className="text-[#CBA054] text-3xl font-semibold whitespace-nowrap">
-             The relationship between lawyer and client is the key to success
+            {pageInfo?.section_footer}
             </span>
           </div>
           {/* Duplicate for seamless loop */}
           <div className="scrolling-text-content" aria-hidden="true">
             <span className="text-[#CBA054] text-3xl font-semibold whitespace-nowrap">
-             The relationship between lawyer and client is the key to success
+            {pageInfo?.section_footer}
             </span>
           </div>
          

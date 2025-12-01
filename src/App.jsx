@@ -40,6 +40,7 @@ import BookingAccept from "./pages/booking/BookingAccept";
 import BookingCancel from "./pages/booking/BookingCancel";
 import BookingReschedule from "./pages/booking/BookingReschedule";
 import HandleBookingAppointment from "./pages/admin/booking_appointment/HandleBookingAppointment";
+import HandleServicePageHeading from "./pages/admin/services/HandleServicePageHeading";
 
 const App = () => {
   const { token, user } = useAuth();
@@ -141,6 +142,7 @@ const App = () => {
 
               <Route path="handle-services" element={<HandleServices />} />
               <Route path="add-services" element={<AddServices />} />
+              <Route path="handle-services-page" element={<HandleServicePageHeading/>}/>
 
               <Route path="handle-team" element={<HandleTeam />} />
               <Route path="add-team" element={<AddTeam />} />

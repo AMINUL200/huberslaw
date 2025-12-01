@@ -42,6 +42,8 @@ const HandleBanner = () => {
       const response = await api.get("/banner");
       if (response.data.status) {
         setBanners(response.data.data);
+        console.log(response.data.data);
+        
       }
     } catch (error) {
       console.error("Error fetching banners:", error);
@@ -239,6 +241,8 @@ const HandleBanner = () => {
 
   // Toggle banner visibility
   const toggleVisibility = async (banner) => {
+    console.log(banner);
+    
     try {
       const response = await api.post(`/banner/status/${banner.id}`);
       if (response.data.status) {

@@ -31,17 +31,18 @@ const Services = () => {
       const response = await api.get("/service");
 
       if (response.data.status) {
-        setServicesData(response.data.data);
+        const res = response.data.data;
+        setServicesData(res.service);
         setPageInfo({
-          title: response.data.data[0]?.page_heading || "Our Practice Areas",
+          title: res?.section?.section_title || "Our Practice Areas",
           title_meta:
-            response.data.data[0]?.page_heading_meta ||
+            res?.section?.title_meta ||
             "Professional Legal Services",
           description:
-            response.data.data[0]?.page_description ||
+            res.section?.section_para ||
             "Comprehensive legal services across multiple practice areas. Our experienced attorneys provide expert counsel and representation tailored to your specific needs.",
           description_meta:
-            response.data.data[0]?.page_desc_meta ||
+             res.section?.section_para||
             "Comprehensive legal services across multiple practice areas. Our experienced attorneys provide expert counsel and representation tailored to your specific needs.",
         });
       } else {
