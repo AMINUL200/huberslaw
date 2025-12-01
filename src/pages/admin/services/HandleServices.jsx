@@ -8,11 +8,16 @@ import {
   FileText, 
   Eye, 
   X,
-  Download,
   Upload,
   ChevronDown,
   ChevronUp,
-  MoreVertical
+  MoreVertical,
+  Search,
+  Filter,
+  List,
+  Calendar,
+  File,
+  Hash
 } from "lucide-react";
 
 const HandleServices = () => {
@@ -21,7 +26,6 @@ const HandleServices = () => {
   const [loading, setLoading] = useState(true);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const storageUrl = import.meta.env.VITE_APP_BASE_URL;
 
@@ -34,6 +38,9 @@ const HandleServices = () => {
     pdf_name: "",
     pdf: null,
   });
+
+  // Search and filter states
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Mobile menu state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(null);
@@ -79,6 +86,16 @@ const HandleServices = () => {
   useEffect(() => {
     fetchServices();
   }, []);
+
+  // Filter services based on search
+  const filteredServices = services.filter((service) => {
+    const matchesSearch =
+      service.service_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.service_description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.slug?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesSearch;
+  });
 
   // Handle delete service
   const handleDelete = async (serviceId) => {
@@ -191,103 +208,96 @@ const HandleServices = () => {
     setSelectedServiceId(null);
   };
 
-  // Toggle service expansion on mobile
-  const toggleServiceExpansion = (serviceId) => {
-    setExpandedService(expandedService === serviceId ? null : serviceId);
-  };
+  // Service List Item Component (for all screen sizes)
+  const ServiceListItem = ({ service }) => (
+    <div className="border-b border-[#E8EEF4] bg-white hover:bg-gray-50 transition-colors">
+      <div className="p-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          {/* Left Section: Service Info */}
+          <div className="flex-1">
+            <div className="flex items-start space-x-3">
+              <div className="flex-shrink-0 h-10 w-10 bg-[#F4EEDC] rounded-full flex items-center justify-center">
+                <List className="w-5 h-5 text-[#CBA054]" />
+              </div>
+              <div className="flex-1">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div>
+                    <h3 className="text-sm font-medium text-[#0A1A2F]">
+                      {service.service_name}
+                    </h3>
+                    <div className="flex items-center space-x-3 mt-1">
+                      <div className="flex items-center space-x-1 text-sm text-gray-600">
+                        <Hash className="w-3 h-3" />
+                        <span>{service.slug}</span>
+                      </div>
+                      <div className="flex items-center space-x-1 text-sm text-gray-600">
+                        <Calendar className="w-3 h-3" />
+                        <span>{new Date(service.created_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-2">
+                  <p className="text-sm text-gray-600 line-clamp-1">
+                    {service.service_description}
+                  </p>
+                </div>
 
-  // Mobile Service Card Component
-  const MobileServiceCard = ({ service }) => (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 p-4 mb-4">
-      <div className="flex justify-between items-start mb-3">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-[#0A1A2F] mb-1">
-            {service.service_name}
-          </h3>
-          <p className="text-sm text-gray-500 mb-2">{service.slug}</p>
-          <div className="text-xs text-gray-500">
-            Created: {new Date(service.created_at).toLocaleDateString()}
-          </div>
-        </div>
-        <div className="relative">
-          <button
-            onClick={() => setMobileMenuOpen(mobileMenuOpen === service.id ? null : service.id)}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <MoreVertical className="w-4 h-4 text-gray-600" />
-          </button>
-          {mobileMenuOpen === service.id && (
-            <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg border border-gray-200 z-10 min-w-[140px]">
-              <button
-                onClick={() => handleEdit(service.id)}
-                className="w-full text-left px-4 py-2 text-sm text-[#0A1A2F] hover:bg-gray-50 flex items-center space-x-2"
-              >
-                <Edit className="w-3 h-3" />
-                <span>Edit</span>
-              </button>
-              <button
-                onClick={() => handleAddPdf(service.id)}
-                className="w-full text-left px-4 py-2 text-sm text-[#0A1A2F] hover:bg-gray-50 flex items-center space-x-2"
-              >
-                <Upload className="w-3 h-3" />
-                <span>Add PDF</span>
-              </button>
-              <button
-                onClick={() => handleViewPdfs(service.id)}
-                className="w-full text-left px-4 py-2 text-sm text-[#0A1A2F] hover:bg-gray-50 flex items-center space-x-2"
-              >
-                <FileText className="w-3 h-3" />
-                <span>View PDFs</span>
-              </button>
-              <button
-                onClick={() => handleDelete(service.id)}
-                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 flex items-center space-x-2"
-              >
-                <Trash2 className="w-3 h-3" />
-                <span>Delete</span>
-              </button>
+                {service.feature && service.feature.length > 0 && (
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {service.feature.slice(0, 2).map((feature, index) => (
+                      <span
+                        key={index}
+                        className="inline-block bg-gray-100 rounded-full px-2 py-1 text-xs text-gray-700"
+                      >
+                        {feature}
+                      </span>
+                    ))}
+                    {service.feature.length > 2 && (
+                      <span className="inline-block bg-gray-100 rounded-full px-2 py-1 text-xs text-gray-700">
+                        +{service.feature.length - 2} more
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-          )}
+          </div>
+
+          {/* Right Section: Actions */}
+          <div className="flex items-center justify-end space-x-2">
+            <button
+              onClick={() => handleEdit(service.id)}
+              className="p-2 text-[#0A1A2F] hover:text-[#CBA054] hover:bg-gray-100 rounded-lg transition-colors"
+              title="Edit Service"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => handleAddPdf(service.id)}
+              className="p-2 text-[#0A1A2F] hover:text-[#CBA054] hover:bg-gray-100 rounded-lg transition-colors"
+              title="Add PDF"
+            >
+              <Upload className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => handleViewPdfs(service.id)}
+              className="p-2 text-[#0A1A2F] hover:text-[#CBA054] hover:bg-gray-100 rounded-lg transition-colors"
+              title="View PDFs"
+            >
+              <FileText className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => handleDelete(service.id)}
+              className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+              title="Delete Service"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
-
-      <button
-        onClick={() => toggleServiceExpansion(service.id)}
-        className="w-full flex items-center justify-between py-2 text-sm text-[#0A1A2F] hover:bg-gray-50 rounded-lg transition-colors"
-      >
-        <span>View Details</span>
-        {expandedService === service.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-      </button>
-
-      {expandedService === service.id && (
-        <div className="mt-3 pt-3 border-t border-gray-200 space-y-3">
-          <div>
-            <h4 className="text-sm font-medium text-gray-700 mb-1">Description</h4>
-            <p className="text-sm text-gray-600 line-clamp-3">
-              {service.service_description}
-            </p>
-          </div>
-          
-          <div>
-            <h4 className="text-sm font-medium text-gray-700 mb-1">Features</h4>
-            <div className="flex flex-wrap gap-1">
-              {service.feature?.slice(0, 3).map((feature, index) => (
-                <span
-                  key={index}
-                  className="inline-block bg-gray-100 rounded-full px-2 py-1 text-xs text-gray-700"
-                >
-                  {feature}
-                </span>
-              ))}
-              {service.feature?.length > 3 && (
-                <span className="inline-block bg-gray-100 rounded-full px-2 py-1 text-xs text-gray-700">
-                  +{service.feature.length - 3} more
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 
@@ -311,32 +321,126 @@ const HandleServices = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0 mb-6 sm:mb-8">
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#0A1A2F]">
-              Manage Services
-            </h1>
-            <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
-              Manage your services and associated PDF documents
-            </p>
+        {/* Header - Fully Responsive */}
+        <div className="mb-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+            <div className="flex-1">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#0A1A2F]">
+                Manage Services
+              </h1>
+              <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">
+                Manage your services and associated PDF documents
+              </p>
+            </div>
+            <div className="flex items-center justify-end space-x-2 sm:space-x-3">
+              <button
+                onClick={handleAddNew}
+                className="flex items-center px-3 sm:px-4 py-2 bg-[#0A1A2F] text-white rounded-lg hover:bg-[#CBA054] transition-colors text-sm font-medium"
+              >
+                <Plus className="w-4 h-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Add New Service</span>
+                <span className="sm:hidden">New Service</span>
+              </button>
+            </div>
           </div>
-          <button
-            onClick={handleAddNew}
-            className="bg-[#0A1A2F] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold hover:bg-[#CBA054] transition-colors duration-200 flex items-center justify-center space-x-2 w-full sm:w-auto"
-          >
-            <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span>Add New Service</span>
-          </button>
+        </div>
+
+        {/* Stats Cards - Responsive */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 border border-[#E8EEF4]">
+            <div className="flex items-center">
+              <div className="p-2 bg-[#F4EEDC] rounded-lg">
+                <List className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
+              </div>
+              <div className="ml-3">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
+                  Total Services
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
+                  {services.length}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 border border-[#E8EEF4]">
+            <div className="flex items-center">
+              <div className="p-2 bg-[#F4EEDC] rounded-lg">
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
+              </div>
+              <div className="ml-3">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
+                  With PDFs
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
+                  {services.length}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 border border-[#E8EEF4]">
+            <div className="flex items-center">
+              <div className="p-2 bg-[#F4EEDC] rounded-lg">
+                <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
+              </div>
+              <div className="ml-3">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
+                  Active
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
+                  {services.length}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 border border-[#E8EEF4]">
+            <div className="flex items-center">
+              <div className="p-2 bg-[#F4EEDC] rounded-lg">
+                <Upload className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
+              </div>
+              <div className="ml-3">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
+                  PDF Uploads
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
+                  {services.length}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Search Section - Responsive */}
+        <div className="bg-white rounded-lg shadow mb-4 sm:mb-6 p-4 border border-[#E8EEF4]">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Search services by name, description, or slug..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-[#E8EEF4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBA054]/20 text-[#0A1A2F] placeholder-gray-500 text-sm sm:text-base"
+                />
+              </div>
+            </div>
+
+            <div className="text-sm text-[#0A1A2F] text-center lg:text-right whitespace-nowrap">
+              Showing {filteredServices.length} of {services.length} services
+            </div>
+          </div>
         </div>
 
         {/* PDF Management Sections */}
         {(showPdfForm || showPdfList) && (
           <div className="mb-6 sm:mb-8 bg-white rounded-lg shadow-md p-4 sm:p-6 border border-[#CBA054]">
             <div className="flex justify-between items-center mb-4 sm:mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-[#0A1A2F]">
+              <h2 className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
                 {showPdfForm ? "Add PDF" : "Service PDFs"}
               </h2>
               <button
@@ -381,7 +485,7 @@ const HandleServices = () => {
 
                 <button
                   type="submit"
-                  className="bg-[#0A1A2F] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md font-semibold hover:bg-[#CBA054] transition-colors duration-200 flex items-center space-x-2 w-full sm:w-auto justify-center"
+                  className="w-full sm:w-auto bg-[#0A1A2F] text-white px-4 sm:px-6 py-2 sm:py-3 rounded-md font-semibold hover:bg-[#CBA054] transition-colors duration-200 flex items-center justify-center space-x-2"
                 >
                   <Upload className="w-4 h-4" />
                   <span>Upload PDF</span>
@@ -410,12 +514,17 @@ const HandleServices = () => {
                           className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-3 sm:p-4 border border-gray-200 rounded-lg space-y-2 sm:space-y-0"
                         >
                           <div className="flex-1">
-                            <h3 className="font-semibold text-[#0A1A2F] text-sm sm:text-base">
-                              {pdf.pdf_name}
-                            </h3>
-                            <p className="text-xs sm:text-sm text-gray-500">
-                              Uploaded: {new Date(pdf.created_at).toLocaleDateString()}
-                            </p>
+                            <div className="flex items-center space-x-3">
+                              <File className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
+                              <div>
+                                <h3 className="font-semibold text-[#0A1A2F] text-sm sm:text-base">
+                                  {pdf.pdf_name}
+                                </h3>
+                                <p className="text-xs sm:text-sm text-gray-500">
+                                  Uploaded: {new Date(pdf.created_at).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
                           </div>
                           <div className="flex gap-2">
                             <a
@@ -445,130 +554,40 @@ const HandleServices = () => {
           </div>
         )}
 
-        {/* Services List */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          {services.length === 0 ? (
-            <div className="text-center py-8 sm:py-12 text-[#0A1A2F]">
-              <FileText className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-4" />
-              <p className="text-lg sm:text-xl font-semibold mb-2">No services found</p>
-              <p className="text-gray-600 text-sm sm:text-base">
-                Click "Add New Service" to create your first service
+        {/* Services List Container */}
+        <div className="bg-white rounded-lg shadow border border-[#E8EEF4] overflow-hidden">
+          {/* List Header for Desktop */}
+          <div className="hidden md:grid md:grid-cols-12 gap-4 p-4 bg-gray-50 border-b border-[#E8EEF4]">
+            <div className="col-span-5">
+              <span className="text-xs font-medium text-gray-500 uppercase">Service Information</span>
+            </div>
+            <div className="col-span-4">
+              <span className="text-xs font-medium text-gray-500 uppercase">Description & Features</span>
+            </div>
+            <div className="col-span-3 text-right">
+              <span className="text-xs font-medium text-gray-500 uppercase">Actions</span>
+            </div>
+          </div>
+
+          {/* Services List Items */}
+          <div className="divide-y divide-[#E8EEF4]">
+            {filteredServices.map((service) => (
+              <ServiceListItem key={service.id} service={service} />
+            ))}
+          </div>
+          
+          {filteredServices.length === 0 && (
+            <div className="text-center py-12">
+              <List className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500 text-lg">
+                No services found
+              </p>
+              <p className="text-gray-400 text-sm mt-2">
+                {searchTerm 
+                  ? "Try a different search term" 
+                  : "Click 'Add New Service' to create your first service"}
               </p>
             </div>
-          ) : (
-            <>
-              {/* Desktop Table */}
-              <div className="hidden lg:block overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-[#0A1A2F]">
-                    <tr>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                        Service Name
-                      </th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                        Description
-                      </th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                        Features
-                      </th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                        Created Date
-                      </th>
-                      <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-white uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {services.map((service) => (
-                      <tr
-                        key={service.id}
-                        className="hover:bg-gray-50 transition-colors duration-150"
-                      >
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-[#0A1A2F]">
-                            {service.service_name}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {service.slug}
-                          </div>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <div className="text-sm text-[#0A1A2F] max-w-xs line-clamp-2">
-                            {service.service_description}
-                          </div>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4">
-                          <div className="text-sm text-[#0A1A2F]">
-                            {service.feature
-                              ?.slice(0, 2)
-                              .map((feature, index) => (
-                                <span
-                                  key={index}
-                                  className="inline-block bg-gray-100 rounded-full px-2 py-1 text-xs font-semibold text-gray-700 mr-1 mb-1"
-                                >
-                                  {feature}
-                                </span>
-                              ))}
-                            {service.feature?.length > 2 && (
-                              <span className="inline-block bg-gray-100 rounded-full px-2 py-1 text-xs font-semibold text-gray-700">
-                                +{service.feature.length - 2} more
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-[#0A1A2F]">
-                          {new Date(service.created_at).toLocaleDateString()}
-                        </td>
-                        <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <div className="flex flex-col gap-2">
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() => handleEdit(service.id)}
-                                className="text-[#0A1A2F] hover:text-[#CBA054] transition-colors duration-200 text-xs flex items-center space-x-1"
-                              >
-                                <Edit className="w-3 h-3" />
-                                <span>Edit</span>
-                              </button>
-                              <button
-                                onClick={() => handleDelete(service.id)}
-                                className="text-red-600 hover:text-red-800 transition-colors duration-200 text-xs flex items-center space-x-1"
-                              >
-                                <Trash2 className="w-3 h-3" />
-                                <span>Delete</span>
-                              </button>
-                            </div>
-                            <div className="flex gap-2">
-                              <button
-                                onClick={() => handleAddPdf(service.id)}
-                                className="bg-green-500 text-white px-2 py-1 rounded text-xs hover:bg-green-600 transition-colors duration-200 flex items-center space-x-1"
-                              >
-                                <Upload className="w-3 h-3" />
-                                <span>Add PDF</span>
-                              </button>
-                              <button
-                                onClick={() => handleViewPdfs(service.id)}
-                                className="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600 transition-colors duration-200 flex items-center space-x-1"
-                              >
-                                <FileText className="w-3 h-3" />
-                                <span>View PDFs</span>
-                              </button>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Mobile Cards */}
-              <div className="lg:hidden p-4">
-                {services.map((service) => (
-                  <MobileServiceCard key={service.id} service={service} />
-                ))}
-              </div>
-            </>
           )}
         </div>
       </div>

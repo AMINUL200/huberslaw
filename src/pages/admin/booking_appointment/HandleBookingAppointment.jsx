@@ -15,7 +15,6 @@ import {
   RefreshCw,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
   MoreVertical,
   MapPin,
   Briefcase,
@@ -306,90 +305,110 @@ const HandleBookingAppointment = () => {
     return pages;
   };
 
-  // Mobile booking card component
-  const MobileBookingCard = ({ booking }) => (
-    <div className="bg-white rounded-lg shadow p-4 mb-4 border border-[#E8EEF4]">
-      <div className="flex justify-between items-start mb-3">
-        <div className="flex items-center space-x-3">
-          <div className="flex-shrink-0 h-10 w-10 bg-[#F4EEDC] rounded-full flex items-center justify-center">
-            <User className="w-5 h-5 text-[#CBA054]" />
-          </div>
-          <div>
-            <div className="text-sm font-medium text-[#0A1A2F]">
-              {booking.full_name}
+  // Booking List Item Component (for all screen sizes)
+  const BookingListItem = ({ booking }) => (
+    <div className="bg-white rounded-lg shadow p-4 border border-[#E8EEF4] hover:shadow-md transition-shadow">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between">
+        {/* Left Section: Client Info */}
+        <div className="flex-1 mb-4 lg:mb-0 lg:pr-4">
+          <div className="flex items-start space-x-3">
+            <div className="flex-shrink-0 h-10 w-10 bg-[#F4EEDC] rounded-full flex items-center justify-center">
+              <User className="w-5 h-5 text-[#CBA054]" />
             </div>
-            <div className="text-xs text-gray-500">{booking.email}</div>
+            <div className="flex-1">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3">
+                <h3 className="text-sm font-medium text-[#0A1A2F]">
+                  {booking.full_name}
+                </h3>
+                <div className="flex items-center space-x-2 mt-1 sm:mt-0">
+                  {getStatusBadge(booking.status)}
+                  {getViewStatusBadge(booking.is_view)}
+                </div>
+              </div>
+              
+              <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                <div className="flex items-center space-x-2">
+                  <Mail className="w-3 h-3 text-gray-400" />
+                  <span className="text-gray-600 truncate">{booking.email}</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Phone className="w-3 h-3 text-gray-400" />
+                  <span className="text-gray-600">{booking.phone_no}</span>
+                </div>
+                {booking.organisation && (
+                  <div className="flex items-center space-x-2 sm:col-span-2">
+                    <Building className="w-3 h-3 text-gray-400" />
+                    <span className="text-gray-600 truncate">{booking.organisation}</span>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
-        <div className="relative">
-          <button
-            onClick={() => setMobileMenuOpen(mobileMenuOpen === booking.id ? null : booking.id)}
-            className="p-1 hover:bg-gray-100 rounded"
-          >
-            <MoreVertical className="w-4 h-4 text-gray-500" />
-          </button>
-          {mobileMenuOpen === booking.id && (
-            <div className="absolute right-0 top-8 bg-white shadow-lg rounded-lg border border-gray-200 z-10 min-w-[120px]">
-              <button
-                onClick={() => openBookingDetails(booking)}
-                className="w-full text-left px-3 py-2 text-sm text-[#0A1A2F] hover:bg-gray-50 flex items-center space-x-2"
-              >
-                <Eye className="w-3 h-3" />
-                <span>View</span>
-              </button>
-              <button
-                onClick={() => updateViewStatus(booking.id, booking.is_view)}
-                className="w-full text-left px-3 py-2 text-sm text-[#0A1A2F] hover:bg-gray-50 flex items-center space-x-2"
-              >
-                {booking.is_view === "closed" ? (
-                  <>
-                    <RefreshCw className="w-3 h-3" />
-                    <span>Reopen</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle className="w-3 h-3" />
-                    <span>Close</span>
-                  </>
-                )}
-              </button>
+
+        {/* Right Section: Service & Appointment Info */}
+        <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row items-start md:items-center lg:items-start xl:items-center justify-between space-y-3 md:space-y-0 md:space-x-4 lg:space-x-0 lg:space-y-3 xl:space-y-0 xl:space-x-4">
+          <div className="space-y-2">
+            <div>
+              <div className="text-sm font-medium text-[#0A1A2F]">
+                {booking.service_name}
+              </div>
+              <div className="text-xs text-gray-500">
+                Lawyer: {booking.preferred_lawyer}
+              </div>
             </div>
-          )}
+            
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-1">
+                <Calendar className="w-3 h-3 text-gray-400" />
+                <span className="text-sm text-gray-600">{formatDate(booking.date)}</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Clock className="w-3 h-3 text-gray-400" />
+                <span className="text-sm text-gray-600">{formatTime(booking.time)}</span>
+              </div>
+            </div>
+
+            {booking.reschedule_date && (
+              <div className="text-xs text-yellow-600 bg-yellow-50 px-2 py-1 rounded">
+                Rescheduled: {formatDate(booking.reschedule_date)} at {formatTime(booking.reschedule_time)}
+              </div>
+            )}
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center space-x-2 self-end md:self-auto">
+            <button
+              onClick={() => openBookingDetails(booking)}
+              className="p-2 text-[#0A1A2F] hover:text-[#CBA054] hover:bg-gray-50 rounded-lg transition-colors"
+              title="View Details"
+            >
+              <Eye className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => updateViewStatus(booking.id, booking.is_view)}
+              className="p-2 text-[#0A1A2F] hover:text-[#CBA054] hover:bg-gray-50 rounded-lg transition-colors"
+              title={booking.is_view === "closed" ? "Reopen" : "Mark as Closed"}
+            >
+              {booking.is_view === "closed" ? (
+                <RefreshCw className="w-4 h-4" />
+              ) : (
+                <CheckCircle className="w-4 h-4" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="space-y-2 text-sm">
-        <div className="flex justify-between">
-          <span className="text-gray-500">Service:</span>
-          <span className="text-[#0A1A2F] font-medium">{booking.service_name}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">Lawyer:</span>
-          <span className="text-[#0A1A2F]">{booking.preferred_lawyer}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">Date:</span>
-          <span className="text-[#0A1A2F]">{formatDate(booking.date)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">Time:</span>
-          <span className="text-[#0A1A2F]">{formatTime(booking.time)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">Status:</span>
-          <div>{getStatusBadge(booking.status)}</div>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">View Status:</span>
-          <div>{getViewStatusBadge(booking.is_view)}</div>
-        </div>
-        {booking.organisation && (
-          <div className="flex justify-between">
-            <span className="text-gray-500">Organisation:</span>
-            <span className="text-[#0A1A2F]">{booking.organisation}</span>
+      {/* Message preview for mobile */}
+      {booking.message && (
+        <div className="mt-3 pt-3 border-t border-gray-100">
+          <div className="flex items-start space-x-2">
+            <MessageCircle className="w-3 h-3 text-gray-400 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-gray-600 truncate">{booking.message}</p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 
@@ -405,12 +424,12 @@ const HandleBookingAppointment = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-6 sm:mb-8">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center space-y-4 sm:space-y-0">
-            <div>
+        {/* Header - Responsive */}
+        <div className="mb-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+            <div className="flex-1">
               <h1 className="text-2xl sm:text-3xl font-bold text-[#0A1A2F]">
                 Booking Appointments
               </h1>
@@ -418,81 +437,87 @@ const HandleBookingAppointment = () => {
                 Manage and review all booking appointments from your website
               </p>
             </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
+            <div className="flex items-center justify-end space-x-2 sm:space-x-3">
               <button
                 onClick={exportToCSV}
-                className="flex items-center px-3 sm:px-4 py-2 bg-[#0A1A2F] text-white rounded-lg hover:bg-[#CBA054] transition-colors text-sm sm:text-base"
+                className="flex items-center px-3 sm:px-4 py-2 bg-[#0A1A2F] text-white rounded-lg hover:bg-[#CBA054] transition-colors text-sm"
+                title="Export to CSV"
               >
-                <Download className="w-4 h-4 mr-1 sm:mr-2" />
+                <Download className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Export CSV</span>
-                <span className="sm:hidden">Export</span>
               </button>
               <button
                 onClick={fetchBookings}
-                className="flex items-center px-3 sm:px-4 py-2 bg-[#0A1A2F] text-white rounded-lg hover:bg-[#CBA054] transition-colors text-sm sm:text-base"
+                className="flex items-center px-3 sm:px-4 py-2 bg-[#0A1A2F] text-white rounded-lg hover:bg-[#CBA054] transition-colors text-sm"
+                title="Refresh Data"
               >
-                <RefreshCw className="w-4 h-4 mr-1 sm:mr-2" />
+                <RefreshCw className="w-4 h-4 sm:mr-2" />
                 <span className="hidden sm:inline">Refresh</span>
-                <span className="sm:hidden">Refresh</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white rounded-lg shadow p-3 sm:p-4 md:p-6 border border-[#E8EEF4]">
+        {/* Stats Cards - Responsive */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 border border-[#E8EEF4]">
             <div className="flex items-center">
-              <div className="p-1 sm:p-2 bg-[#F4EEDC] rounded-lg">
-                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#CBA054]" />
+              <div className="p-2 bg-[#F4EEDC] rounded-lg">
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
               </div>
-              <div className="ml-2 sm:ml-3 md:ml-4">
+              <div className="ml-3">
                 <p className="text-xs sm:text-sm font-medium text-gray-600">
                   Total Bookings
                 </p>
-                <p className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A1A2F]">
+                <p className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
                   {bookings.length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-3 sm:p-4 md:p-6 border border-[#E8EEF4]">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 border border-[#E8EEF4]">
             <div className="flex items-center">
-              <div className="p-1 sm:p-2 bg-[#F4EEDC] rounded-lg">
-                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#CBA054]" />
+              <div className="p-2 bg-[#F4EEDC] rounded-lg">
+                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
               </div>
-              <div className="ml-2 sm:ml-3 md:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-gray-600">Accepted</p>
-                <p className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A1A2F]">
+              <div className="ml-3">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
+                  Accepted
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
                   {bookings.filter((b) => b.status === "accepted").length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-3 sm:p-4 md:p-6 border border-[#E8EEF4]">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 border border-[#E8EEF4]">
             <div className="flex items-center">
-              <div className="p-1 sm:p-2 bg-[#F4EEDC] rounded-lg">
-                <Clock className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#CBA054]" />
+              <div className="p-2 bg-[#F4EEDC] rounded-lg">
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
               </div>
-              <div className="ml-2 sm:ml-3 md:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-gray-600">New</p>
-                <p className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A1A2F]">
+              <div className="ml-3">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
+                  New
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
                   {bookings.filter((b) => b.status === "new").length}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-3 sm:p-4 md:p-6 border border-[#E8EEF4]">
+          <div className="bg-white rounded-lg shadow p-3 sm:p-4 border border-[#E8EEF4]">
             <div className="flex items-center">
-              <div className="p-1 sm:p-2 bg-[#F4EEDC] rounded-lg">
-                <XCircle className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-[#CBA054]" />
+              <div className="p-2 bg-[#F4EEDC] rounded-lg">
+                <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
               </div>
-              <div className="ml-2 sm:ml-3 md:ml-4">
-                <p className="text-xs sm:text-sm font-medium text-gray-600">Cancelled</p>
-                <p className="text-lg sm:text-xl md:text-2xl font-bold text-[#0A1A2F]">
+              <div className="ml-3">
+                <p className="text-xs sm:text-sm font-medium text-gray-600">
+                  Cancelled
+                </p>
+                <p className="text-lg sm:text-xl font-bold text-[#0A1A2F]">
                   {bookings.filter((b) => b.status === "cancelled").length}
                 </p>
               </div>
@@ -500,16 +525,16 @@ const HandleBookingAppointment = () => {
           </div>
         </div>
 
-        {/* Filters and Search */}
-        <div className="bg-white rounded-lg shadow mb-4 sm:mb-6 p-3 sm:p-4 border border-[#E8EEF4]">
-          <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+        {/* Filters and Search - Responsive */}
+        <div className="bg-white rounded-lg shadow mb-4 sm:mb-6 p-4 border border-[#E8EEF4]">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
               <div className="flex items-center space-x-2">
                 <Filter className="w-4 h-4 text-[#0A1A2F]" />
                 <select
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                  className="border border-[#CBA054] rounded-lg px-2 sm:px-3 py-1 sm:py-2 focus:outline-none focus:ring-2 focus:ring-[#CBA054]/20 text-[#0A1A2F] text-sm w-full sm:w-auto"
+                  className="border border-[#CBA054] rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#CBA054]/20 text-[#0A1A2F] text-sm w-full sm:w-auto"
                 >
                   <option value="all">All Status</option>
                   <option value="new">New</option>
@@ -519,39 +544,41 @@ const HandleBookingAppointment = () => {
                 </select>
               </div>
 
-              <div className="flex items-center space-x-2 bg-gray-100 rounded-lg px-3 py-2 border border-[#E8EEF4]">
-                <Search className="w-4 h-4 text-[#0A1A2F]" />
-                <input
-                  type="text"
-                  placeholder="Search bookings..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="bg-transparent border-none focus:outline-none focus:ring-0 text-[#0A1A2F] placeholder-gray-500 text-sm w-full"
-                />
+              <div className="flex-1 sm:w-64 lg:w-80">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search by name, email, service, lawyer, or organisation..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-[#E8EEF4] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBA054]/20 text-[#0A1A2F] placeholder-gray-500 text-sm"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="text-sm text-[#0A1A2F] text-center sm:text-left">
+            <div className="text-sm text-[#0A1A2F] text-center lg:text-right">
               Showing {filteredBookings.length} of {bookings.length} bookings
             </div>
           </div>
         </div>
 
         {/* Items Per Page and Pagination Controls - Top */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-2 sm:space-y-0">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-2">
           <div className="flex items-center space-x-2">
             <span className="text-sm text-[#0A1A2F]">Show</span>
             <select
               value={itemsPerPage}
               onChange={(e) => handleItemsPerPageChange(e.target.value)}
-              className="border border-[#CBA054] rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[#CBA054]/20 text-[#0A1A2F]"
+              className="border border-[#CBA054] rounded-lg px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[#CBA054]/20 text-[#0A1A2F]"
             >
               <option value="5">5</option>
               <option value="10">10</option>
               <option value="25">25</option>
               <option value="50">50</option>
             </select>
-            <span className="text-sm text-[#0A1A2F]">entries</span>
+            <span className="text-sm text-[#0A1A2F]">entries per page</span>
           </div>
 
           <div className="text-sm text-[#0A1A2F]">
@@ -561,149 +588,19 @@ const HandleBookingAppointment = () => {
           </div>
         </div>
 
-        {/* Desktop Table */}
-        <div className="hidden lg:block bg-white rounded-lg shadow overflow-x-auto border border-[#E8EEF4]">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-[#0A1A2F] uppercase tracking-wider">
-                    Client Details
-                  </th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-[#0A1A2F] uppercase tracking-wider">
-                    Service & Lawyer
-                  </th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-[#0A1A2F] uppercase tracking-wider">
-                    Appointment
-                  </th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-[#0A1A2F] uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-[#0A1A2F] uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {currentBookings.map((booking) => (
-                  <tr key={booking.id} className="hover:bg-gray-50">
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10 bg-[#F4EEDC] rounded-full flex items-center justify-center">
-                          <User className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
-                        </div>
-                        <div className="ml-3 sm:ml-4">
-                          <div className="text-sm font-medium text-[#0A1A2F]">
-                            {booking.full_name}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {booking.email}
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            {booking.phone_no}
-                          </div>
-                          {booking.organisation && (
-                            <div className="text-xs text-gray-500">
-                              {booking.organisation}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-[#0A1A2F]">
-                        {booking.service_name}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {booking.preferred_lawyer}
-                      </div>
-                      {booking.message && (
-                        <div className="text-xs text-gray-500 mt-1 max-w-xs truncate">
-                          "{booking.message}"
-                        </div>
-                      )}
-                    </td>
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-[#0A1A2F]">
-                        <div className="flex items-center space-x-1">
-                          <Calendar className="w-3 h-3" />
-                          <span>{formatDate(booking.date)}</span>
-                        </div>
-                        <div className="flex items-center space-x-1 mt-1">
-                          <Clock className="w-3 h-3" />
-                          <span>{formatTime(booking.time)}</span>
-                        </div>
-                        {booking.reschedule_date && (
-                          <>
-                            <div className="text-xs text-yellow-600 mt-1">
-                              Rescheduled: {formatDate(booking.reschedule_date)}
-                            </div>
-                            <div className="text-xs text-yellow-600">
-                              {formatTime(booking.reschedule_time)}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap">
-                      <div className="space-y-1">
-                        {getStatusBadge(booking.status)}
-                        <div className="text-xs">
-                          {getViewStatusBadge(booking.is_view)}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                      <button
-                        onClick={() => openBookingDetails(booking)}
-                        className="text-[#0A1A2F] hover:text-[#CBA054] transition-colors"
-                        title="View Details"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button
-                        onClick={() => updateViewStatus(booking.id, booking.is_view)}
-                        className="text-[#0A1A2F] hover:text-[#CBA054] ml-2 transition-colors"
-                        title={booking.is_view === "closed" ? "Reopen" : "Mark as Closed"}
-                      >
-                        {booking.is_view === "closed" ? (
-                          <RefreshCw className="w-4 h-4" />
-                        ) : (
-                          <CheckCircle className="w-4 h-4" />
-                        )}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
+        {/* Booking List for All Screen Sizes */}
+        <div className="space-y-3">
+          {currentBookings.map((booking) => (
+            <BookingListItem key={booking.id} booking={booking} />
+          ))}
+          
           {currentBookings.length === 0 && (
-            <div className="text-center py-8 sm:py-12">
-              <Calendar className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
-              <p className="text-gray-500 text-base sm:text-lg">
+            <div className="text-center py-12 bg-white rounded-lg shadow border border-[#E8EEF4]">
+              <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500 text-lg">
                 No booking appointments found
               </p>
-              <p className="text-gray-400 text-sm mt-1 sm:mt-2">
-                {searchTerm || filter !== "all"
-                  ? "Try adjusting your search or filter"
-                  : "All booking appointments will appear here"}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Mobile Cards */}
-        <div className="lg:hidden space-y-3">
-          {currentBookings.map((booking) => (
-            <MobileBookingCard key={booking.id} booking={booking} />
-          ))}
-          {currentBookings.length === 0 && (
-            <div className="text-center py-8 bg-white rounded-lg shadow border border-[#E8EEF4]">
-              <Calendar className="w-8 h-8 text-gray-400 mx-auto mb-3" />
-              <p className="text-gray-500">No booking appointments found</p>
-              <p className="text-gray-400 text-sm mt-1">
+              <p className="text-gray-400 text-sm mt-2">
                 {searchTerm || filter !== "all"
                   ? "Try adjusting your search or filter"
                   : "All booking appointments will appear here"}
@@ -714,19 +611,19 @@ const HandleBookingAppointment = () => {
 
         {/* Pagination Controls - Bottom */}
         {totalPages > 1 && (
-          <div className="flex flex-col sm:flex-row justify-between items-center mt-4 sm:mt-6 space-y-3 sm:space-y-0">
-            <div className="text-sm text-[#0A1A2F] text-center sm:text-left">
+          <div className="flex flex-col sm:flex-row justify-between items-center mt-6 gap-4">
+            <div className="text-sm text-[#0A1A2F]">
               Showing {startIndex + 1} to{" "}
               {Math.min(endIndex, filteredBookings.length)} of{" "}
               {filteredBookings.length} entries
             </div>
 
-            <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className="flex items-center space-x-2">
               {/* Previous Button */}
               <button
                 onClick={goToPrevPage}
                 disabled={currentPage === 1}
-                className={`p-1 sm:p-2 rounded-lg border ${
+                className={`p-2 rounded-lg border ${
                   currentPage === 1
                     ? "border-gray-300 text-gray-400 cursor-not-allowed"
                     : "border-[#CBA054] text-[#0A1A2F] hover:bg-[#CBA054] hover:text-white transition-colors"
@@ -740,7 +637,7 @@ const HandleBookingAppointment = () => {
                 <button
                   key={page}
                   onClick={() => goToPage(page)}
-                  className={`px-2 sm:px-3 py-1 rounded-lg text-sm font-medium ${
+                  className={`px-3 py-1 rounded-lg text-sm font-medium ${
                     currentPage === page
                       ? "bg-[#CBA054] text-white"
                       : "text-[#0A1A2F] hover:bg-[#F4EEDC] border border-[#E8EEF4] transition-colors"
@@ -754,7 +651,7 @@ const HandleBookingAppointment = () => {
               <button
                 onClick={goToNextPage}
                 disabled={currentPage === totalPages}
-                className={`p-1 sm:p-2 rounded-lg border ${
+                className={`p-2 rounded-lg border ${
                   currentPage === totalPages
                     ? "border-gray-300 text-gray-400 cursor-not-allowed"
                     : "border-[#CBA054] text-[#0A1A2F] hover:bg-[#CBA054] hover:text-white transition-colors"
@@ -768,15 +665,15 @@ const HandleBookingAppointment = () => {
 
         {/* Booking Details Modal */}
         {showModal && selectedBooking && (
-          <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-2 sm:p-4 z-50">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
             <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-[#E8EEF4]">
-              <div className="p-4 sm:p-6">
-                <div className="flex justify-between items-start mb-4 sm:mb-6">
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-6">
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-[#0A1A2F]">
                       {selectedBooking.full_name}
                     </h2>
-                    <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-4 mt-1 sm:mt-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-2">
                       {getStatusBadge(selectedBooking.status)}
                       {getViewStatusBadge(selectedBooking.is_view)}
                       <span className="text-sm text-gray-500">
@@ -788,14 +685,14 @@ const HandleBookingAppointment = () => {
                     onClick={() => setShowModal(false)}
                     className="text-[#0A1A2F] hover:text-[#CBA054] transition-colors"
                   >
-                    <XCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <XCircle className="w-6 h-6" />
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
-                  <div className="space-y-3 sm:space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <div className="space-y-4">
                     <div className="flex items-center space-x-3">
-                      <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
+                      <Mail className="w-5 h-5 text-[#CBA054]" />
                       <div>
                         <p className="text-sm font-medium text-gray-500">
                           Email
@@ -807,7 +704,7 @@ const HandleBookingAppointment = () => {
                     </div>
 
                     <div className="flex items-center space-x-3">
-                      <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
+                      <Phone className="w-5 h-5 text-[#CBA054]" />
                       <div>
                         <p className="text-sm font-medium text-gray-500">
                           Phone
@@ -819,7 +716,7 @@ const HandleBookingAppointment = () => {
                     </div>
 
                     <div className="flex items-center space-x-3">
-                      <Building className="w-4 h-4 sm:w-5 sm:h-5 text-[#CBA054]" />
+                      <Building className="w-5 h-5 text-[#CBA054]" />
                       <div>
                         <p className="text-sm font-medium text-gray-500">
                           Organisation
@@ -831,7 +728,7 @@ const HandleBookingAppointment = () => {
                     </div>
                   </div>
 
-                  <div className="space-y-3 sm:space-y-4">
+                  <div className="space-y-4">
                     <div>
                       <p className="text-sm font-medium text-gray-500 mb-1">
                         Service Needed
@@ -884,41 +781,41 @@ const HandleBookingAppointment = () => {
                 </div>
 
                 {selectedBooking.message && (
-                  <div className="mb-4 sm:mb-6">
+                  <div className="mb-6">
                     <p className="text-sm font-medium text-gray-500 mb-2">
                       Message
                     </p>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 border border-[#E8EEF4]">
-                      <p className="text-[#0A1A2F] whitespace-pre-wrap text-sm sm:text-base">
+                    <div className="bg-gray-50 rounded-lg p-4 border border-[#E8EEF4]">
+                      <p className="text-[#0A1A2F] whitespace-pre-wrap">
                         {selectedBooking.message}
                       </p>
                     </div>
                   </div>
                 )}
 
-                <div className="flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 border-t border-[#E8EEF4]">
+                <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-[#E8EEF4]">
                   <button
                     onClick={() => {
                       updateViewStatus(selectedBooking.id, selectedBooking.is_view);
                       setShowModal(false);
                     }}
-                    className="px-3 sm:px-4 py-2 bg-[#0A1A2F] text-white rounded-lg hover:bg-[#CBA054] transition-colors flex items-center justify-center text-sm sm:text-base"
+                    className="px-4 py-2 bg-[#0A1A2F] text-white rounded-lg hover:bg-[#CBA054] transition-colors flex items-center justify-center"
                   >
                     {selectedBooking.is_view === "closed" ? (
                       <>
-                        <RefreshCw className="w-4 h-4 mr-1 sm:mr-2" />
+                        <RefreshCw className="w-4 h-4 mr-2" />
                         Reopen
                       </>
                     ) : (
                       <>
-                        <CheckCircle className="w-4 h-4 mr-1 sm:mr-2" />
+                        <CheckCircle className="w-4 h-4 mr-2" />
                         Mark as Closed
                       </>
                     )}
                   </button>
                   <button
                     onClick={() => setShowModal(false)}
-                    className="px-3 sm:px-4 py-2 border border-[#CBA054] text-[#0A1A2F] rounded-lg hover:bg-[#F4EEDC] transition-colors text-sm sm:text-base"
+                    className="px-4 py-2 border border-[#CBA054] text-[#0A1A2F] rounded-lg hover:bg-[#F4EEDC] transition-colors"
                   >
                     Close
                   </button>
