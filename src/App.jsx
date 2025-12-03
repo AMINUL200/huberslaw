@@ -41,6 +41,7 @@ import BookingCancel from "./pages/booking/BookingCancel";
 import BookingReschedule from "./pages/booking/BookingReschedule";
 import HandleBookingAppointment from "./pages/admin/booking_appointment/HandleBookingAppointment";
 import HandleServicePageHeading from "./pages/admin/services/HandleServicePageHeading";
+import BookingConfirmation from "./pages/booking/BookingConfirm";
 
 const App = () => {
   const { token, user } = useAuth();
@@ -106,6 +107,8 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+
+          <Route path="/booking/confirm" element={<BookingConfirmation/>}/>
 
           <Route path="/booking/accept/:id" element={<BookingAccept/>}/>
           <Route path="/booking/cancel/:id" element={<BookingCancel/>}/>

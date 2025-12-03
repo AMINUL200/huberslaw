@@ -116,9 +116,9 @@ const AboutOurPeople = ({ teamInfo = [] }) => {
                           {member.service.service_name}
                         </p>
                       )}
-                      <p className="text-sm text-gray-300">
+                      {/* <p className="text-sm text-gray-300">
                         Click to view full profile
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                 </div>
@@ -128,10 +128,10 @@ const AboutOurPeople = ({ teamInfo = [] }) => {
                   <div className="space-y-4 flex-1">
                     {/* Designation */}
                     {member?.designation && (
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">
-                          Designation
-                        </span>
+                      <div className="flex flex-wrap justify-between items-center">
+                        {/* <span className="text-sm text-gray-500">
+                          Designation:
+                        </span> */}
                         <span className="text-sm font-semibold text-[#CBA054]">
                           {member.designation}
                         </span>
@@ -172,7 +172,7 @@ const AboutOurPeople = ({ teamInfo = [] }) => {
                   {/* View Profile Button */}
                   <Link
                     to={`/team/${member?.slug ? member.slug : member.name}`}
-                    className="w-full mt-6 bg-gradient-to-r from-[#CBA054] to-[#D4B578] text-white py-3 px-6 rounded-xl font-semibold hover:from-[#B89246] hover:to-[#CBA054] transition-all duration-300 flex items-center justify-center space-x-2 group/btn shadow-lg hover:shadow-xl"
+                    className="w-full mt-1 bg-gradient-to-r from-[#CBA054] to-[#D4B578] text-white py-3 px-6 rounded-xl font-semibold hover:from-[#B89246] hover:to-[#CBA054] transition-all duration-300 flex items-center justify-center space-x-2 group/btn shadow-lg hover:shadow-xl"
                   >
                     <span>View Profile</span>
                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />

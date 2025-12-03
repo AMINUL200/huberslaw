@@ -3,10 +3,12 @@ import { Phone, Building, Shield, Send, RefreshCw, Calendar, Clock } from "lucid
 import CustomInput from "../form/CustomInput";
 import { api } from "../../utils/app";
 import { toast } from "react-toastify";
+import BookingConfirmation from "../../pages/booking/BookingConfirm";
+import { useNavigate } from "react-router-dom";
 
 const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
-  console.log("popup");
-
+  // console.log("popup");
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -153,6 +155,7 @@ const AppointmentPopup = ({ onClose, servicesData = [], teamData = [] }) => {
 
       if (response.data.status) {
         toast.success(response.data.message || "Appointment booked successfully!");
+        navigate('/booking/confirm');
       } else {
         toast.error(response.data.message || "Failed to book appointment.");
       }

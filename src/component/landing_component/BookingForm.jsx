@@ -3,10 +3,12 @@ import { Calendar, Clock, Send, RefreshCw, Shield } from "lucide-react";
 import CustomInput from "../form/CustomInput";
 import { toast } from "react-toastify";
 import { api } from "../../utils/app";
+import BookingConfirmation from "../../pages/booking/BookingConfirm";
+import { useNavigate } from "react-router-dom";
 
 const BookingForm = ({ servicesList = [], teamList = [] }) => {
   const [submitLoading, setSubmitLoading] = useState(false);
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -113,6 +115,7 @@ const BookingForm = ({ servicesList = [], teamList = [] }) => {
         toast.success(
           response.data.message || "Appointment booked successfully!"
         );
+       navigate('/booking/confirm');
       } else {
         toast.error(response.data.message || "Failed to book appointment.");
       }
