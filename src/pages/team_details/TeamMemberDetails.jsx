@@ -30,6 +30,8 @@ const TeamMemberDetails = () => {
       const res = await api.get(`/teams-details/${slug}`);
       if (res.data.status) {
         setTeamMember(res.data.data);
+        console.log(res.data.data);
+        
       } else {
         toast.error("Team member not found.");
       }

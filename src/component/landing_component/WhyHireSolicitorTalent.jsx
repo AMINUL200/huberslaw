@@ -40,7 +40,7 @@ const WhyHireSolicitorTalent = ({ solicitorTalentData = [] }) => {
           </h1>
 
           {/* Description */}
-          <p className="text-xl text-gray-600 leading-relaxed">
+          <p className="text-xl text-gray-600 leading-relaxed z-black-justify">
             {sectionInfo.description}
           </p>
         </div>
@@ -76,7 +76,7 @@ const WhyHireSolicitorTalent = ({ solicitorTalentData = [] }) => {
                   {item.title}
                 </h3>
 
-                <p className="text-gray-600 leading-relaxed mb-6">
+                <p className="text-gray-600 leading-relaxed mb-6 z-black-justify">
                   {item.description}
                 </p>
               </div>

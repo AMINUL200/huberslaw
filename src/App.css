@@ -40,3 +40,10 @@
 .read-the-docs {
   color: #888;
 }
+
+
+.z-black-justify {
+  color: #0A0A0A;        
+  text-align: justify;   
+  text-justify: inter-word;
+}

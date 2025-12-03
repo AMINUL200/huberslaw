@@ -43,7 +43,7 @@ const AboutINfo = ({ aboutInfo = {}, teamInfo = [], solicitorInfo = [] }) => {
           <h2 className="text-3xl lg:text-4xl font-bold text-[#0A1A2F] mb-4">
             {solicitorInfo[0]?.section_title || "Why Choose Us?"}
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto z-black-justify">
             {solicitorInfo[0]?.section_description}
           </p>
         </div>
@@ -64,7 +64,7 @@ const AboutINfo = ({ aboutInfo = {}, teamInfo = [], solicitorInfo = [] }) => {
                 {card.title}
               </h3>
 
-              <p className="text-gray-600 text-sm leading-relaxed">
+              <p className="text-gray-600 text-sm leading-relaxed z-black-justify">
                 {card.description}
               </p>
             </div>
@@ -79,7 +79,7 @@ const AboutINfo = ({ aboutInfo = {}, teamInfo = [], solicitorInfo = [] }) => {
             WORLD CLASS LONDON BASED LAWYERS
           </h2>
           <div
-            className="prose prose-lg max-w-none"
+            className="prose prose-lg max-w-none z-black-justify"
             dangerouslySetInnerHTML={{ __html: aboutInfo?.mission }}
           />
         </div>
@@ -150,13 +150,13 @@ const AboutINfo = ({ aboutInfo = {}, teamInfo = [], solicitorInfo = [] }) => {
                         </span>
                       </div>
                     )}
-                    {member?.experience && (
+                    {member?.designation && (
                       <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-500">
-                          Experience
+                          Designation
                         </span>
                         <span className="text-sm font-semibold text-[#CBA054]">
-                          {member.experience}
+                          {member.designation}
                         </span>
                       </div>
                     )}

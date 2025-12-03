@@ -100,20 +100,20 @@ const WeAreSolicitors = ({ aboutData = {} }) => {
              
 
               {/* Title */}
-              <h2 className="text-4xl lg:text-5xl font-bold text-[#0A1A2F] mb-6 leading-tight">
+              <h2 className="text-4xl lg:text-5xl font-bold text-[#0A1A2F]  leading-tight">
                 {data.title || "We Are Solicitors"}
               </h2>
 
               {/* Description - Using dangerouslySetInnerHTML for HTML content */}
               <div
-                className="text-lg  text-gray-600 mb-8 leading-relaxed prose prose-lg max-w-none"
+                className="text-lg  text-gray-600  leading-relaxed prose prose-lg max-w-none text-justify z-black-justify"
                 dangerouslySetInnerHTML={{
                   __html: data.description || defaultData.description,
                 }}
               />
 
               {/* Features Grid */}
-              <div className="grid grid-cols-1  gap-4 mb-8">
+              <div className="grid grid-cols-1  gap-4">
                 {(data.about_feature || defaultData.about_feature).map(
                   (feature, index) => (
                     <div key={index} className="flex items-start space-x-3">
@@ -126,7 +126,7 @@ const WeAreSolicitors = ({ aboutData = {} }) => {
                         <h3 className="font-semibold text-[#0A1A2F] mb-1">
                           {feature.title}
                         </h3>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-gray-600 text-justify z-black-justify">
                           {feature.description}
                         </p>
                       </div>
@@ -136,7 +136,7 @@ const WeAreSolicitors = ({ aboutData = {} }) => {
               </div>
 
               {/* Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-4 mt-5">
                 <Link
                   to="/about-us?tab=about"
                   className="bg-[#0A1A2F] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#CBA054] transition-all duration-300 flex items-center justify-center space-x-2 group"

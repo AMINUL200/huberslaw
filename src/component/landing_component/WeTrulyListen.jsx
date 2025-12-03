@@ -43,7 +43,7 @@ const WeTrulyListen = ({ trulyListenData = {} }) => {
 
           {/* Description */}
           <p
-            className="text-xl text-white/90 mb-12 leading-relaxed"
+            className="text-xl text-white/90 mb-12 leading-relaxed text-justify"
             aria-label={
               trulyListenData?.description_meta || trulyListenData?.description
             }
