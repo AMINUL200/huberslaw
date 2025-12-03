@@ -107,7 +107,7 @@ const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
 
   const handleDownload = (document) => {
     if (document.file_path) {
-      const fullUrl = `${baseUrl}/${document.file_path}`;
+      const fullUrl = `${baseUrl}${document.file_path}`;
       window.open(fullUrl, "_blank");
     }
   };
@@ -194,7 +194,7 @@ const AboutTerms = ({ termsInfo = {}, settingInfo = {} }) => {
               {termsInfo.image && (
                 <div className="mb-4">
                   <img
-                    src={`${baseUrl}/${termsInfo.image}`}
+                    src={`${baseUrl}${termsInfo.image}`}
                     alt={
                       termsInfo.image_alt ||
                       termsInfo.heading ||

@@ -92,14 +92,14 @@ const App = () => {
         {/* Open Graph Tags */}
         <meta property="og:title" content={settings.meta_title} />
         <meta property="og:description" content={settings.meta_description} />
-        <meta property="og:image" content={`${baseUrl}/${settings.logo}`} />
+        <meta property="og:image" content={`${baseUrl}${settings.logo}`} />
         <meta property="og:url" content={settings.canonical_url} />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={settings.meta_title} />
         <meta name="twitter:description" content={settings.meta_description} />
-        <meta name="twitter:image" content={`${baseUrl}/${settings.logo}`} />
+        <meta name="twitter:image" content={`${baseUrl}${settings.logo}`} />
       </Helmet>
 
       <Router>

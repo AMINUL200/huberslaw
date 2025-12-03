@@ -16,12 +16,14 @@ const BannerSection = ({
   showControls = true,
   showPagination = true
 }) => {
+  console.log(bannerData);
+  
   const storageUrl = import.meta.env.VITE_APP_BASE_URL;
   const [isPlaying, setIsPlaying] = useState(autoPlay);
   const [swiperInstance, setSwiperInstance] = useState(null);
 
   // Filter only active banners
-  const activeBanners = bannerData.filter((banner) => banner.is_show === "1");
+  const activeBanners = bannerData.filter((banner) => banner.is_show == 1);
 
   // Handle autoplay toggle
   const toggleAutoplay = () => {

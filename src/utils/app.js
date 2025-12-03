@@ -10,9 +10,18 @@ export const api = axios.create({
 // Interceptor: Attach Token + Detect FormData + Default Headers
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
+  console.log(token);
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  // 🔥 Auto prevent caching only for GET requests
+  if (config.method === "get") {
+    config.params = {
+      ...(config.params || {}), // keep existing params if any
+      t: Date.now(), // add timestamp to bust cache
+    };
   }
 
   // 🔥 Auto handle FormData

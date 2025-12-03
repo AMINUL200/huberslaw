@@ -46,7 +46,7 @@ const HandleAboutTerms = () => {
         setTerms(response.data.data);
         // Set image preview if image exists
         if (response.data.data.image) {
-          setImagePreview(`${baseUrl}/${response.data.data.image}`);
+          setImagePreview(`${baseUrl}${response.data.data.image}`);
         }
       } else {
         console.error("Failed to load terms");
@@ -318,7 +318,7 @@ const HandleAboutTerms = () => {
       setFileInputs([{ file_name: "", file_path: "", file: null }]);
     }
 
-    setImagePreview(terms?.image ? `${baseUrl}/${terms.image}` : null);
+    setImagePreview(terms?.image ? `${baseUrl}${terms.image}` : null);
     setHasImageChanged(false);
     setIsEditing(true);
     setShowForm(true);
@@ -348,7 +348,7 @@ const HandleAboutTerms = () => {
   // Get full file URL
   const getFileUrl = (filePath) => {
     if (!filePath) return null;
-    return `${baseUrl}/${filePath}`;
+    return `${baseUrl}${filePath}`;
   };
 
   if (loading) {
@@ -413,7 +413,7 @@ const HandleAboutTerms = () => {
               <div className="w-full h-64 border-2 border-dashed border-[#E8EEF4] rounded-xl bg-gray-50 flex items-center justify-center overflow-hidden">
                 {terms.image ? (
                   <img
-                    src={`${baseUrl}/${terms.image}`}
+                    src={`${baseUrl}${terms.image}`}
                     alt={terms.image_alt || "Terms & Conditions"}
                     className="w-full h-full object-cover"
                   />

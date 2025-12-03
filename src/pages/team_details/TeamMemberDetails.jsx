@@ -203,7 +203,7 @@ const TeamMemberDetails = () => {
               {teamMember.image && (
                 <div className="mb-6">
                   <img
-                    src={`${baseUrl}/${teamMember.image}`}
+                    src={`${baseUrl}${teamMember.image}`}
                     alt={teamMember.image_alt || teamMember.name}
                     className="w-full h-64 object-cover rounded-2xl shadow-lg"
                   />

@@ -40,9 +40,9 @@ const HandleBanner = () => {
   const fetchBanners = async () => {
     try {
       const response = await api.get("/banner");
+      console.log(response.data.data);
       if (response.data.status) {
         setBanners(response.data.data);
-        console.log(response.data.data);
         
       }
     } catch (error) {
@@ -227,7 +227,7 @@ const HandleBanner = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this banner?")) {
       try {
-        const response = await api.delete(`/banner/delete/${id}`);
+        const response = await api.delete(`/banner/${id}`);
         if (response.data.status) {
           alert("Banner deleted successfully!");
           fetchBanners();
@@ -241,10 +241,12 @@ const HandleBanner = () => {
 
   // Toggle banner visibility
   const toggleVisibility = async (banner) => {
-    console.log(banner);
+    // console.log(banner.id);
     
     try {
       const response = await api.post(`/banner/status/${banner.id}`);
+      console.log(response);
+      
       if (response.data.status) {
         fetchBanners();
       }
@@ -590,12 +592,13 @@ const HandleBanner = () => {
                     <div className="flex items-center space-x-4 mt-2">
                       <span
                         className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
-                          banner.is_show === "1"
+                          banner.is_show === 1
                             ? "bg-green-100 text-green-800"
                             : "bg-red-100 text-red-800"
                         }`}
                       >
-                        {banner.is_show === "1" ? "Active" : "Inactive"}
+                      
+                        {banner.is_show === 1 ? "Active" : "Inactive"}
                       </span>
                       {banner.button_name && (
                         <span className="text-xs text-gray-500">
@@ -610,7 +613,7 @@ const HandleBanner = () => {
                     </div>
                   </div>
                 </div>
-
+                   
                 {/* Action Buttons */}
                 <div className="flex items-center space-x-2">
                   <button

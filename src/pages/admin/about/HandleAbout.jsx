@@ -63,7 +63,7 @@ const HandleAbout = () => {
 
         // Set image preview if image exists
         if (about.image) {
-          setImagePreview(`${baseUrl}/${about.image}`);
+          setImagePreview(`${baseUrl}${about.image}`);
         }
       } else {
         console.error("Failed to load about data");

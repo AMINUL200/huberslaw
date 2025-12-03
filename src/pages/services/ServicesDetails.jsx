@@ -301,7 +301,7 @@ const ServicesDetails = () => {
                   {serviceData.pdfs.map((pdf) => (
                     <a
                       key={pdf.id}
-                      href={`${baseUrl}/${pdf.pdf}`}
+                      href={`${baseUrl}${pdf.pdf}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full flex items-center justify-between p-2 bg-[#F4EEDC] rounded-lg hover:bg-[#CBA054] hover:text-white transition-all duration-300 group block"

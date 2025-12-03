@@ -69,7 +69,7 @@ const ViewApplyJob = () => {
   };
 
   const handleDownloadCV = (application) => {
-    const cvUrl = `${baseUrl}/${application.cv}`;
+    const cvUrl = `${baseUrl}${application.cv}`;
     window.open(cvUrl, '_blank');
   };
 
