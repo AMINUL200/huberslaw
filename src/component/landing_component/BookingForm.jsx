@@ -107,7 +107,8 @@ const BookingForm = ({ servicesList = [], teamList = [] }) => {
       date: formData.date,
       time: formData.time,
     };
-
+    console.log(payload);
+    
     try {
       const response = await api.post("/booking/store", payload);
 
@@ -115,7 +116,11 @@ const BookingForm = ({ servicesList = [], teamList = [] }) => {
         toast.success(
           response.data.message || "Appointment booked successfully!"
         );
-       navigate('/booking/confirm');
+        navigate("/booking/confirm", {
+          state: {
+            bookingData: response.data.data, // 👈 Pass API response directly
+          },
+        });
       } else {
         toast.error(response.data.message || "Failed to book appointment.");
       }
